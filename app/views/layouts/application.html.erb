@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asset Manager</title>
+  <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+</head>
+<!--
+`body` tag options:
+
+  Apply one or more of the following classes to to the body tag
+  to get the desired effect
+
+  * sidebar-collapse
+  * sidebar-mini
+-->
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="/" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">My profile</a>
+      </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Navbar Search -->
+      <li class="nav-item">
+        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+          <i class="fas fa-search"></i>
+        </a>
+        <div class="navbar-search-block">
+          <form class="form-inline">
+            <div class="input-group input-group-sm">
+              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li>
+
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="/" class="brand-link">
+      <span class="brand-text font-weight-light">AGCOM TIS SYSTEM</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+
+          <li class="nav-item assets-menu">
+            <a href="#" class="nav-link assets">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/new_asset_menu" class="nav-link new_asset_dashboard">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>New Asset</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/checkout_menu" class="nav-link checkout">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Checkout</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/checkin_menu" class="nav-link checkin">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Checkin</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/audit_menu" class="nav-link audit">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Audit</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+
+
+
+          <li class="nav-item assets-menu">
+            <a href="#" class="nav-link assets">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Assets
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/new_asset" class="nav-link new_asset_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>New Asset</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/edit_asset" class="nav-link edit_asset_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Edit Asset</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/delete_asset_menu" class="nav-link delete_asset_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Delete Asset</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item tis_cluster-menu">
+            <a href="#" class="nav-link tis_cluster">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                TIS Clusters
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/new_cluster_menu" class="nav-link new_cluster_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Cluster</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/edit_cluster_menu" class="nav-link edit_cluster_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Edit Cluster</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/delete_cluster_menu" class="nav-link delete_cluster_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Delete Cluster</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item tis_brokers-menu">
+            <a href="#" class="nav-link tis_brokers">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+                TIS Brokers
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/new_tis_broker_menu" class="nav-link new_tis_broker_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>New TIS Broker</p>
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a href="/edit_tis_broker_menu" class="nav-link edit_tis_broker_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Edit TIS Broker</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/delete_tis_broker_menu" class="nav-link delete_tis_broker_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Delete TIS Broker</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item zones-menu">
+            <a href="#" class="nav-link zones">
+              <i class="nav-icon fas fa-tree"></i>
+              <p>
+                Zones
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/new_zone_menu" class="nav-link new_zone_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>New Zone</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/edit_zone_menu" class="nav-link edit_zone_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Edit Zone</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/delete_zone_menu" class="nav-link delete_zone_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Delete Zone</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item deliverables-menu">
+            <a href="#" class="nav-link deliverables">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
+                Deliverables
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/new_deliverable_menu" class="nav-link new_deliverable_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>New Deliverable</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/edit_deliverable_menu" class="nav-link edit_deliverable_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Edit Deliverable</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/delete_deliverable_menu" class="nav-link delete_deliverable_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Delete Deliverable</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+<!--
+          <li class="nav-item issue_tracker-menu">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Issue Tracker
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/new_issue_menu" class="nav-link new_issue_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>New Issue</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/view_issues_menu" class="nav-link view_issues_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View Issues</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/update_issues_menu" class="nav-link update_issues_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Update Issues</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+-->
+          <li class="nav-item">
+            <a href="/reports_menu" class="nav-link">
+              <i class="nav-icon fas fa-book-open"></i>
+              <p>
+                Reports
+              </p>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0"><%= @page_header %></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item active"><%= @page_header %></li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <% if flash[:notice] %>
+          <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <%= flash[:notice] %>
+          </div>
+        <% end %>
+
+        <% if flash[:error] %>
+          <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <%= flash[:error] %>
+          </div>
+        <% end %>
+        <%= yield %>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2022 <a href="#">AGCOM</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 1.0
+    </div>
+  </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<!-- Bootstrap -->
+<script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="/AdminLTE/dist/js/adminlte.js"></script>
+
+<!-- OPTIONAL SCRIPTS -->
+<script src="/AdminLTE/plugins/chart.js/Chart.min.js"></script>
+<script src="/AdminLTE/dist/js/pages/dashboard2.js"></script>
+
+<script type="text/javascript">
+  function goBack(){
+      window.history.back()
+  }
+</script>
+</body>
+</html>
