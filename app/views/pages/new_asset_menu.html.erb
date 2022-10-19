@@ -344,15 +344,102 @@
 
 
       <div class="tab-pane fade" id="custom-content-above-notes" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
-        #5
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card card-outline card-info">
+              <div class="card-header">
+                <h3 class="card-title">
+                  Summernote
+                </h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+              <textarea id="summernote">
+                Place <em>some</em> <u>text</u> <strong>here</strong>
+              </textarea>
+              </div>
+            </div>
+          </div>
+          <!-- /.col-->
+        </div>
       </div>
+
+
       <div class="tab-pane fade" id="custom-content-above-files" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
-        #6
+        <br />
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="">
+                <button type="button" class="btn btn-default">
+                  <i class="fa fa-plus"></i> Attach</button>
+              </div>
+              <div class="col-md-4">
+                <button type="button" class="btn btn-default">
+                  <i class="fa fa-trash"></i> Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br />
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th style="width: 10px">#</th>
+            <th>File Name</th>
+            <th>File Size</th>
+            <th>Uploaded</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>Test file </td>
+            <td>
+             20KB
+            </td>
+            <td>
+              01.01.2020
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
       <div class="tab-pane fade" id="custom-content-above-history" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
-        #7
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th>Action</th>
+            <th>Change Summary</th>
+            <th>User</th>
+            <th>Timestamp</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>Attached File</td>
+            <td>
+              Attached File: test.pdf
+            </td>
+            <td>
+              Me
+            </td>
+            <td>10/19/2022 11:36:46 AM </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
   <!-- /.card -->
 </div>
+
+<script>
+
+    $(document).ready(function () {
+        // Summernote
+        jQuery('#summernote').summernote()
+    })
+
+</script>
