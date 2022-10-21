@@ -20,7 +20,11 @@ class PagesController < ApplicationController
   end
 
   def report_options
+    @page_header = "Report Options"
+  end
 
+  def export_all
+    @page_header = "Export Data and Files"
   end
 
 end

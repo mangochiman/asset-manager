@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   post '/service_items' => 'pages#service_items' #report_options
 
   get '/report_options' => 'pages#report_options'
-  post '/report_options' => 'pages#report_options'
+  post '/report_options' => 'pages#report_options' #export_all
+
+  get '/export_all' => 'pages#export_all'
+  post '/export_all' => 'pages#export_all'
 
 end
