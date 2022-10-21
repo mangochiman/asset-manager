@@ -112,7 +112,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
-      <span class="brand-text font-weight-light">AGCOM TIS SYSTEM</span>
+      <span class="brand-text font-weight-light">Asset Manager</span>
     </a>
 
     <!-- Sidebar -->
@@ -157,10 +157,6 @@
               </li>
             </ul>
           </li>
-
-
-
-
           <li class="nav-item assets-menu">
             <a href="#" class="nav-link assets">
               <i class="nav-icon fas fa-copy"></i>
@@ -171,51 +167,56 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/new_asset" class="nav-link new_asset_menu">
+                <a href="/new_asset_menu" class="nav-link new_asset_menu">
                   <i class="far fa-circle nav-icon"></i>
                   <p>New Asset</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/edit_asset" class="nav-link edit_asset_menu">
+                <a href="/list_assets" class="nav-link list_assets_menu">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Edit Asset</p>
+                  <p>All Assets</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/delete_asset_menu" class="nav-link delete_asset_menu">
+                <a href="/asset_types" class="nav-link asset_types_menu">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Delete Asset</p>
+                  <p>All Types</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/asset_locations" class="nav-link asset_locations_menu">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>All Locations</p>
                 </a>
               </li>
             </ul>
           </li>
-
           <li class="nav-item tis_cluster-menu">
             <a href="#" class="nav-link tis_cluster">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                TIS Clusters
+                People
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/new_cluster_menu" class="nav-link new_cluster_menu">
+                <a href="/new_person_menu" class="nav-link new_person_menu">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Add Cluster</p>
+                  <p>New Person</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/edit_cluster_menu" class="nav-link edit_cluster_menu">
+                <a href="/people_groups" class="nav-link people_groups_menu">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Edit Cluster</p>
+                  <p>All groups</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/delete_cluster_menu" class="nav-link delete_cluster_menu">
+                <a href="/people_locations" class="nav-link people_locations_menu">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Delete Cluster</p>
+                  <p>All Locations</p>
                 </a>
               </li>
             </ul>
@@ -225,131 +226,174 @@
             <a href="#" class="nav-link tis_brokers">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                TIS Brokers
+                Vendors
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/new_tis_broker_menu" class="nav-link new_tis_broker_menu">
+                <a href="/new_vendor_menu" class="nav-link new_vendor_menu">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>New TIS Broker</p>
+                  <p>New Vendor</p>
                 </a>
               </li>
               <li class="nav-item ">
-                <a href="/edit_tis_broker_menu" class="nav-link edit_tis_broker_menu">
+                <a href="/list_vendors_menu" class="nav-link list_vendors_menu">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Edit TIS Broker</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/delete_tis_broker_menu" class="nav-link delete_tis_broker_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Delete TIS Broker</p>
+                  <p>All vendors</p>
                 </a>
               </li>
             </ul>
           </li>
 
-          <li class="nav-item zones-menu">
-            <a href="#" class="nav-link zones">
-              <i class="nav-icon fas fa-tree"></i>
-              <p>
-                Zones
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/new_zone_menu" class="nav-link new_zone_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>New Zone</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/edit_zone_menu" class="nav-link edit_zone_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Edit Zone</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/delete_zone_menu" class="nav-link delete_zone_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Delete Zone</p>
-                </a>
-              </li>
-            </ul>
-          </li>
 
-          <li class="nav-item deliverables-menu">
-            <a href="#" class="nav-link deliverables">
-              <i class="nav-icon fas fa-edit"></i>
-              <p>
-                Deliverables
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/new_deliverable_menu" class="nav-link new_deliverable_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>New Deliverable</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/edit_deliverable_menu" class="nav-link edit_deliverable_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Edit Deliverable</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/delete_deliverable_menu" class="nav-link delete_deliverable_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Delete Deliverable</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-<!--
-          <li class="nav-item issue_tracker-menu">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Issue Tracker
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/new_issue_menu" class="nav-link new_issue_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>New Issue</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/view_issues_menu" class="nav-link view_issues_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>View Issues</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/update_issues_menu" class="nav-link update_issues_menu">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Update Issues</p>
-                </a>
-              </li>
-            </ul>
-          </li>
--->
+          <li class="nav-header">Reports</li>
           <li class="nav-item">
-            <a href="/reports_menu" class="nav-link">
-              <i class="nav-icon fas fa-book-open"></i>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
               <p>
-                Reports
+                Asset Reports
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Asset List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Asset Details</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Assets Checked out</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Audit Checklist</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Warranty Expiration</p>
+                </a>
+              </li>
+            </ul>
           </li>
 
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>
+                Service Reports
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Completed Service</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Overdue Service</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Service Schedule</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Upcoming Service</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>
+                Other Reports
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Personnel List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Vendor List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Barcode Labels</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+
+          <li class="nav-header">System Options</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>System Overview</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>Selection Fields</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>Service Items</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>Report Options</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>Export All</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>Default Values</p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
