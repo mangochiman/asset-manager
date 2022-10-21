@@ -23,4 +23,16 @@ Rails.application.routes.draw do
   #new_asset_menu
   get '/new_asset_menu' => 'pages#new_asset_menu'
   post '/new_asset_menu' => 'pages#new_asset_menu'
+
+  get '/system_overview' => 'pages#system_overview' #selection_fields
+
+  get '/selection_fields' => 'pages#selection_fields'
+  post '/selection_fields' => 'pages#selection_fields' #service_items
+
+  get '/service_items' => 'pages#service_items'
+  post '/service_items' => 'pages#service_items' #report_options
+
+  get '/report_options' => 'pages#report_options'
+  post '/report_options' => 'pages#report_options'
+
 end

@@ -1,0 +1,89 @@
+<div class="row">
+  <div class="col-md-7">
+    <div class="card card-primary">
+      <!-- /.card-header -->
+      <div class="card-header">
+        <h3 class="card-title">System Information</h3>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <tbody>
+          <tr>
+            <td>Company ID:<br/>
+              <strong>99912666</strong>
+            </td>
+            <td> Uniquely identifies your company and all related settings
+            </td>
+          </tr>
+          <tr>
+            <td> Subscription Plan:<br/>
+              <strong>Trial</strong>
+            </td>
+            <td> This is a Trial Plan. This plan expires: 10/25/2022
+            </td>
+          </tr>
+          <tr>
+            <td>File Storage Quota:<br/>
+              <strong>5 GB</strong>
+            </td>
+            <td> Your plan allows for storing up to 5 GB of files.
+            </td>
+          </tr>
+          <tr>
+            <td> Administrator Quota:<br/>
+              <strong>1</strong>
+            </td>
+            <td> Your plan allows for up to 1 Administrators.
+            </td>
+          </tr>
+          <tr>
+            <td> Standard User Quota:<br/>
+              <strong>Unlimited</strong>
+            </td>
+            <td> Your plan allows for Unlimited Standard User Accounts.
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="col-md-5">
+    <div class="card card-primary">
+      <!-- /.card-header -->
+      <div class="card-header">
+        <h3 class="card-title">Company Settings</h3>
+      </div>
+      <div class="card-body">
+        <form action="#">
+          <div class="card-body">
+            <div class="form-group">
+              <label for="companyName">Company Name</label>
+              <input type="text" id="companyName" value="Test Company" disabled class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="billingEmail">Billing Email</label>
+              <input type="text" id="billingEmail" class="form-control"  placeholder="Mangochiman@gmail.com">
+            </div>
+          </div>
+          <!-- /.card-body -->
+
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.system_overview').addClass('active');
+    })
+</script>
