@@ -117,6 +117,38 @@ class PagesController < ApplicationController
 
   def report_options
     @page_header = "Report Options"
+    report_option = ReportOption.last
+    @header = report_option.header
+    @footer = report_option.footer
+
+    if request.post?
+      report_option = ReportOption.last
+      report_option = ReportOption.new if report_option.blank?
+      report_option.header = params[:header]
+      report_option.footer = params[:footer]
+      if report_option.save
+        unless params[:logo].blank?
+          logo = params[:logo]
+          extension = File.extname(logo).downcase
+          file_extensions = %w[.png .jpeg .jpg]
+          if !file_extensions.include?(extension)
+            flash[:error] = "Unsupported file. You can only upload .png, .jpeg, .jpg file extensions"
+            redirect_to("/report_options") and return
+          end
+          file_name = "logo#{extension}"
+          File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+            file.write(logo.read)
+          end
+          report_option.logo_url = '/uploads/' + file_name
+          report_option.save!
+        end
+        flash[:notice] = 'Record update was successful'
+        redirect_to("/report_options") and return
+      else
+        flash[:error] = report_option.errors.full_messages.join('<br />')
+        redirect_to("/report_options") and return
+      end
+    end
   end
 
   def export_all
