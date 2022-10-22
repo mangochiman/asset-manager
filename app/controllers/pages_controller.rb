@@ -118,8 +118,9 @@ class PagesController < ApplicationController
   def report_options
     @page_header = "Report Options"
     report_option = ReportOption.last
-    @header = report_option.header
-    @footer = report_option.footer
+    @header = report_option.header rescue nil
+    @footer = report_option.footer rescue nil
+    @logo_url = report_option.logo_url rescue nil
 
     if request.post?
       report_option = ReportOption.last
@@ -137,7 +138,7 @@ class PagesController < ApplicationController
           end
           file_name = "logo#{extension}"
           File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
-            file.write(logo.read)
+            file.write(params[:logo].read)
           end
           report_option.logo_url = '/uploads/' + file_name
           report_option.save!
