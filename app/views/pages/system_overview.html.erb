@@ -10,37 +10,37 @@
           <tbody>
           <tr>
             <td>Company ID:<br/>
-              <strong>99912666</strong>
+              <strong><%= @active_system_plan.company_id %></strong>
             </td>
             <td> Uniquely identifies your company and all related settings
             </td>
           </tr>
           <tr>
             <td> Subscription Plan:<br/>
-              <strong>Trial</strong>
+              <strong><%= @active_system_plan.subscription_plan %></strong>
             </td>
-            <td> This is a Trial Plan. This plan expires: 10/25/2022
+            <td> This is a <%= @active_system_plan.subscription_plan %> Plan. You can upgrade anytime
             </td>
           </tr>
           <tr>
             <td>File Storage Quota:<br/>
-              <strong>5 GB</strong>
+              <strong><%= @active_system_plan.storage_quota %> GB</strong>
             </td>
-            <td> Your plan allows for storing up to 5 GB of files.
+            <td> Your plan allows for storing up to <%= @active_system_plan.storage_quota %> GB of files.
             </td>
           </tr>
           <tr>
             <td> Administrator Quota:<br/>
-              <strong>1</strong>
+              <strong><%= @active_system_plan.admin_quota %></strong>
             </td>
-            <td> Your plan allows for up to 1 Administrators.
+            <td> Your plan allows for up to <%= @active_system_plan.admin_quota %> Administrators.
             </td>
           </tr>
           <tr>
             <td> Standard User Quota:<br/>
-              <strong>Unlimited</strong>
+              <strong><%= @active_system_plan.user_quota %></strong>
             </td>
-            <td> Your plan allows for Unlimited Standard User Accounts.
+            <td> Your plan allows for <%= @active_system_plan.user_quota %> Standard User Accounts.
             </td>
           </tr>
           </tbody>
@@ -58,15 +58,15 @@
         <h3 class="card-title">Company Settings</h3>
       </div>
       <div class="card-body">
-        <form action="#">
+        <form action="/system_overview" method="post">
           <div class="card-body">
             <div class="form-group">
               <label for="companyName">Company Name</label>
-              <input type="text" id="companyName" value="Test Company" disabled class="form-control">
+              <input type="text" id="companyName" value="<%= @active_system_plan.company_name %>" disabled class="form-control">
             </div>
             <div class="form-group">
               <label for="billingEmail">Billing Email</label>
-              <input type="text" id="billingEmail" class="form-control"  placeholder="Mangochiman@gmail.com">
+              <input type="email" required name="email" value="<%= @active_system_plan.billing_email %>" id="billingEmail" class="form-control">
             </div>
           </div>
           <!-- /.card-body -->

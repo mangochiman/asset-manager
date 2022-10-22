@@ -9,6 +9,17 @@ class PagesController < ApplicationController
 
   def system_overview
     @page_header = "System Overview"
+    @active_system_plan = SystemPlan.where('active =?', 1).last
+    if request.post?
+      @active_system_plan.billing_email = params[:email]
+      if @active_system_plan.save
+        flash[:notice] = 'Record update was successful'
+        redirect_to('/system_overview') and return
+      else
+        flash[:error] = @active_system_plan.errors.full_messages.join('<br />')
+        redirect_to("/system_overview") and return
+      end
+    end
   end
 
   def selection_fields

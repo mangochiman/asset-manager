@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_18_233319) do
+ActiveRecord::Schema.define(version: 2022_10_22_050809) do
+
+  create_table "system_plans", primary_key: "system_plan_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "company_id"
+    t.string "subscription_plan"
+    t.integer "assets_quota"
+    t.integer "storage_quota"
+    t.integer "admin_quota"
+    t.integer "user_quota"
+    t.string "company_name"
+    t.string "billing_email"
+    t.integer "active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "users", primary_key: "user_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "username"
