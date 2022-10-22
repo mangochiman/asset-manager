@@ -1,0 +1,2 @@
+class SelectionField < ApplicationRecord
+end

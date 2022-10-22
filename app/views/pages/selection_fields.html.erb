@@ -1,24 +1,92 @@
-<div class="row">
-  <div class="col-md-7">
-    <div class="card card-primary">
-      <!-- /.card-header -->
-      <div class="card-body">
-        <h5>Choose a selection field to add, edit, or delete selection field values:</h5>
+<% if params[:field_type].blank? %>
+  <div class="row">
+    <div class="col-md-7">
+      <div class="card card-primary">
+        <!-- /.card-header -->
+        <div class="card-body">
 
-        <ul>
-          <li><a href="/selection_fields?field_name=status">Status</a></li>
-          <li><a href="/selection_fields?field_name=condition">Condition</a></li>
-          <li><a href="/selection_fields?field_name=job_title">Job Title</a></li>
-          <li><a href="/selection_fields?field_name=shift">Shift</a></li>
-          <li><a href="/selection_fields?field_name=service_type">Service Type</a></li>
-        </ul>
+          <h5>Choose a selection field to add, edit, or delete selection field values:</h5>
+
+          <ul>
+            <li><a href="/selection_fields?field_type=status">Status</a></li>
+            <li><a href="/selection_fields?field_type=condition">Condition</a></li>
+            <li><a href="/selection_fields?field_type=job_title">Job Title</a></li>
+            <li><a href="/selection_fields?field_type=shift">Shift</a></li>
+            <li><a href="/selection_fields?field_type=service_type">Service Type</a></li>
+          </ul>
+        </div>
+
       </div>
-
     </div>
   </div>
+<% else %>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">General info</h3>
 
-</div>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <form action="/selection_fields" method="post">
+            <div class="form-group">
+              <label for="inputName">Name</label>
+              <input type="text" name="field_name" id="inputName" class="form-control">
+              <input type="hidden" name="field_type" value="<%= params[:field_type] %>" class="form-control">
+            </div>
+            <input type="submit" value="Add" class="btn btn-success">
+          </form>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
 
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><strong><%= params[:field_type].to_s.capitalize %></strong> Options</h3>
+
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>Selection Field Value</th>
+              <th colspan="2">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @selection_fields.each do |selection_field| %>
+              <tr>
+                <td><%= selection_field.field_name %></td>
+                <td>
+                  <button class="btn btn-secondary btn-block">Edit</button>
+                </td>
+                <td>
+                  <button class="btn btn-danger btn-block">Delete</button>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+  </div>
+<% end %>
 
 <script type="text/javascript">
     $(document).ready(function () {

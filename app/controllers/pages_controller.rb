@@ -24,6 +24,20 @@ class PagesController < ApplicationController
 
   def selection_fields
     @page_header = "Selection Fields"
+    if request.post?
+      selection_field = SelectionField.new
+      selection_field.field_name = params[:field_name]
+      selection_field.field_type = params[:field_type].downcase
+
+      if selection_field.save
+        flash[:notice] = 'Record update was successful'
+        redirect_to("/selection_fields?field_type=#{params[:field_type]}") and return
+      else
+        flash[:error] = selection_field.errors.full_messages.join('<br />')
+        redirect_to("/selection_fields") and return
+      end
+    end
+    @selection_fields = SelectionField.where(['field_type =?', params[:field_type]])
   end
 
   def service_items
