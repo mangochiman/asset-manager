@@ -1,74 +1,180 @@
-<form action="#" method="POST">
-  <section class="content">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">General info</h3>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">General info</h3>
 
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                <i class="fas fa-minus"></i>
-              </button>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="form-group">
-              <label for="inputName"> Service Description</label>
-              <input type="text" name="name" id="inputName" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="inputServiceType">Service Type</label>
-              <select name="status" id="inputServiceType" class="form-control custom-select">
-                <option selected disabled>Select one</option>
-                  <option>Option 1</option>
-                  <option>Option 2</option>
-              </select>
-            </div>
-            <a href="#" onclick="goBack();" class="btn btn-secondary">Cancel</a>
-            <input type="submit" value="Submit" class="btn btn-success float-right">
-          </div>
-          <!-- /.card-body -->
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+            <i class="fas fa-minus"></i>
+          </button>
         </div>
-        <!-- /.card -->
       </div>
-
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Available Services</h3>
-
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                <i class="fas fa-minus"></i>
-              </button>
-            </div>
+      <div class="card-body">
+        <form action="/service_items" method="post">
+          <div class="form-group">
+            <label for="inputName">Name</label>
+            <input type="text" required name="name" id="inputName" class="form-control">
           </div>
-          <div class="card-body">
-            <table class="table">
-              <thead>
-              <tr>
-                <th>Service Item Description</th>
-                <th>Service Type</th>
-              </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Change Oil</td>
-                  <td>Maintenance</td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="form-group">
+            <label for="inputServiceType">Service Type</label>
+            <select name="selection_field_id" required id="inputServiceType" class="form-control custom-select">
+              <option value="" selected disabled>Select one</option>
+              <% @service_types.each do |service_type| %>
+                <option value="<%= service_type.selection_field_id %>"><%= service_type.field_name %></option>
+              <% end %>
+            </select>
           </div>
-          <!-- /.card-body -->
+          <input type="submit" value="Submit" class="btn btn-success">
+        </form>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Services</h3>
+
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+            <i class="fas fa-minus"></i>
+          </button>
         </div>
-        <!-- /.card -->
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th>Service Description</th>
+            <th>Service Type</th>
+            <th colspan="2">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @service_items.each do |service_item| %>
+            <tr>
+              <td><%= service_item.name %></td>
+              <td><%= service_item.selection_field.field_name %></td>
+              <td>
+                <button onclick="showEditPopup('<%= service_item.service_item_id %>', '<%= service_item.name %>', '<%= service_item.selection_field_id %>')" class="btn btn-secondary btn-block">Edit</button>
+              </td>
+              <td>
+                <button onclick="voidServiceItemConfirm('<%= service_item.service_item_id %>')" class="btn btn-danger btn-block">Delete</button>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editFieldModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit service item</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/update_service_item" method="post">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="inputName">Name</label>
+            <input type="text" name="name" id="fieldName" class="form-control">
+            <input type="hidden" name="selection_field_id" id="selectionFieldID" class="form-control">
+            <input type="hidden" name="service_item_id" id="serviceItemID" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="inputServiceType">Service Type</label>
+            <select name="selection_field_id" required id="inputServiceType" class="form-control custom-select">
+              <option value="" selected disabled>Select one</option>
+              <% @service_types.each do |service_type| %>
+                <option id="selection_field_id_<%= service_type.selection_field_id %>" value="<%= service_type.selection_field_id %>"><%= service_type.field_name %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" value="Save" class="btn btn-primary">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidServiceItem();" type="button" class="btn btn-primary">Yes, Am Sure</button>
       </div>
     </div>
-  </section>
-</form>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <script type="text/javascript">
     $(document).ready(function () {
         jQuery('.service_items').addClass('active');
     })
+
+    var field_type = '<%= params[:field_type] %>'
+
+    function showEditPopup(serviceItemID, fieldName, selectionFieldID) {
+        jQuery('#fieldName').val(fieldName);
+        jQuery('#selectionFieldID').val(selectionFieldID); // selection_field_id_
+        jQuery('#selection_field_id_' + selectionFieldID).attr('selected', 'selected');
+        jQuery('#serviceItemID').val(serviceItemID);
+        jQuery('#editFieldModal').modal('show');
+    }
+
+    var selectedServiceItemID;
+
+    function voidServiceItemConfirm(id) {
+        selectedServiceItemID = id;
+        jQuery('#deleteModal').modal('show');
+    }
+
+    function voidServiceItem() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_service_item";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedServiceItemID;
+        input.name = "id";
+        form.appendChild(input);
+
+        form.submit();
+    }
 </script>

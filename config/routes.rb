@@ -33,7 +33,9 @@ Rails.application.routes.draw do
   post '/delete_selection_field' => 'pages#delete_selection_field'
 
   get '/service_items' => 'pages#service_items'
-  post '/service_items' => 'pages#service_items' #report_options
+  post '/service_items' => 'pages#service_items' #report_options update_service_item
+  post '/update_service_item' => 'pages#update_service_item' #delete_service_item
+  post '/delete_service_item' => 'pages#delete_service_item'
 
   get '/report_options' => 'pages#report_options'
   post '/report_options' => 'pages#report_options' #export_all

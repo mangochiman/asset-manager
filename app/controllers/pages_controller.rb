@@ -75,6 +75,44 @@ class PagesController < ApplicationController
 
   def service_items
     @page_header = "Service Items"
+    @service_items = ServiceItem.all
+    @service_types = SelectionField.where(['field_type =?', 'service_type'])
+    if request.post?
+      service_item = ServiceItem.new
+      service_item.name = params[:name]
+      service_item.selection_field_id = params[:selection_field_id]
+      if service_item.save
+        flash[:notice] = 'Record creation was successful'
+        redirect_to("/service_items") and return
+      else
+        flash[:error] = service_item.errors.full_messages.join('<br />')
+        redirect_to("/service_items") and return
+      end
+    end
+  end
+
+  def update_service_item
+    service_item = ServiceItem.find(params[:service_item_id])
+    service_item.name = params[:name]
+    service_item.selection_field_id = params[:selection_field_id]
+    if service_item.save
+      flash[:notice] = 'Record update was successful'
+      redirect_to("/service_items") and return
+    else
+      flash[:error] = service_item.errors.full_messages.join('<br />')
+      redirect_to("/service_items") and return
+    end
+  end
+
+  def delete_service_item
+    service_item = ServiceItem.find(params[:id])
+    if service_item.delete
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/service_items") and return
+    else
+      flash[:error] = service_item.errors.full_messages.join('<br />')
+      redirect_to("/service_items") and return
+    end
   end
 
   def report_options
