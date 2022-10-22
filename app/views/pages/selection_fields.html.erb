@@ -71,7 +71,7 @@
               <tr>
                 <td><%= selection_field.field_name %></td>
                 <td>
-                  <button class="btn btn-secondary btn-block">Edit</button>
+                  <button onclick="showEditPopup('<%= selection_field.selection_field_id %>', '<%= selection_field.field_name %>')" class="btn btn-secondary btn-block">Edit</button>
                 </td>
                 <td>
                   <button class="btn btn-danger btn-block">Delete</button>
@@ -88,8 +88,47 @@
   </div>
 <% end %>
 
+<!-- Modal -->
+<div class="modal fade" id="editFieldModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit selection field value</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/update_selection_field" method="post">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="inputName">Name</label>
+            <input type="text" name="field_name" id="fieldName" class="form-control">
+            <input type="hidden" name="selection_field_id" id="selectionFieldID" class="form-control">
+            <input type="hidden" name="field_type" id="fieldType" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" value="Save" class="btn btn-primary">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <script type="text/javascript">
     $(document).ready(function () {
         jQuery('.selection_fields').addClass('active');
     })
+
+    var field_type = '<%= params[:field_type] %>'
+    function showEditPopup(selectionFieldID, fieldName){
+        jQuery('#fieldName').val(fieldName);
+        jQuery('#selectionFieldID').val(selectionFieldID); //
+        jQuery('#fieldType').val(field_type);
+        jQuery('#editFieldModal').modal('show');
+    }
 </script>

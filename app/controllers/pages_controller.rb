@@ -24,6 +24,7 @@ class PagesController < ApplicationController
 
   def selection_fields
     @page_header = "Selection Fields"
+
     if request.post?
       selection_field = SelectionField.new
       selection_field.field_name = params[:field_name]
@@ -36,8 +37,28 @@ class PagesController < ApplicationController
         flash[:error] = selection_field.errors.full_messages.join('<br />')
         redirect_to("/selection_fields") and return
       end
+    else
+      unless params[:field_type].blank?
+        required_field_types = %w[status condition job_title shift service_type]
+        if !required_field_types.include?(params[:field_type].downcase)
+          flash[:error] = "Unknown selection field #{params[:field_type]}"
+          redirect_to("/selection_fields")
+        end
+      end
     end
     @selection_fields = SelectionField.where(['field_type =?', params[:field_type]])
+  end
+
+  def update_selection_field
+    selection_field = SelectionField.find(params[:selection_field_id])
+    selection_field.field_name = params[:field_name]
+    if selection_field.save
+      flash[:notice] = 'Record update was successful'
+      redirect_to("/selection_fields?field_type=#{params[:field_type]}") and return
+    else
+      flash[:error] = selection_field.errors.full_messages.join('<br />')
+      redirect_to("/selection_fields?field_type=#{params[:field_type]}") and return
+    end
   end
 
   def service_items
