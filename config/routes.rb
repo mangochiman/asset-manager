@@ -29,7 +29,8 @@ Rails.application.routes.draw do
 
   get '/selection_fields' => 'pages#selection_fields'
   post '/selection_fields' => 'pages#selection_fields' #service_items update_selection_field
-  post '/update_selection_field' => 'pages#update_selection_field'
+  post '/update_selection_field' => 'pages#update_selection_field' #delete_selection_field
+  post '/delete_selection_field' => 'pages#delete_selection_field'
 
   get '/service_items' => 'pages#service_items'
   post '/service_items' => 'pages#service_items' #report_options

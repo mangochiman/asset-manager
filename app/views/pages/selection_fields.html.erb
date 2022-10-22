@@ -36,7 +36,7 @@
           <form action="/selection_fields" method="post">
             <div class="form-group">
               <label for="inputName">Name</label>
-              <input type="text" name="field_name" id="inputName" class="form-control">
+              <input type="text" required name="field_name" id="inputName" class="form-control">
               <input type="hidden" name="field_type" value="<%= params[:field_type] %>" class="form-control">
             </div>
             <input type="submit" value="Add" class="btn btn-success">
@@ -74,7 +74,7 @@
                   <button onclick="showEditPopup('<%= selection_field.selection_field_id %>', '<%= selection_field.field_name %>')" class="btn btn-secondary btn-block">Edit</button>
                 </td>
                 <td>
-                  <button class="btn btn-danger btn-block">Delete</button>
+                  <button onclick="voidSelectionFieldConfirm('<%= selection_field.selection_field_id %>')" class="btn btn-danger btn-block">Delete</button>
                 </td>
               </tr>
             <% end %>
@@ -119,6 +119,30 @@
 </div>
 <!-- /.modal -->
 
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidSelectionField();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <script type="text/javascript">
     $(document).ready(function () {
         jQuery('.selection_fields').addClass('active');
@@ -130,5 +154,29 @@
         jQuery('#selectionFieldID').val(selectionFieldID); //
         jQuery('#fieldType').val(field_type);
         jQuery('#editFieldModal').modal('show');
+    }
+
+    var selectedSelectionFieldID;
+
+    function voidSelectionFieldConfirm(id) {
+        selectedSelectionFieldID = id;
+        jQuery('#deleteModal').modal('show');
+    }
+
+    function voidSelectionField() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_selection_field";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedSelectionFieldID;
+        input.name = "id";
+        form.appendChild(input);
+
+        form.submit();
     }
 </script>

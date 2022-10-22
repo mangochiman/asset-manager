@@ -61,6 +61,18 @@ class PagesController < ApplicationController
     end
   end
 
+  def delete_selection_field
+    selection_field = SelectionField.find(params[:id])
+    field_type = selection_field.field_type
+    if selection_field.delete
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/selection_fields?field_type=#{field_type}") and return
+    else
+      flash[:error] = selection_field.errors.full_messages.join('<br />')
+      redirect_to("/selection_fields?field_type=#{field_type}") and return
+    end
+  end
+
   def service_items
     @page_header = "Service Items"
   end
