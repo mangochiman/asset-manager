@@ -179,7 +179,7 @@
                 <td><%= vendor_attachment.name %></td>
                 <td><%= vendor_attachment.size %></td>
                 <td><%= vendor_attachment.updated_at.strftime("%d.%m.%Y") %></td>
-                <td class="project-actions text-right" onclick="voidZoneConfirm('<%= vendor_attachment.vendor_attachment_id %>')">
+                <td class="project-actions text-right" onclick="voidVendorAttachmentConfirm('<%= vendor_attachment.vendor_attachment_id %>')">
                   <a class="btn btn-danger btn-block" href="#"><i class="fas fa-trash"></i>Delete</a>
                 </td>
               </tr>
@@ -215,6 +215,31 @@
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+<div class="modal fade" id="voidVendorAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidVendorAttachment();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
 <script>
 
     $(document).ready(function () {
@@ -237,5 +262,37 @@
 
     function validateForm() {
         $("#vendor").submit();
+    }
+
+    var selectedVendorAttachmentID;
+
+    function voidVendorAttachmentConfirm(id) {
+        selectedVendorAttachmentID = id;
+        jQuery('#voidVendorAttachmentModal').modal('show');
+    }
+
+    var vendorID = '<%= params[:vendor_id] %>';
+
+    function voidVendorAttachment() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_vendor_attachment";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedVendorAttachmentID;
+        input.name = "id";
+        form.appendChild(input);
+
+        var input2 = document.createElement("input");
+        input2.type = "hidden";
+        input2.value = vendorID;
+        input2.name = "vendor_id";
+        form.appendChild(input2);
+
+        form.submit();
     }
 </script>

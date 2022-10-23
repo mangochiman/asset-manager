@@ -269,4 +269,17 @@ class PagesController < ApplicationController
 
   end
 
+  def delete_vendor_attachment
+    vendor_attachment = VendorAttachment.find(params[:id])
+    file_path = Rails.root.to_s + '/public' + vendor_attachment.url.to_s
+    if vendor_attachment.delete
+      File.delete(file_path) if File.exist?(file_path)
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/edit_vendor?vendor_id=#{params[:vendor_id]}") and return
+    else
+      flash[:error] = vendor_attachment.errors.full_messages.join('<br />')
+      redirect_to("/edit_vendor?vendor_id=#{params[:vendor_id]}") and return
+    end
+  end
+
 end

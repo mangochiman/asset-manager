@@ -50,4 +50,5 @@ Rails.application.routes.draw do
   get '/edit_vendor' => 'pages#edit_vendor'
   post '/edit_vendor' => 'pages#edit_vendor'
 
+  post '/delete_vendor_attachment' => 'pages#delete_vendor_attachment'
 end
