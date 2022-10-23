@@ -152,6 +152,7 @@
         <div class="tab-pane fade" id="custom-content-above-files" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
           <br/>
           <p><i>To upload multiple files, press <strong>ctrl</strong> on your keyboard + click the file</i></p>
+
           <div class="col-md-12">
             <div class="form-group" id="fileInput">
               <label for="exampleInputFile">Upload Files</label>
@@ -162,9 +163,28 @@
                 </div>
               </div>
             </div>
-
           </div>
 
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>File Name</th>
+              <th>File Size</th>
+              <th>Uploaded</th>
+              <th></th>
+            </tr>
+            </thead>
+            <% @vendor.vendor_attachments.each do |vendor_attachment| %>
+              <tr>
+                <td><%= vendor_attachment.name %></td>
+                <td><%= vendor_attachment.size %></td>
+                <td><%= vendor_attachment.updated_at.strftime("%d.%m.%Y") %></td>
+                <td class="project-actions text-right" onclick="voidZoneConfirm('<%= vendor_attachment.vendor_attachment_id %>')">
+                  <a class="btn btn-danger btn-block" href="#"><i class="fas fa-trash"></i>Delete</a>
+                </td>
+              </tr>
+            <% end %>
+          </table>
         </div>
       </div>
     </div>
