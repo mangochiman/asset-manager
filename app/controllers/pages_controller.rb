@@ -180,12 +180,15 @@ class PagesController < ApplicationController
             extension = File.extname(file_upload).downcase
             original_filename = file_upload.original_filename.split(".")[0].parameterize
             file_name = "#{original_filename}#{extension}"
+            file_size_readable = ActionController::Base.helpers.number_to_human_size(file_upload.size)
+            file_size_bytes = file_upload.size
+
             vendor_attachment = VendorAttachment.new
             vendor_attachment.vendor_id = vendor.vendor_id
             vendor_attachment.name = original_filename
+            vendor_attachment.size = file_size_readable
+            vendor_attachment.bytes = file_size_bytes
             vendor_attachment.url = '/uploads/' + file_name
-            vendor_attachment.size = ''
-            vendor_attachment.bytes = ''
             if vendor_attachment.save
               File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
                 file.write(file_upload.read)
@@ -239,12 +242,15 @@ class PagesController < ApplicationController
             extension = File.extname(file_upload).downcase
             original_filename = file_upload.original_filename.split(".")[0].parameterize
             file_name = "#{original_filename}#{extension}"
+            file_size_readable = ActionController::Base.helpers.number_to_human_size(file_upload.size)
+            file_size_bytes = file_upload.size
+
             vendor_attachment = VendorAttachment.new
             vendor_attachment.vendor_id = @vendor.vendor_id
             vendor_attachment.name = original_filename
             vendor_attachment.url = '/uploads/' + file_name
-            vendor_attachment.size = ''
-            vendor_attachment.bytes = ''
+            vendor_attachment.size = file_size_readable
+            vendor_attachment.bytes = file_size_bytes
             if vendor_attachment.save
               File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
                 file.write(file_upload.read)
