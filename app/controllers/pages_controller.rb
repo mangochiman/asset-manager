@@ -282,4 +282,19 @@ class PagesController < ApplicationController
     end
   end
 
+  def delete_vendor
+    vendor = Vendor.find(params[:id])
+    vendor_attachments = vendor.vendor_attachments
+    ActiveRecord::Base.transaction do
+      vendor_attachments.each do |vendor_attachment|
+        file_path = Rails.root.to_s + '/public' + vendor_attachment.url.to_s
+        vendor_attachment.delete
+        File.delete(file_path) if File.exist?(file_path)
+      end
+      vendor.delete
+    end
+    flash[:notice] = 'Record deletion was successful'
+    redirect_to("/list_vendors") and return
+  end
+
 end

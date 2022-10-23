@@ -27,7 +27,7 @@
           <td>
             <a class="btn btn-primary btn-block" href="/edit_vendor?vendor_id=<%= vendor.vendor_id %>"><i class="fas fa-user-edit"></i>Edit</a>
           </td>
-          <td class="project-actions text-right" onclick="voidZoneConfirm('<%= vendor.vendor_id %>')">
+          <td class="project-actions text-right" onclick="voidVendorConfirm('<%= vendor.vendor_id %>')">
             <a class="btn btn-danger btn-block" href="#"><i class="fas fa-trash"></i>Delete</a>
           </td>
         </tr>
@@ -41,7 +41,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="voidZoneModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="voidVendorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -55,7 +55,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
-        <button onclick="voidZone();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+        <button onclick="voidVendor();" type="button" class="btn btn-primary">Yes, Am Sure</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -71,24 +71,24 @@
         jQuery('.vendors-menu').addClass('menu-open');
     })
 
-    var selectedZoneID;
+    var selectedVendorID;
 
-    function voidZoneConfirm(id) {
-        selectedZoneID = id;
-        jQuery('#voidZoneModal').modal('show');
+    function voidVendorConfirm(id) {
+        selectedVendorID = id;
+        jQuery('#voidVendorModal').modal('show');
     }
 
-    function voidZone() {
+    function voidVendor() {
         var body = document.getElementsByTagName("body")[0];
 
         var form = document.createElement("form");
         form.method = "POST";
-        form.action = "/delete_zone_menu";
+        form.action = "/delete_vendor";
         body.appendChild(form);
 
         var input = document.createElement("input");
         input.type = "hidden";
-        input.value = selectedZoneID;
+        input.value = selectedVendorID;
         input.name = "id";
         form.appendChild(input);
 
