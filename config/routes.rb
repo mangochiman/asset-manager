@@ -43,4 +43,6 @@ Rails.application.routes.draw do
   get '/export_all' => 'pages#export_all'
   post '/export_all' => 'pages#export_all'
 
+  get '/new_vendor' => 'pages#new_vendor'
+  post '/new_vendor' => 'pages#new_vendor'
 end

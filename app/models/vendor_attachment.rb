@@ -1,0 +1,2 @@
+class VendorAttachment < ApplicationRecord
+end

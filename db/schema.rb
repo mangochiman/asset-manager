@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_22_162056) do
+ActiveRecord::Schema.define(version: 2022_10_23_023742) do
 
   create_table "report_options", primary_key: "report_option_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "header"
@@ -61,6 +61,34 @@ ActiveRecord::Schema.define(version: 2022_10_22_162056) do
     t.integer "voided", default: 0
     t.integer "voided_by"
     t.date "date_voided"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "vendor_attachments", primary_key: "vendor_attachment_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "vendor_id"
+    t.string "name"
+    t.string "url"
+    t.string "size"
+    t.integer "bytes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "vendors", primary_key: "vendor_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "number"
+    t.string "phone"
+    t.string "website"
+    t.string "contact_name"
+    t.string "email"
+    t.string "address1"
+    t.string "address2"
+    t.string "city"
+    t.string "state"
+    t.string "postal_code"
+    t.string "country"
+    t.text "notes"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

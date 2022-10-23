@@ -1,0 +1,225 @@
+<form id="vendor" action="/new_vendor" method="post" enctype="multipart/form-data">
+  <div class="card card-primary card-outline">
+
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Buttons with Icons -->
+          <div class="card">
+            <div class="card-body row">
+              <div class="">
+                <button onclick="validateForm()" type="button" class="btn btn-primary">
+                  <i class="fa fa-save"></i> Save
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="btn btn-success">
+                  <i class="fa fa-plus"></i> New Vendor
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs" id="custom-content-above-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="custom-content-above-home-tab" data-toggle="pill" href="#custom-content-above-home" role="tab" aria-controls="custom-content-above-home" aria-selected="true">General</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-profile-tab" data-toggle="pill" href="#custom-content-above-profile" role="tab" aria-controls="custom-content-above-profile" aria-selected="false">Assets</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-settings-tab" data-toggle="pill" href="#custom-content-above-notes" role="tab" aria-controls="custom-content-above-notes" aria-selected="false">Notes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-settings-tab" data-toggle="pill" href="#custom-content-above-files" role="tab" aria-controls="custom-content-above-notes" aria-selected="false">Files</a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="custom-content-above-tabContent">
+        <div class="tab-pane fade show active" id="custom-content-above-home" role="tabpanel" aria-labelledby="custom-content-above-home-tab">
+
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Vendor Name<span class="text-red"> *</span></label>
+                    <input type="text" id="vendorName" name="name" required class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Vendor Number</label>
+                    <input type="text" name="number" class="form-control" placeholder="Automatic">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Website</label>
+                    <input type="text" name="website" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Contact Name</label>
+                    <input type="text" name="contact_name" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Email address</label>
+                    <input type="text" name="email" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Address 1</label>
+                    <input type="text" name="address1" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Address 2</label>
+                    <input type="text" name="address2" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>City</label>
+                    <input type="text" name="city" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>State/Province</label>
+                    <input type="text" name="state" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Postal Code</label>
+                    <input type="text" name="postal_code" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Country</label>
+                    <input type="text" name="country" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="custom-content-above-profile" role="tabpanel" aria-labelledby="custom-content-above-profile-tab">
+          <div class="card">
+            <div class="card-body">
+              <p>Nothing to show</p>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="custom-content-above-notes" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-outline card-info">
+                <!-- /.card-header -->
+                <div class="card-body">
+              <textarea id="summernote" name="notes" rows="40">
+
+              </textarea>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+          </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="custom-content-above-files" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
+          <br/>
+          <p><i>To upload multiple files, press <strong>ctrl</strong> on your keyboard + click the file</i></p>
+          <div class="col-md-12">
+            <div class="form-group" id="fileInput">
+              <label for="exampleInputFile">Upload Files</label>
+              <div class="input-group">
+                <div class="custom-file">
+                  <input type="file" name="file[]" class="custom-file-input" multiple>
+                  <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- /.card -->
+  </div>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="requiredModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The asset name is required
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script>
+
+    $(document).ready(function () {
+        // Summernote
+        jQuery('#summernote').summernote()
+
+        jQuery('.vendors').addClass('active');
+        jQuery('.new_vendor_menu').addClass('active');
+        jQuery('.vendors-menu').addClass('menu-open');
+        jQuery("#vendor").submit(function (event) {
+            var vendorName = jQuery("#vendorName").val().trim()
+            if (vendorName == "") {
+                jQuery('#requiredModal').modal('show');
+                event.preventDefault();
+            }
+        });
+
+        bsCustomFileInput.init();
+    })
+
+    function validateForm() {
+        $("#vendor").submit();
+    }
+</script>

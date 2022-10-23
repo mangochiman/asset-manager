@@ -156,4 +156,57 @@ class PagesController < ApplicationController
     @page_header = "Export Data and Files"
   end
 
+  def new_vendor
+    @page_header = "New Vendor"
+    if request.post?
+      vendor = Vendor.new
+      vendor.name = params[:name]
+      vendor.number = params[:number]
+      vendor.phone = params[:phone]
+      vendor.website = params[:website]
+      vendor.contact_name = params[:contact_name]
+      vendor.email = params[:email]
+      vendor.address1 = params[:address1]
+      vendor.address2 = params[:address2]
+      vendor.city = params[:city]
+      vendor.state = params[:state]
+      vendor.postal_code = params[:postal_code]
+      vendor.country = params[:country]
+      vendor.notes = params[:notes]
+      if vendor.save
+        unless params[:file].blank?
+          errors = []
+          params[:file].each do |file_upload|
+            extension = File.extname(file_upload).downcase
+            original_filename = file_upload.original_filename.split(".")[0].parameterize
+            file_name = "#{original_filename}#{extension}"
+            vendor_attachment = VendorAttachment.new
+            vendor_attachment.vendor_id = vendor.vendor_id
+            vendor_attachment.name = original_filename
+            vendor_attachment.url = '/uploads/' + file_name
+            vendor_attachment.size = ''
+            vendor_attachment.bytes = ''
+            if vendor_attachment.save
+              File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+                file.write(file_upload.read)
+              end
+            else
+              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+            end
+          end
+          unless errors.blank?
+            flash[:error] = errors.join('<br />')
+            redirect_to("/new_vendor") and return
+          end
+        end
+
+        flash[:notice] = 'Record creation was successful'
+        redirect_to("/new_vendor") and return
+      else
+        flash[:error] = vendor.errors.full_messages.join('<br />')
+        redirect_to("/new_vendor") and return
+      end
+    end
+  end
+
 end
