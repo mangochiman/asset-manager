@@ -44,5 +44,10 @@ Rails.application.routes.draw do
   post '/export_all' => 'pages#export_all'
 
   get '/new_vendor' => 'pages#new_vendor'
-  post '/new_vendor' => 'pages#new_vendor'
+  post '/new_vendor' => 'pages#new_vendor' #list_vendors
+
+  get '/list_vendors' => 'pages#list_vendors' #edit_vendor
+  get '/edit_vendor' => 'pages#edit_vendor'
+  post '/edit_vendor' => 'pages#edit_vendor'
+
 end

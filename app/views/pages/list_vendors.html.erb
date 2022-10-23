@@ -1,0 +1,97 @@
+
+
+<!-- Default box -->
+<div class="card">
+  <div class="card-body ">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Number</th>
+        <th>Phone #</th>
+        <th>Contact Name</th>
+        <th>Email</th>
+        <th>Last Update</th>
+        <th colspan="2"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @vendors.each do |vendor| %>
+        <tr>
+          <td><%= vendor.name %></td>
+          <td><%= vendor.number %></td>
+          <td><%= vendor.phone %></td>
+          <td><%= vendor.contact_name %></td>
+          <td><%= vendor.email %></td>
+          <td><%= vendor.updated_at.strftime("%d.%m.%Y") %></td>
+          <td>
+            <a class="btn btn-primary btn-block" href="/edit_vendor?vendor_id=<%= vendor.vendor_id %>"><i class="fas fa-user-edit"></i>Edit</a>
+          </td>
+          <td class="project-actions text-right" onclick="voidZoneConfirm('<%= vendor.vendor_id %>')">
+            <a class="btn btn-danger btn-block" href="#"><i class="fas fa-trash"></i>Delete</a>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="voidZoneModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidZone();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.vendors').addClass('active');
+        jQuery('.list_vendors_menu').addClass('active');
+        jQuery('.vendors-menu').addClass('menu-open');
+    })
+
+    var selectedZoneID;
+
+    function voidZoneConfirm(id) {
+        selectedZoneID = id;
+        jQuery('#voidZoneModal').modal('show');
+    }
+
+    function voidZone() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_zone_menu";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedZoneID;
+        input.name = "id";
+        form.appendChild(input);
+
+        form.submit();
+    }
+</script>

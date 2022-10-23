@@ -209,4 +209,17 @@ class PagesController < ApplicationController
     end
   end
 
+  def list_vendors
+    @page_header = "Vendors List"
+    @vendors = Vendor.order('vendor_id DESC')
+  end
+
+  def edit_vendor
+    @vendor = Vendor.find(params[:vendor_id])
+    @page_header = "Updating vendor: #{@vendor.name}"
+    if request.post?
+
+    end
+  end
+
 end
