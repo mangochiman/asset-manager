@@ -51,5 +51,13 @@ Rails.application.routes.draw do
   get '/edit_vendor' => 'pages#edit_vendor'
   post '/edit_vendor' => 'pages#edit_vendor'
 
-  post '/delete_vendor_attachment' => 'pages#delete_vendor_attachment'
+  post '/delete_vendor_attachment' => 'pages#delete_vendor_attachment' #groups
+  get '/groups' => 'pages#groups'
+  post '/groups' => 'pages#groups' #update_group
+  post '/update_group' => 'pages#update_group'
+  post '/delete_group' => 'pages#delete_group'
+
+  get '/locations' => 'pages#locations'
+  post '/locations' => 'pages#locations'
+  post '/delete_location' => 'pages#delete_location'
 end

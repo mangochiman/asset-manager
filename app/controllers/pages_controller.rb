@@ -303,4 +303,52 @@ class PagesController < ApplicationController
     redirect_to("/list_vendors") and return
   end
 
+  def groups
+    @page_header = "Groups"
+    if request.post?
+      group = Group.new
+      group.name = params[:name]
+      if group.save
+        flash[:notice] = 'Record creation was successful'
+        redirect_to("/groups") and return
+      else
+        flash[:error] = group.errors.full_messages.join('<br />')
+        redirect_to("/groups") and return
+      end
+    end
+    @groups = Group.order("group_id DESC")
+  end
+
+  def update_group
+    group = Group.find(params[:group_id])
+    group.name = params[:name]
+    if group.save
+      flash[:notice] = 'Record update was successful'
+      redirect_to("/groups") and return
+    else
+      flash[:error] = group.errors.full_messages.join('<br />')
+      redirect_to("/groups") and return
+    end
+  end
+
+  def delete_group
+    group = Group.find(params[:id])
+    if group.delete
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/groups") and return
+    else
+      flash[:error] = group.errors.full_messages.join('<br />')
+      redirect_to("/groups") and return
+    end
+  end
+
+  def locations
+    @page_header = "Locations"
+    @locations = Location.order("group_id DESC")
+  end
+
+  def delete_location
+
+  end
+
 end

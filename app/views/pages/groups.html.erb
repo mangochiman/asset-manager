@@ -1,0 +1,157 @@
+<div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">General info</h3>
+
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <form action="/groups" method="post">
+            <div class="form-group">
+              <label for="inputName">Name</label>
+              <input type="text" required name="name" id="inputName" class="form-control">
+            </div>
+            <input type="submit" value="Add" class="btn btn-success">
+          </form>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Manage Groups</h3>
+
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th colspan="2">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @groups.each do |group| %>
+              <tr>
+                <td><%= group.name %></td>
+                <td>
+                  <button onclick="showEditPopup('<%= group.group_id %>', '<%= group.name %>')" class="btn btn-secondary btn-block">Edit</button>
+                </td>
+                <td>
+                  <button onclick="voidGroupConfirm('<%= group.group_id %>')" class="btn btn-danger btn-block">Delete</button>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+  </div>
+
+<!-- Modal -->
+<div class="modal fade" id="editFieldModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Record</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/update_group" method="post">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="inputName">Name</label>
+            <input type="text" name="name" id="groupName" class="form-control">
+            <input type="hidden" name="group_id" id="groupID" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" value="Save" class="btn btn-primary">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidGroup();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.people').addClass('active');
+        jQuery('.people_groups_menu').addClass('active');
+        jQuery('.people-menu').addClass('menu-open');
+    })
+
+    function showEditPopup(groupID, name){
+        jQuery('#groupName').val(name);
+        jQuery('#groupID').val(groupID); //
+        jQuery('#editFieldModal').modal('show');
+    }
+
+    var selectedGroupID;
+
+    function voidGroupConfirm(id) {
+        selectedGroupID = id;
+        jQuery('#deleteModal').modal('show');
+    }
+
+    function voidGroup() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_group";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedGroupID;
+        input.name = "id";
+        form.appendChild(input);
+
+        form.submit();
+    }
+</script>
