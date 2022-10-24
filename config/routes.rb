@@ -60,4 +60,8 @@ Rails.application.routes.draw do
   get '/locations' => 'pages#locations'
   post '/locations' => 'pages#locations'
   post '/delete_location' => 'pages#delete_location'
+  post '/update_location' => 'pages#update_location' #new_person
+
+  get '/new_person' => 'pages#new_person'
+  post '/new_person' => 'pages#new_person'
 end

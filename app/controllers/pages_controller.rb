@@ -344,11 +344,44 @@ class PagesController < ApplicationController
 
   def locations
     @page_header = "Locations"
-    @locations = Location.order("group_id DESC")
+    if request.post?
+      location = Location.new
+      location.name = params[:name]
+      if location.save
+        flash[:notice] = 'Record creation was successful'
+        redirect_to("/locations") and return
+      else
+        flash[:error] = location.errors.full_messages.join('<br />')
+        redirect_to("/locations") and return
+      end
+    end
+    @locations = Location.order("location_id DESC")
   end
 
   def delete_location
-
+    location = Location.find(params[:id])
+    if location.delete
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/locations") and return
+    else
+      flash[:error] = location.errors.full_messages.join('<br />')
+      redirect_to("/locations") and return
+    end
   end
 
+  def update_location
+    location = Location.find(params[:location_id])
+    location.name = params[:name]
+    if location.save
+      flash[:notice] = 'Record update was successful'
+      redirect_to("/locations") and return
+    else
+      flash[:error] = location.errors.full_messages.join('<br />')
+      redirect_to("/locations") and return
+    end
+  end
+
+  def new_person
+    
+  end
 end
