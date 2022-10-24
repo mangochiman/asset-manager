@@ -57,7 +57,7 @@
           <% @service_items.each do |service_item| %>
             <tr>
               <td><%= service_item.name %></td>
-              <td><%= service_item.selection_field.field_name %></td>
+              <td><%= service_item.selection_field.field_name rescue "<span class='text-red'>[Deleted]</span>".html_safe %></td>
               <td>
                 <button onclick="showEditPopup('<%= service_item.service_item_id %>', '<%= service_item.name %>', '<%= service_item.selection_field_id %>')" class="btn btn-secondary btn-block">Edit</button>
               </td>
