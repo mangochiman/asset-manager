@@ -1,0 +1,258 @@
+<form id="person" action="/new_person" method="post" enctype="multipart/form-data">
+  <div class="card card-primary card-outline">
+
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Buttons with Icons -->
+          <div class="card">
+            <div class="card-body row">
+              <div class="">
+                <button onclick="validateForm()" type="button" class="btn btn-primary">
+                  <i class="fa fa-save"></i> Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs" id="custom-content-above-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="custom-content-above-home-tab" data-toggle="pill" href="#custom-content-above-home" role="tab" aria-controls="custom-content-above-home" aria-selected="true">General</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-profile-tab" data-toggle="pill" href="#custom-content-above-profile" role="tab" aria-controls="custom-content-above-profile" aria-selected="false">Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-settings-tab" data-toggle="pill" href="#custom-content-above-notes" role="tab" aria-controls="custom-content-above-notes" aria-selected="false">Notes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-settings-tab" data-toggle="pill" href="#custom-content-above-files" role="tab" aria-controls="custom-content-above-notes" aria-selected="false">Files</a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="custom-content-above-tabContent">
+        <div class="tab-pane fade show active" id="custom-content-above-home" role="tabpanel" aria-labelledby="custom-content-above-home-tab">
+
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>First Name<span class="text-red"> *</span></label>
+                    <input type="text" id="firstName" name="first_name" required class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Last Name <span class="text-red"> *</span></label>
+                    <input type="text" id="lastName" name="last_name" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Personnel Number</label>
+                    <input type="text" name="barcode" class="form-control" placeholder="Automatic">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <select name="location_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @locations.each do |location| %>
+                        <option value="<%= location.location_id %>"><%= location.name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Group</label>
+                    <select name="group_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @groups.each do |group| %>
+                        <option value="<%= group.group_id %>"><%= group.name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Job Title</label>
+                    <select name="selection_field_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @selection_fields.each do |selection_field| %>
+                        <option value="<%= selection_field.selection_field_id %>"><%= selection_field.field_name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>E-mail address</label>
+                    <input type="text" name="email" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="custom-content-above-profile" role="tabpanel" aria-labelledby="custom-content-above-profile-tab">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Username<span class="text-red"> *</span></label>
+                    <input type="text" id="username" name="username" required class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>System Role</label>
+                    <select name="location_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @system_roles.each do |system_role| %>
+                        <option value="<%= system_role %>"><%= system_role %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="text" id="password" name="password" class="form-control" placeholder="Automatic">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="custom-content-above-notes" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-outline card-info">
+                <!-- /.card-header -->
+                <div class="card-body">
+              <textarea id="summernote" name="notes" rows="40">
+
+              </textarea>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+          </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="custom-content-above-files" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
+          <br/>
+          <p><i>To upload multiple files, press <strong>ctrl</strong> on your keyboard + click the file</i></p>
+          <div class="col-md-12">
+            <div class="form-group" id="fileInput">
+              <label for="exampleInputFile">Upload Files</label>
+              <div class="input-group">
+                <div class="custom-file">
+                  <input type="file" name="file[]" class="custom-file-input" multiple>
+                  <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- /.card -->
+  </div>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="requiredModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="customMessage">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script>
+
+    $(document).ready(function () {
+        // Summernote
+        jQuery('#summernote').summernote()
+
+        jQuery('.people').addClass('active');
+        jQuery('.new_person_menu').addClass('active');
+        jQuery('.people-menu').addClass('menu-open');
+
+        jQuery("#person").submit(function (event) {
+            var firstName = jQuery("#firstName").val().trim()
+            var lastName = jQuery("#lastName").val().trim()
+            var username = jQuery("#username").val().trim()
+            var password = jQuery("#password").val().trim()
+            if (firstName == "") {
+                jQuery('#requiredModal').modal('show');
+                jQuery('#customMessage').html('The first name is required')
+                event.preventDefault();
+                return
+            }
+            if (lastName == "") {
+                jQuery('#requiredModal').modal('show');
+                jQuery('#customMessage').html('The last name is required')
+                event.preventDefault();
+                return
+            }
+            if (username == "") {
+                jQuery('#requiredModal').modal('show');
+                jQuery('#customMessage').html('The username is required')
+                event.preventDefault();
+                return
+            }
+            if (password == "") {
+                jQuery('#requiredModal').modal('show');
+                jQuery('#customMessage').html('The passord is required')
+                event.preventDefault();
+                return
+            }
+            //password
+        });
+
+        bsCustomFileInput.init();
+    })
+
+    function validateForm() {
+        $("#person").submit();
+    }
+</script>
