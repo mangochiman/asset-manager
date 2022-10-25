@@ -384,6 +384,9 @@ class PagesController < ApplicationController
   def new_person
     @page_header = "New person"
     @locations = Location.all
+    if request.post?
+
+    end
     @selection_fields = SelectionField.where(['field_type =?', 'job_title'])
     @groups = Group.all
     @system_roles = ["Auditor", "Custodian", "Data Administrator", "Service Manager",

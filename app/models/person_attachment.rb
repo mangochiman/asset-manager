@@ -1,0 +1,2 @@
+class PersonAttachment < ApplicationRecord
+end

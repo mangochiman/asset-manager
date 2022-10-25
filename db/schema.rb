@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_24_165052) do
+ActiveRecord::Schema.define(version: 2022_10_25_042140) do
 
   create_table "groups", primary_key: "group_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
@@ -20,6 +20,31 @@ ActiveRecord::Schema.define(version: 2022_10_24_165052) do
 
   create_table "locations", primary_key: "location_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "people", primary_key: "person_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "barcode"
+    t.integer "location_id"
+    t.integer "group_id"
+    t.integer "selection_field_id"
+    t.string "email"
+    t.string "phone"
+    t.string "role"
+    t.string "salt"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "person_attachments", primary_key: "person_attachment_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "person_id"
+    t.string "name"
+    t.string "url"
+    t.string "size"
+    t.integer "bytes"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -61,15 +86,12 @@ ActiveRecord::Schema.define(version: 2022_10_24_165052) do
   end
 
   create_table "users", primary_key: "user_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "person_id"
     t.string "username"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "phone_number"
-    t.string "email"
     t.string "password"
+    t.string "salt"
     t.string "secret_question"
     t.string "secret_answer"
-    t.string "salt"
     t.integer "voided", default: 0
     t.integer "voided_by"
     t.date "date_voided"
