@@ -8,9 +8,9 @@ class CreatePeople < ActiveRecord::Migration[6.0]
       t.integer :group_id
       t.integer :selection_field_id
       t.string :email
+      t.text :notes
       t.string :phone
       t.string :role
-      t.string :salt
       t.timestamps
     end
   end

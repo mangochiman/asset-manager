@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_25_042140) do
+ActiveRecord::Schema.define(version: 2022_10_25_141307) do
 
   create_table "groups", primary_key: "group_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 2022_10_25_042140) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "password_reminders", primary_key: "password_reminder_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "password"
+    t.string "salt"
+    t.integer "voided", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "people", primary_key: "person_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -32,9 +41,9 @@ ActiveRecord::Schema.define(version: 2022_10_25_042140) do
     t.integer "group_id"
     t.integer "selection_field_id"
     t.string "email"
+    t.text "notes"
     t.string "phone"
     t.string "role"
-    t.string "salt"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

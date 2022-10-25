@@ -385,12 +385,180 @@ class PagesController < ApplicationController
     @page_header = "New person"
     @locations = Location.all
     if request.post?
+      person = Person.new
+      person.first_name = params[:first_name]
+      person.last_name = params[:last_name]
+      person.barcode = params[:barcode]
+      person.location_id = params[:location_id]
+      person.group_id = params[:group_id]
+      person.selection_field_id = params[:selection_field_id]
+      person.email = params[:email]
+      person.notes = params[:notes]
+      person.phone = params[:phone]
+      person.role = params[:role]
 
+      if person.save
+        unless params[:file].blank?
+          errors = []
+          params[:file].each do |file_upload|
+            extension = File.extname(file_upload).downcase
+            original_filename = file_upload.original_filename.split(".")[0].parameterize
+            file_name = "#{original_filename}#{extension}"
+            file_size_readable = ActionController::Base.helpers.number_to_human_size(file_upload.size)
+            file_size_bytes = file_upload.size
+
+            person_attachment = PersonAttachment.new
+            person_attachment.person_id = person.person_id
+            person_attachment.name = original_filename
+            person_attachment.size = file_size_readable
+            person_attachment.bytes = file_size_bytes
+            person_attachment.url = '/uploads/' + file_name
+            if person_attachment.save
+              File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+                file.write(file_upload.read)
+              end
+            else
+              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+            end
+          end
+          unless errors.blank?
+            flash[:error] = errors.join('<br />')
+            redirect_to("/new_person") and return
+          end
+        end
+
+        unless params[:username].blank?
+          params[:person_id] = person.person_id
+          params[:username] = params[:username]
+          params[:password] = params[:password]
+          user = User.new_user(params)
+          if user.save
+          else
+            flash[:error] = user.errors.full_messages.join('<br />')
+            redirect_to("/new_person") and return
+          end
+        end
+
+        flash[:notice] = 'Record creation was successful'
+        redirect_to("/new_person") and return
+      else
+        flash[:error] = person.errors.full_messages.join('<br />')
+        redirect_to("/new_person") and return
+      end
     end
     @selection_fields = SelectionField.where(['field_type =?', 'job_title'])
     @groups = Group.all
-    @system_roles = ["Auditor", "Custodian", "Data Administrator", "Service Manager",
-                     "System Administrator", "Viewer"]
+    @system_roles = User.roles
+  end
+
+  def list_people
+    @page_header = "List people"
+    @people = Person.order("person_id DESC")
+  end
+
+  def edit_person
+    @page_header = "Edit Person"
+    @person = Person.find(params[:person_id])
+    if request.post?
+      person = @person
+      person.first_name = params[:first_name]
+      person.last_name = params[:last_name]
+      person.barcode = params[:barcode]
+      person.location_id = params[:location_id]
+      person.group_id = params[:group_id]
+      person.selection_field_id = params[:selection_field_id]
+      person.email = params[:email]
+      person.notes = params[:notes]
+      person.phone = params[:phone]
+      if person.user.blank?
+        person.role = params[:role] unless params[:role].blank?
+      end
+
+      if person.save
+        unless params[:file].blank?
+          errors = []
+          params[:file].each do |file_upload|
+            extension = File.extname(file_upload).downcase
+            original_filename = file_upload.original_filename.split(".")[0].parameterize
+            file_name = "#{original_filename}#{extension}"
+            file_size_readable = ActionController::Base.helpers.number_to_human_size(file_upload.size)
+            file_size_bytes = file_upload.size
+
+            person_attachment = PersonAttachment.new
+            person_attachment.person_id = person.person_id
+            person_attachment.name = original_filename
+            person_attachment.size = file_size_readable
+            person_attachment.bytes = file_size_bytes
+            person_attachment.url = '/uploads/' + file_name
+            if person_attachment.save
+              File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+                file.write(file_upload.read)
+              end
+            else
+              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+            end
+          end
+          unless errors.blank?
+            flash[:error] = errors.join('<br />')
+            redirect_to("/edit_person?person_id=#{params[:person_id]}") and return
+          end
+        end
+
+        if person.user.blank?
+          unless params[:username].blank?
+            params[:person_id] = person.person_id
+            params[:username] = params[:username]
+            params[:password] = params[:password]
+            user = User.new_user(params)
+            if user.save
+            else
+              flash[:error] = user.errors.full_messages.join('<br />')
+              redirect_to("/edit_person?person_id=#{params[:person_id]}") and return
+            end
+          end
+        end
+
+        flash[:notice] = 'Record creation was successful'
+        redirect_to("/list_people") and return
+      else
+        flash[:error] = person.errors.full_messages.join('<br />')
+        redirect_to("/edit_person?person_id=#{params[:person_id]}") and return
+      end
+    end
+
+    @locations = Location.all
+    @selection_fields = SelectionField.where(['field_type =?', 'job_title'])
+    @groups = Group.all
+    @system_roles = User.roles
+  end
+
+  def delete_person
+    person = Person.find(params[:id])
+    person_attachments = person.person_attachments
+    ActiveRecord::Base.transaction do
+      person_attachments.each do |person_attachment|
+        file_path = Rails.root.to_s + '/public' + person_attachment.url.to_s
+        person_attachment.delete
+        File.delete(file_path) if File.exist?(file_path)
+      end
+      person.user.delete unless person.user.blank?
+      person.delete
+    end
+    flash[:notice] = 'Record deletion was successful'
+    redirect_to("/list_people") and return
+  end
+
+  def delete_person_attachment
+    person_attachment = PersonAttachment.find(params[:id])
+    file_path = Rails.root.to_s + '/public' + person_attachment.url.to_s
+    if person_attachment.delete
+      File.delete(file_path) if File.exist?(file_path)
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/edit_person?person_id=#{params[:person_id]}") and return
+    else
+      flash[:error] = person_attachment.errors.full_messages.join('<br />')
+      redirect_to("/edit_person?person_id=#{params[:person_id]}") and return
+    end
   end
 
 end

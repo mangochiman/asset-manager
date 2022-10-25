@@ -4,17 +4,17 @@ class User < ActiveRecord::Base
   self.table_name = 'users'
   self.primary_key = 'user_id'
 
-  has_many :user_roles, :dependent => :destroy
+  #has_many :user_roles, :dependent => :destroy
   has_many :password_reminders, :dependent => :destroy
 
-  validates_presence_of :first_name, :message => ' can not be blank'
-  validates_presence_of :last_name, :message => ' can not be blank'
+  #validates_presence_of :first_name, :message => ' can not be blank'
+  #validates_presence_of :last_name, :message => ' can not be blank'
   validates_presence_of :username, :message => ' can not be blank'
-  validates_presence_of :phone_number, :message => ' can not be blank'
-  validates_presence_of :email, :message => ' can not be blank'
+  #validates_presence_of :phone_number, :message => ' can not be blank'
+  #validates_presence_of :email, :message => ' can not be blank'
   validates_uniqueness_of :username, :message => ' already taken'
-  validates_uniqueness_of :email, :message => ' already taken'
-  validates_uniqueness_of :phone_number, :phone_number => ' already taken'
+  #validates_uniqueness_of :email, :message => ' already taken'
+  #validates_uniqueness_of :phone_number, :phone_number => ' already taken'
 
 
   default_scope {where('voided = 0')}
@@ -96,21 +96,14 @@ class User < ActiveRecord::Base
   def self.new_user(params)
     salt = self.random_string(10)
     user = User.new
-    user.first_name = params[:user][:first_name]
-    user.last_name = params[:user][:last_name]
-    user.email = params[:user][:email]
-    user.phone_number = params[:user][:phone_number]
-    user.password = self.encrypt(params[:user][:password], salt)
+    user.password = self.encrypt(params[:password], salt)
     user.salt = salt
-    user.username = params[:user][:username]
+    user.person_id = params[:person_id]
+    user.username = params[:username]
     return user
   end
 
   def self.update_user(user, params)
-    user.first_name = params[:user][:first_name]
-    user.last_name = params[:user][:last_name]
-    user.email = params[:user][:email]
-    user.phone_number = params[:user][:phone_number]
     user.username = params[:user][:username]
     user.secret_question = params[:user][:secret_question]
     user.secret_answer = params[:user][:secret_answer]
@@ -126,8 +119,8 @@ class User < ActiveRecord::Base
   end
 
   def self.roles
-    roles = [
-        %w[Admin admin]]
+    roles = ["Auditor", "Custodian", "Data Administrator", "Service Manager",
+             "System Administrator", "Viewer"]
     return roles
   end
 

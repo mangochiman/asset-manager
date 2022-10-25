@@ -63,5 +63,13 @@ Rails.application.routes.draw do
   post '/update_location' => 'pages#update_location' #new_person
 
   get '/new_person' => 'pages#new_person'
-  post '/new_person' => 'pages#new_person'
+  post '/new_person' => 'pages#new_person' #edit_person
+
+  get '/edit_person' => 'pages#edit_person'
+  post '/edit_person' => 'pages#edit_person'
+
+  get '/list_people' => 'pages#list_people' #delete_person
+  post '/delete_person' => 'pages#delete_person'
+  post '/delete_person_attachment' => 'pages#delete_person_attachment'
+
 end

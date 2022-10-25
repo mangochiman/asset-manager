@@ -1,4 +1,4 @@
-<form id="person" action="/new_person" method="post" enctype="multipart/form-data">
+<form id="person" action="/edit_person" method="post" enctype="multipart/form-data">
   <div class="card card-primary card-outline">
 
     <div class="card-body">
@@ -10,7 +10,7 @@
             <div class="card-body row">
               <div class="">
                 <button onclick="validateForm()" type="button" class="btn btn-primary">
-                  <i class="fa fa-save"></i> Save
+                  <i class="fa fa-save"></i> Update
                 </button>
               </div>
             </div>
@@ -42,19 +42,19 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label>First Name<span class="text-red"> *</span></label>
-                    <input type="text" id="firstName" name="first_name" required class="form-control">
+                    <input type="text" value="<%= @person.first_name %>" id="firstName" name="first_name" required class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label>Last Name <span class="text-red"> *</span></label>
-                    <input type="text" id="lastName" name="last_name" class="form-control">
+                    <input type="text" value="<%= @person.last_name %>" id="lastName" name="last_name" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label>Personnel Number</label>
-                    <input type="text" name="barcode" class="form-control" placeholder="Automatic">
+                    <input type="text" name="barcode" value="<%= @person.barcode %>" class="form-control" placeholder="Automatic">
                   </div>
                 </div>
                 <div class="col-sm-3">
@@ -63,7 +63,7 @@
                     <select name="location_id" class="form-control custom-select">
                       <option value="" selected disabled>Select one</option>
                       <% @locations.each do |location| %>
-                        <option value="<%= location.location_id %>"><%= location.name %></option>
+                        <option id="location_id_<%= location.location_id %>" value="<%= location.location_id %>"><%= location.name %></option>
                       <% end %>
                     </select>
                   </div>
@@ -77,7 +77,7 @@
                     <select name="group_id" class="form-control custom-select">
                       <option value="" selected disabled>Select one</option>
                       <% @groups.each do |group| %>
-                        <option value="<%= group.group_id %>"><%= group.name %></option>
+                        <option id="group_id_<%= group.group_id %>" value="<%= group.group_id %>"><%= group.name %></option>
                       <% end %>
                     </select>
                   </div>
@@ -88,7 +88,7 @@
                     <select name="selection_field_id" class="form-control custom-select">
                       <option value="" selected disabled>Select one</option>
                       <% @selection_fields.each do |selection_field| %>
-                        <option value="<%= selection_field.selection_field_id %>"><%= selection_field.field_name %></option>
+                        <option id="selection_field_id_<%= selection_field.selection_field_id %>" value="<%= selection_field.selection_field_id %>"><%= selection_field.field_name %></option>
                       <% end %>
                     </select>
                   </div>
@@ -96,13 +96,13 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label>E-mail address</label>
-                    <input type="text" name="email" class="form-control">
+                    <input type="text" value="<%= @person.email %>" name="email" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label>Phone Number</label>
-                    <input type="text" name="phone" class="form-control">
+                    <input type="text" value="<%= @person.phone %>" name="phone" class="form-control">
                   </div>
                 </div>
               </div>
@@ -115,11 +115,15 @@
         <div class="tab-pane fade" id="custom-content-above-profile" role="tabpanel" aria-labelledby="custom-content-above-profile-tab">
           <div class="card">
             <div class="card-body">
+              <% if !@person.user.blank? %>
+              <p class="text-info">NOTE: You can't change existing user account from here. User account data can be updated
+              under My Profile after login. All details from this tab will not be updated</p>
+              <% end %>
               <div class="row">
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label>Username<span class="text-red"> *</span></label>
-                    <input type="text" id="username" name="username" required class="form-control">
+                    <input type="text" id="username" value="<%= @person.user.username rescue '' %>" name="username" required class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-3">
@@ -128,7 +132,7 @@
                     <select name="role" id="systemRole" class="form-control custom-select">
                       <option value="" selected disabled>Select one</option>
                       <% @system_roles.each do |system_role| %>
-                        <option value="<%= system_role %>"><%= system_role %></option>
+                        <option id="system_role_<%= system_role %>" value="<%= system_role %>"><%= system_role %></option>
                       <% end %>
                     </select>
                   </div>
@@ -136,7 +140,7 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label>Password</label>
-                    <input type="text" id="password" name="password" class="form-control">
+                    <input type="text" id="password" name="password" class="form-control" >
                   </div>
                 </div>
               </div>
@@ -151,9 +155,9 @@
               <div class="card card-outline card-info">
                 <!-- /.card-header -->
                 <div class="card-body">
-              <textarea id="summernote" name="notes" rows="40">
-
-              </textarea>
+                <textarea id="summernote" name="notes" rows="40">
+                    <%= @person.notes %>
+                </textarea>
                 </div>
               </div>
             </div>
@@ -175,14 +179,35 @@
                 </div>
               </div>
             </div>
-
           </div>
+
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>File Name</th>
+              <th>File Size</th>
+              <th>Uploaded</th>
+              <th></th>
+            </tr>
+            </thead>
+            <% @person.person_attachments.each do |person_attachment| %>
+              <tr>
+                <td><%= person_attachment.name %></td>
+                <td><%= person_attachment.size %></td>
+                <td><%= person_attachment.updated_at.strftime("%d.%m.%Y") %></td>
+                <td class="project-actions text-right" onclick="voidPersonAttachmentConfirm('<%= person_attachment.person_attachment_id %>')">
+                  <a class="btn btn-danger btn-block" href="#"><i class="fas fa-trash"></i>Delete</a>
+                </td>
+              </tr>
+            <% end %>
+          </table>
 
         </div>
       </div>
     </div>
     <!-- /.card -->
   </div>
+  <input type="hidden" value="<%= params[:person_id] %>" name="person_id">
 </form>
 
 <!-- Modal -->
@@ -200,6 +225,29 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="voidPersonAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidPersonAttachment();" type="button" class="btn btn-primary">Yes, Am Sure</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -235,26 +283,6 @@
                 event.preventDefault();
                 return
             }
-            if (username != "" || password != "" || systemRole != null) {
-                if (username == "") {
-                    jQuery('#requiredModal').modal('show');
-                    jQuery('#customMessage').html('The username is required')
-                    event.preventDefault();
-                    return
-                }
-                if (password == "") {
-                    jQuery('#requiredModal').modal('show');
-                    jQuery('#customMessage').html('The password is required')
-                    event.preventDefault();
-                    return
-                }
-                if (systemRole == null) {
-                    jQuery('#requiredModal').modal('show');
-                    jQuery('#customMessage').html('The system role is required')
-                    event.preventDefault();
-                    return
-                }
-            }
         });
 
         bsCustomFileInput.init();
@@ -263,4 +291,63 @@
     function validateForm() {
         $("#person").submit();
     }
+
+    var selectedPersonAttachmentID;
+
+    function voidPersonAttachmentConfirm(id) {
+        selectedPersonAttachmentID = id;
+        jQuery('#voidPersonAttachmentModal').modal('show');
+    }
+
+    var personID = '<%= params[:person_id] %>';
+
+    function voidPersonAttachment() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_person_attachment";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedPersonAttachmentID;
+        input.name = "id";
+        form.appendChild(input);
+
+        var input2 = document.createElement("input");
+        input2.type = "hidden";
+        input2.value = personID;
+        input2.name = "person_id";
+        form.appendChild(input2);
+
+        form.submit();
+    }
+    var location_id = '<%= @person.location_id %>';
+    var group_id = '<%= @person.group_id %>';
+    var selection_field_id = '<%= @person.selection_field_id %>';
+    var system_role = '<%= @person.role %>';
+
+    function loadDefaultValues() {
+        var location_id_option = document.getElementById('location_id_' + location_id)
+        if (location_id_option) {
+            location_id_option.selected = true;
+        }
+
+        var group_id_option = document.getElementById('group_id_' + group_id)
+        if (group_id_option) {
+            group_id_option.selected = true;
+        }
+
+        var selection_field_id_option = document.getElementById('selection_field_id_' + selection_field_id)
+        if (selection_field_id_option) {
+            selection_field_id_option.selected = true;
+        }
+
+        var system_role_option = document.getElementById('system_role_' + system_role)
+        if (system_role_option) {
+            system_role_option.selected = true;
+        }
+    }
+    loadDefaultValues()
 </script>
