@@ -1,0 +1,24 @@
+class CreateAssets < ActiveRecord::Migration[6.0]
+  def change
+    create_table :assets, :primary_key => :asset_id do |t|
+      t.string :name
+      t.string :barcode
+      t.integer :asset_type_id
+      t.integer :status_id
+      t.integer :location_id
+      t.integer :condition_id
+      t.integer :vendor_id
+      t.string :serial_number
+      t.string :manufacturer
+      t.string :brand
+      t.string :model
+      t.decimal :unit_price
+      t.date :date_purchased
+      t.string :order_number
+      t.string :account_code
+      t.date :warranty_end
+      t.text :notes
+      t.timestamps
+    end
+  end
+end

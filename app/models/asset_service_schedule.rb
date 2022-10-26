@@ -1,0 +1,2 @@
+class AssetServiceSchedule < ApplicationRecord
+end

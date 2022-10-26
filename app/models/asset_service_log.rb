@@ -1,0 +1,2 @@
+class AssetServiceLog < ApplicationRecord
+end

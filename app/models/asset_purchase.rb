@@ -1,0 +1,2 @@
+class AssetPurchase < ApplicationRecord
+end
