@@ -561,4 +561,43 @@ class PagesController < ApplicationController
     end
   end
 
+  def asset_types
+    @page_header = "Asset Types"
+    if request.post?
+      asset_type = AssetType.new
+      asset_type.name = params[:name]
+      if asset_type.save
+        flash[:notice] = 'Record creation was successful'
+        redirect_to("/asset_types") and return
+      else
+        flash[:error] = asset_type.errors.full_messages.join('<br />')
+        redirect_to("/asset_types") and return
+      end
+    end
+    @asset_types = AssetType.order("asset_type_id DESC")
+  end
+
+  def update_asset_type
+    asset_type = AssetType.find(params[:asset_type_id])
+    asset_type.name = params[:name]
+    if asset_type.save
+      flash[:notice] = 'Record update was successful'
+      redirect_to("/asset_types") and return
+    else
+      flash[:error] = asset_type.errors.full_messages.join('<br />')
+      redirect_to("/asset_types") and return
+    end
+  end
+
+  def delete_asset_type
+    asset_type = AssetType.find(params[:id])
+    if asset_type.delete
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/asset_types") and return
+    else
+      flash[:error] = asset_type.errors.full_messages.join('<br />')
+      redirect_to("/asset_types") and return
+    end
+  end
+
 end

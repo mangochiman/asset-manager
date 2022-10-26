@@ -72,4 +72,10 @@ Rails.application.routes.draw do
   post '/delete_person' => 'pages#delete_person'
   post '/delete_person_attachment' => 'pages#delete_person_attachment'
 
+  #asset_types
+  get '/asset_types' => 'pages#asset_types'
+  post '/asset_types' => 'pages#asset_types'
+  post '/update_asset_type' => 'pages#update_asset_type'
+  post '/delete_asset_type' => 'pages#delete_asset_type'
+
 end
