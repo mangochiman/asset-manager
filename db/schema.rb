@@ -10,10 +10,63 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_26_032051) do
+ActiveRecord::Schema.define(version: 2022_10_26_233315) do
+
+  create_table "asset_attachments", primary_key: "asset_attachment_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "asset_id"
+    t.string "name"
+    t.string "url"
+    t.string "size"
+    t.integer "bytes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "asset_service_logs", primary_key: "asset_service_log_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "service_item_id"
+    t.integer "asset_id"
+    t.date "service_date"
+    t.text "notes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "asset_service_schedules", primary_key: "asset_service_schedule_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "service_item_id"
+    t.integer "asset_id"
+    t.date "start_date"
+    t.date "end_date"
+    t.string "frequency"
+    t.string "notes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "asset_types", primary_key: "asset_type_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "assets", primary_key: "asset_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "barcode"
+    t.integer "asset_type_id"
+    t.integer "status_id"
+    t.integer "location_id"
+    t.integer "condition_id"
+    t.integer "vendor_id"
+    t.string "serial_number"
+    t.string "manufacturer"
+    t.string "brand"
+    t.string "model"
+    t.decimal "unit_price", precision: 10
+    t.date "date_purchased"
+    t.string "order_number"
+    t.string "account_code"
+    t.date "warranty_end"
+    t.text "notes"
+    t.string "photo_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

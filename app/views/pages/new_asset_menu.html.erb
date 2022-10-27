@@ -1,4 +1,4 @@
-<form id="vendor" action="/new_vendor" method="post" enctype="multipart/form-data">
+<form id="assetForm" action="/new_asset_menu" method="post" enctype="multipart/form-data">
   <div class="card card-primary card-outline">
 
     <div class="card-body">
@@ -63,7 +63,12 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Asset Type</label>
-                    <input type="text" name="asset_type_id" class="form-control">
+                    <select name="asset_type_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @asset_types.each do |asset_type| %>
+                        <option id="asset_type_id_<%= asset_type.asset_type_id %>" value="<%= asset_type.asset_type_id %>"><%= asset_type.name %></option>
+                      <% end %>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -88,6 +93,29 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Picture</label>
+                    <div class="form-group">
+                      <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <div class="fileupload-new thumbnail" style=" height: 150px;">
+                            <img src="/assets/demoUpload.jpg" alt=""/>
+                        </div>
+                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                        <div>
+                        <span class="btn btn-file btn-info">
+                          <span class="fileupload-new">Select image</span>
+                          <span class="fileupload-exists">Change</span>
+                          <input type="file" name="picture"/>
+                        </span>
+                          <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remove</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- /.card-body -->
           </div>
@@ -100,19 +128,29 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Status</label>
-                    <input type="text"  name="status" class="form-control">
+                    <select name="status_selection_field_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @status_selection_fields.each do |selection_field| %>
+                        <option id="selection_field_id_<%= selection_field.selection_field_id %>" value="<%= selection_field.selection_field_id %>"><%= selection_field.field_name %></option>
+                      <% end %>
+                    </select>
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Checked out to</label>
-                    <input type="text" name="custodian" class="form-control" placeholder="Automatic">
+                    <select name="custodian_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @people.each do |person| %>
+                        <option id="person_id_<%= person.person_id %>" value="<%= person.person_id %>"><%= "#{person.first_name} #{person.last_name}" %></option>
+                      <% end %>
+                    </select>
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Return By</label>
-                    <input type="text" name="return_date" class="form-control">
+                    <input type="date" name="return_date" class="form-control">
                   </div>
                 </div>
               </div>
@@ -121,7 +159,12 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Location</label>
-                    <input type="text" name="location_id" class="form-control">
+                    <select name="location_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @locations.each do |location| %>
+                        <option id="location_id_<%= location.location_id %>" value="<%= location.location_id %>"><%= location.name %></option>
+                      <% end %>
+                    </select>
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -133,7 +176,12 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Condition</label>
-                    <input type="text" name="condition_id" class="form-control">
+                    <select name="condition_selection_field_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @condition_selection_fields.each do |selection_field| %>
+                        <option id="selection_field_id_<%= selection_field.selection_field_id %>" value="<%= selection_field.selection_field_id %>"><%= selection_field.field_name %></option>
+                      <% end %>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -149,7 +197,12 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Vendor</label>
-                    <input type="text" id="assetName" name="vendor" required class="form-control">
+                    <select name="vendor_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @vendors.each do |vendor| %>
+                        <option id="vendor_id_<%= vendor.vendor_id %>" value="<%= vendor.vendor_id %>"><%= vendor.name %></option>
+                      <% end %>
+                    </select>
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -161,7 +214,7 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Date Purchased</label>
-                    <input type="text" name="date_purchased" class="form-control">
+                    <input type="date" name="date_purchased" class="form-control">
                   </div>
                 </div>
               </div>
@@ -182,7 +235,7 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Warranty End</label>
-                    <input type="text" name="warranty_end" class="form-control">
+                    <input type="date" name="warranty_end" class="form-control">
                   </div>
                 </div>
               </div>
@@ -320,9 +373,9 @@
         jQuery('.new_asset_menu').addClass('active');
         jQuery('.assets-menu').addClass('menu-open');
 
-        jQuery("#vendor").submit(function (event) {
-            var vendorName = jQuery("#vendorName").val().trim()
-            if (vendorName == "") {
+        jQuery("#assetForm").submit(function (event) {
+            var assetName = jQuery("#assetName").val().trim()
+            if (assetName == "") {
                 jQuery('#requiredModal').modal('show');
                 event.preventDefault();
             }
@@ -332,6 +385,6 @@
     })
 
     function validateForm() {
-        $("#vendor").submit();
+        $("#assetForm").submit();
     }
 </script>

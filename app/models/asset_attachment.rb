@@ -1,0 +1,2 @@
+class AssetAttachment < ApplicationRecord
+end

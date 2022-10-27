@@ -18,6 +18,7 @@ class CreateAssets < ActiveRecord::Migration[6.0]
       t.string :account_code
       t.date :warranty_end
       t.text :notes
+      t.string :photo_url
       t.timestamps
     end
   end
