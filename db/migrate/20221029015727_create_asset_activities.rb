@@ -1,0 +1,15 @@
+class CreateAssetActivities < ActiveRecord::Migration[6.0]
+  def change
+    create_table :asset_activities, :primary_key => :asset_activity_id do |t|
+      t.integer :asset_id
+      t.string :name
+      t.datetime :checkout_date
+      t.datetime :return_on
+      t.datetime :checkin_date
+      t.integer :person_id
+      t.integer :location_id
+      t.text :notes
+      t.timestamps
+    end
+  end
+end

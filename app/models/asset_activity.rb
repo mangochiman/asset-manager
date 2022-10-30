@@ -1,0 +1,2 @@
+class AssetActivity < ApplicationRecord
+end

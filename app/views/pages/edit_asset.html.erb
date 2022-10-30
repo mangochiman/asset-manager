@@ -1,19 +1,52 @@
-<form id="assetForm" action="/new_asset_menu" method="post" enctype="multipart/form-data">
+<form id="assetForm" action="/edit_asset" method="post" enctype="multipart/form-data">
   <div class="card card-primary card-outline">
 
     <div class="card-body">
 
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <!-- Buttons with Icons -->
           <div class="card">
             <div class="card-body row">
               <div>
-                <button onclick="validateForm()" type="button" class="btn btn-primary">
+                <button onclick="validateForm()" type="button" class="btn btn-success">
                   <i class="fa fa-save"></i> Save
                 </button>
+                <button type="button" class="btn btn-secondary">
+                  <i class="fa fa-copy"></i> Clone
+                </button>
+                <button type="button" class="btn btn-danger">
+                  <i class="fa fa-trash"></i> Delete
+                </button>
                 <button type="button" class="btn btn-warning">
-                  <i class="fa fa-upload"></i> Upload Assets From CSV
+                  <i class="fa fa-archive"></i> Retire
+                </button>
+              </div>
+              <div class="col-sm-6">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default">More</button>
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <div class="dropdown-menu" role="menu">
+                    <a class="dropdown-item" href="#">Check In/out History</a>
+                    <a class="dropdown-item" href="#">Print Labels</a>
+                  </div>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary">Service</button>
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <div class="dropdown-menu" role="menu">
+                    <a class="dropdown-item" href="#">Start</a>
+                    <a class="dropdown-item" href="#">Complete</a>
+                    <a class="dropdown-item" href="#">Extend</a>
+                    <a class="dropdown-item" href="#">Schedule</a>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary">
+                  <i class="fa fa-arrow-circle-right"></i> Checkout
                 </button>
               </div>
             </div>
@@ -48,13 +81,13 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Asset Name<span class="text-red"> *</span></label>
-                    <input type="text" id="assetName" name="name" required class="form-control">
+                    <input type="text" id="assetName" value="<%= @asset.name %>" name="name" required class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Asset Number</label>
-                    <input type="text" name="barcode" class="form-control" placeholder="Automatic">
+                    <input type="text" value="<%= @asset.barcode %>" name="barcode" class="form-control" placeholder="Automatic">
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -74,19 +107,19 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Manufacturer</label>
-                    <input type="text" name="manufacturer" class="form-control">
+                    <input type="text" value="<%= @asset.manufacturer %>" name="manufacturer" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Brand</label>
-                    <input type="text" name="brand" class="form-control">
+                    <input type="text" value="<%= @asset.brand %>" name="brand" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Model</label>
-                    <input type="text" name="model" class="form-control">
+                    <input type="text" value="<%= @asset.model %>" name="model" class="form-control">
                   </div>
                 </div>
               </div>
@@ -97,7 +130,11 @@
                     <div class="form-group">
                       <div class="fileupload fileupload-new" data-provides="fileupload">
                         <div class="fileupload-new thumbnail" style=" height: 150px;">
+                          <% if @asset.photo_url.blank? %>
                             <img src="/assets/demoUpload.jpg" alt=""/>
+                          <% else %>
+                            <img src="<%= @asset.photo_url %>" alt=""/>
+                          <% end %>
                         </div>
                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                         <div>
@@ -136,7 +173,7 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Serial Number</label>
-                    <input type="text" name="serial_number" class="form-control">
+                    <input type="text" value="<%= @asset.serial_number %>" name="serial_number" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -174,13 +211,13 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Unit Price</label>
-                    <input type="text" name="price" class="form-control" placeholder="Automatic">
+                    <input type="text" value="<%= @asset.unit_price %>" name="price" class="form-control" placeholder="Automatic">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Date Purchased</label>
-                    <input type="date" name="date_purchased" class="form-control">
+                    <input type="date" value="<%= @asset.date_purchased %>" name="date_purchased" class="form-control">
                   </div>
                 </div>
               </div>
@@ -189,19 +226,19 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Purchase Order Number</label>
-                    <input type="text" name="order_number" class="form-control">
+                    <input type="text" value="<%= @asset.order_number %>" name="order_number" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Account Code</label>
-                    <input type="text" name="account_code" class="form-control">
+                    <input type="text" value="<%= @asset.account_code %>" name="account_code" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Warranty End</label>
-                    <input type="date" name="warranty_end" class="form-control">
+                    <input type="date" value="<%= @asset.warranty_end %>" name="warranty_end" class="form-control">
                   </div>
                 </div>
               </div>
@@ -216,9 +253,9 @@
               <div class="card card-outline card-info">
                 <!-- /.card-header -->
                 <div class="card-body">
-              <textarea id="summernote" name="notes" rows="40">
-
-              </textarea>
+                  <textarea id="summernote" name="notes" rows="40">
+                      <%= @asset.notes %>
+                  </textarea>
                 </div>
               </div>
             </div>
@@ -240,14 +277,35 @@
                 </div>
               </div>
             </div>
-
           </div>
+
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>File Name</th>
+              <th>File Size</th>
+              <th>Uploaded</th>
+              <th></th>
+            </tr>
+            </thead>
+            <% @asset.asset_attachments.each do |asset_attachment| %>
+              <tr>
+                <td><%= asset_attachment.name %></td>
+                <td><%= asset_attachment.size %></td>
+                <td><%= asset_attachment.updated_at.strftime("%d.%m.%Y") %></td>
+                <td class="project-actions text-right" onclick="voidAssetAttachmentConfirm('<%= asset_attachment.asset_attachment_id %>')">
+                  <a class="btn btn-danger btn-block" href="#"><i class="fas fa-trash"></i>Delete</a>
+                </td>
+              </tr>
+            <% end %>
+          </table>
 
         </div>
       </div>
     </div>
     <!-- /.card -->
   </div>
+  <input type="hidden" name="asset_id" value="<%= params[:asset_id] %>">
 </form>
 
 <!-- Modal -->
@@ -272,6 +330,30 @@
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+<div class="modal fade" id="voidAssetAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidAssetAttachment();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <script>
 
     $(document).ready(function () {
@@ -279,7 +361,7 @@
         jQuery('#summernote').summernote()
 
         jQuery('.assets').addClass('active');
-        jQuery('.new_asset_menu').addClass('active');
+        jQuery('.list_assets_menu').addClass('active');
         jQuery('.assets-menu').addClass('menu-open');
 
         jQuery("#assetForm").submit(function (event) {
@@ -296,4 +378,66 @@
     function validateForm() {
         $("#assetForm").submit();
     }
+
+    var asset_type_id = '<%= @asset.asset_type_id %>';
+    var location_id = '<%= @asset.location_id %>';
+    var condition_selection_field_id = '<%= @asset.condition_id %>';
+    var vendor_id = '<%= @asset.vendor_id %>';
+    var asset_id = '<%= @asset.asset_id %>';
+
+    var selectedAssetAttachmentID;
+
+    function voidAssetAttachmentConfirm(id) {
+        selectedAssetAttachmentID = id;
+        jQuery('#voidAssetAttachmentModal').modal('show');
+    }
+
+    var assetID = '<%= params[:asset_id] %>';
+
+    function voidAssetAttachment() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_asset_attachment";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedAssetAttachmentID;
+        input.name = "id";
+        form.appendChild(input);
+
+        var input2 = document.createElement("input");
+        input2.type = "hidden";
+        input2.value = asset_id;
+        input2.name = "asset_id";
+        form.appendChild(input2);
+
+        form.submit();
+    }
+
+    function loadDefaultValues() {
+        var location_id_option = document.getElementById('location_id_' + location_id)
+        if (location_id_option) {
+            location_id_option.selected = true;
+        }
+
+        var asset_type_id_option = document.getElementById('asset_type_id_' + asset_type_id)
+        if (asset_type_id_option) {
+            asset_type_id_option.selected = true;
+        }
+
+        var condition_selection_field_id_option = document.getElementById('selection_field_id_' + condition_selection_field_id)
+        if (condition_selection_field_id_option) {
+            condition_selection_field_id_option.selected = true;
+        }
+
+        var vendor_id_option = document.getElementById('vendor_id_' + vendor_id)
+        if (vendor_id_option) {
+            vendor_id_option.selected = true;
+        }
+    }
+    loadDefaultValues()
+
 </script>

@@ -103,6 +103,104 @@ class PagesController < ApplicationController
     @locations = Location.all
   end
 
+  def list_assets
+    @page_header = "List assets"
+    @assets = Asset.order('asset_id DESC')
+  end
+
+  def edit_asset
+    @asset = Asset.find(params[:asset_id])
+
+    if request.post?
+      asset = @asset
+      asset.name = params[:name]
+      asset.barcode = params[:barcode]
+      asset.asset_type_id = params[:asset_type_id]
+      #asset.status_id = params[:status_selection_field_id]
+      asset.location_id = params[:location_id]
+      asset.condition_id = params[:condition_selection_field_id]
+      asset.vendor_id = params[:vendor_id]
+      asset.serial_number = params[:serial_number]
+      asset.manufacturer = params[:manufacturer]
+      asset.brand = params[:brand]
+      asset.model = params[:model]
+      asset.unit_price = params[:price]
+      asset.date_purchased = params[:date_purchased]
+      asset.order_number = params[:order_number]
+      asset.account_code = params[:account_code]
+      asset.warranty_end = params[:warranty_end]
+      asset.notes = params[:notes]
+
+      if asset.save
+        errors = []
+        unless params[:file].blank?
+          params[:file].each do |file_upload|
+            extension = File.extname(file_upload).downcase
+            original_filename = file_upload.original_filename.split(".")[0].parameterize
+            file_name = "#{original_filename}#{extension}"
+            file_size_readable = ActionController::Base.helpers.number_to_human_size(file_upload.size)
+            file_size_bytes = file_upload.size
+
+            asset_attachment = AssetAttachment.new
+            asset_attachment.asset_id = asset.asset_id
+            asset_attachment.name = original_filename
+            asset_attachment.size = file_size_readable
+            asset_attachment.bytes = file_size_bytes
+            asset_attachment.url = '/uploads/' + file_name
+            if asset_attachment.save
+              File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+                file.write(file_upload.read)
+              end
+            else
+              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+            end
+          end
+        end
+
+        unless params[:picture].blank?
+          file_upload = params[:picture]
+          extension = File.extname(file_upload).downcase
+          original_filename = file_upload.original_filename.split(".")[0].parameterize
+          file_name = "#{original_filename}#{extension}"
+
+          file_extensions = %w[.png .jpeg .jpg]
+          if !file_extensions.include?(extension)
+            errors << "Unsupported file for asset picture. You can only upload .png, .jpeg, .jpg file extensions"
+          else
+            file_path = Rails.root.to_s + '/public' + asset.photo_url.to_s
+            File.delete(file_path) if File.exist?(file_path)
+            File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+              file.write(params[:picture].read)
+            end
+            asset.photo_url = '/uploads/' + file_name
+            asset.save!
+          end
+        end
+
+        unless errors.blank?
+          flash[:error] = errors.join('<br />')
+          redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+        end
+
+        flash[:notice] = 'Record update was successful'
+        redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+      else
+        flash[:error] = asset.errors.full_messages.join('<br />')
+        redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+      end
+    end
+
+
+
+    @page_header = @asset.name
+    @asset_types = AssetType.all
+    @status_selection_fields = SelectionField.where(['field_type =?', 'status'])
+    @condition_selection_fields = SelectionField.where(['field_type =?', 'condition'])
+    @people = Person.all
+    @vendors = Vendor.all
+    @locations = Location.all
+  end
+
   def system_overview
     @page_header = "System Overview"
     @active_system_plan = SystemPlan.where('active =?', 1).last

@@ -77,5 +77,7 @@ Rails.application.routes.draw do
   post '/asset_types' => 'pages#asset_types'
   post '/update_asset_type' => 'pages#update_asset_type'
   post '/delete_asset_type' => 'pages#delete_asset_type'
-
+  get '/list_assets' => 'pages#list_assets'
+  get '/edit_asset' => 'pages#edit_asset'
+  post '/edit_asset' => 'pages#edit_asset'
 end
