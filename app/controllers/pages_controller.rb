@@ -5,7 +5,11 @@ class PagesController < ApplicationController
 
   def new_asset_menu
     @page_header = "New Asset"
-
+    @asset = Asset.new
+    if params[:ref_id]
+      @page_header = "Clone Asset"
+      @asset = Asset.find(params[:ref_id]) rescue Asset.new
+    end
     if request.post?
       asset = Asset.new
       asset.name = params[:name]
@@ -70,21 +74,30 @@ class PagesController < ApplicationController
           end
         end
 
+        if params[:display_image].to_s == "on"
+          asset.photo_url = @asset.photo_url
+          asset.save!
+        end
+
+        unless params[:asset_attachment_ids].blank?
+          params[:asset_attachment_ids].each do |asset_attachment_id|
+            asset_attachment_new = AssetAttachment.new
+            asset_attachment_old = AssetAttachment.find(asset_attachment_id)
+            asset_attachment_new.asset_id = asset.asset_id
+            asset_attachment_new.name = asset_attachment_old.name
+            asset_attachment_new.url = asset_attachment_old.url
+            asset_attachment_new.size = asset_attachment_old.size
+            asset_attachment_new.bytes = asset_attachment_old.bytes
+            if asset_attachment_new.save
+            else
+              errors << "Unable to copy image #{asset_attachment_old.url}"
+            end
+          end
+        end
+
         unless errors.blank?
           flash[:error] = errors.join('<br />')
           redirect_to("/new_asset_menu") and return
-        end
-
-        unless params[:custodian_id].blank?
-          #params[:person_id] = person.person_id
-          #params[:username] = params[:username]
-          #params[:password] = params[:password]
-          #user = User.new_user(params)
-          #if user.save
-          #else
-          #flash[:error] = user.errors.full_messages.join('<br />')
-          #redirect_to("/new_person") and return
-          #end
         end
 
         flash[:notice] = 'Record creation was successful'
@@ -190,8 +203,6 @@ class PagesController < ApplicationController
       end
     end
 
-
-
     @page_header = @asset.name
     @asset_types = AssetType.all
     @status_selection_fields = SelectionField.where(['field_type =?', 'status'])
@@ -199,6 +210,19 @@ class PagesController < ApplicationController
     @people = Person.all
     @vendors = Vendor.all
     @locations = Location.all
+  end
+
+  def delete_asset_attachment
+    asset_attachment = AssetAttachment.find(params[:id])
+    file_path = Rails.root.to_s + '/public' + asset_attachment.url.to_s
+    if asset_attachment.delete
+      File.delete(file_path) if File.exist?(file_path)
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    else
+      flash[:error] = asset_attachment.errors.full_messages.join('<br />')
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    end
   end
 
   def system_overview

@@ -48,7 +48,7 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Asset Name<span class="text-red"> *</span></label>
-                    <input type="text" id="assetName" name="name" required class="form-control">
+                    <input type="text" id="assetName" value="<%= @asset.name %>" name="name" required class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -74,19 +74,19 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Manufacturer</label>
-                    <input type="text" name="manufacturer" class="form-control">
+                    <input type="text" value="<%= @asset.manufacturer %>" name="manufacturer" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Brand</label>
-                    <input type="text" name="brand" class="form-control">
+                    <input type="text" name="brand" value="<%= @asset.brand %>" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Model</label>
-                    <input type="text" name="model" class="form-control">
+                    <input type="text" name="model" value="<%= @asset.model %>" class="form-control">
                   </div>
                 </div>
               </div>
@@ -97,20 +97,31 @@
                     <div class="form-group">
                       <div class="fileupload fileupload-new" data-provides="fileupload">
                         <div class="fileupload-new thumbnail" style=" height: 150px;">
+                          <% if @asset.photo_url.blank? %>
                             <img src="/assets/demoUpload.jpg" alt=""/>
+                          <% else %>
+                            <img src="<%= @asset.photo_url %>" alt=""/>
+                          <% end %>
                         </div>
                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                        <div>
-                        <span class="btn btn-file btn-info">
-                          <span class="fileupload-new">Select image</span>
-                          <span class="fileupload-exists">Change</span>
-                          <input type="file" name="picture"/>
-                        </span>
+                        <div class="upload-buttons">
+                          <span class="btn btn-file btn-info">
+                            <span class="fileupload-new">Select image</span>
+                            <span class="fileupload-exists">Change</span>
+                            <input type="file" name="picture"/>
+                          </span>
                           <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remove</a>
                         </div>
+
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-check">
+                  <input type="checkbox" name="display_image" checked class="form-check-input" id="display_image">
+                  <label class="form-check-label" for="display_image">Copy display image</label>
                 </div>
               </div>
             </div>
@@ -136,7 +147,7 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Serial Number</label>
-                    <input type="text" name="serial_number" class="form-control">
+                    <input type="text" value="<%= @asset.serial_number %>" name="serial_number" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -174,13 +185,13 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Unit Price</label>
-                    <input type="text" name="price" class="form-control" placeholder="Automatic">
+                    <input type="text" value="<%= @asset.unit_price %>" name="price" class="form-control" placeholder="Automatic">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Date Purchased</label>
-                    <input type="date" name="date_purchased" class="form-control">
+                    <input type="date" value="<%= @asset.date_purchased %>" name="date_purchased" class="form-control">
                   </div>
                 </div>
               </div>
@@ -189,19 +200,19 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Purchase Order Number</label>
-                    <input type="text" name="order_number" class="form-control">
+                    <input type="text" value="<%= @asset.order_number %>" name="order_number" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Account Code</label>
-                    <input type="text" name="account_code" class="form-control">
+                    <input type="text" value="<%= @asset.account_code %>" name="account_code" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Warranty End</label>
-                    <input type="date" name="warranty_end" class="form-control">
+                    <input type="date" value="<%= @asset.warranty_end %>" name="warranty_end" class="form-control">
                   </div>
                 </div>
               </div>
@@ -216,9 +227,9 @@
               <div class="card card-outline card-info">
                 <!-- /.card-header -->
                 <div class="card-body">
-              <textarea id="summernote" name="notes" rows="40">
-
-              </textarea>
+                <textarea id="summernote" name="notes" rows="40">
+                    <%= @asset.notes %>
+                </textarea>
                 </div>
               </div>
             </div>
@@ -229,25 +240,33 @@
 
         <div class="tab-pane fade" id="custom-content-above-files" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
           <br/>
-          <p><i>To upload multiple files, press <strong>ctrl</strong> on your keyboard + click the file</i></p>
-          <div class="col-md-12">
-            <div class="form-group" id="fileInput">
-              <label for="exampleInputFile">Upload Files</label>
-              <div class="input-group">
-                <div class="custom-file">
-                  <input type="file" name="file[]" class="custom-file-input" multiple>
-                  <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+          <% if @asset.asset_id.blank? %>
+            <p><i>To upload multiple files, press <strong>ctrl</strong> on your keyboard + click the file</i></p>
+            <div class="col-md-12">
+              <div class="form-group" id="fileInput">
+                <label for="exampleInputFile">Upload Files</label>
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" name="file[]" class="custom-file-input" multiple>
+                    <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                  </div>
                 </div>
               </div>
             </div>
-
-          </div>
-
+          <% else %>
+            <% @asset.asset_attachments.each do |asset_attachment| %>
+              <div class="form-check">
+                <input type="checkbox" value="<%= asset_attachment.asset_attachment_id %>" name="asset_attachment_ids[]" checked class="form-check-input" id="asset_attachment<%= asset_attachment.asset_attachment_id %>">
+                <label class="form-check-label" for="asset_attachment<%= asset_attachment.asset_attachment_id %>"><%= asset_attachment.url %></label>
+              </div>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>
     <!-- /.card -->
   </div>
+  <input type="hidden" value="<%= params[:ref_id] %>" name="ref_id">
 </form>
 
 <!-- Modal -->
@@ -273,6 +292,11 @@
 </div>
 <!-- /.modal -->
 <script>
+    var asset_type_id = '<%= @asset.asset_type_id %>';
+    var location_id = '<%= @asset.location_id %>';
+    var condition_selection_field_id = '<%= @asset.condition_id %>';
+    var vendor_id = '<%= @asset.vendor_id %>';
+    var asset_id = '<%= @asset.asset_id %>';
 
     $(document).ready(function () {
         // Summernote
@@ -291,9 +315,36 @@
         });
 
         bsCustomFileInput.init();
+        <% unless @asset.asset_id.blank?%>
+        jQuery(".upload-buttons").hide();
+        <% end %>
     })
 
     function validateForm() {
         $("#assetForm").submit();
     }
+
+    function loadDefaultValues() {
+        var location_id_option = document.getElementById('location_id_' + location_id)
+        if (location_id_option) {
+            location_id_option.selected = true;
+        }
+
+        var asset_type_id_option = document.getElementById('asset_type_id_' + asset_type_id)
+        if (asset_type_id_option) {
+            asset_type_id_option.selected = true;
+        }
+
+        var condition_selection_field_id_option = document.getElementById('selection_field_id_' + condition_selection_field_id)
+        if (condition_selection_field_id_option) {
+            condition_selection_field_id_option.selected = true;
+        }
+
+        var vendor_id_option = document.getElementById('vendor_id_' + vendor_id)
+        if (vendor_id_option) {
+            vendor_id_option.selected = true;
+        }
+    }
+
+    loadDefaultValues()
 </script>

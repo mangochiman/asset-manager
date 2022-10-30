@@ -12,7 +12,7 @@
                 <button onclick="validateForm()" type="button" class="btn btn-success">
                   <i class="fa fa-save"></i> Save
                 </button>
-                <button type="button" class="btn btn-secondary">
+                <button onclick="cloneAsset()" type="button" class="btn btn-secondary">
                   <i class="fa fa-copy"></i> Clone
                 </button>
                 <button type="button" class="btn btn-danger">
@@ -63,6 +63,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" id="custom-content-above-purchasing-tab" data-toggle="pill" href="#custom-content-above-purchasing" role="tab" aria-controls="custom-content-above-purchasing" aria-selected="false">Purchasing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-services-tab" data-toggle="pill" href="#custom-content-above-services" role="tab" aria-controls="custom-content-above-services" aria-selected="false">Services</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="custom-content-above-settings-tab" data-toggle="pill" href="#custom-content-above-notes" role="tab" aria-controls="custom-content-above-notes" aria-selected="false">Notes</a>
@@ -242,6 +245,38 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="custom-content-above-services" role="tabpanel" aria-labelledby="custom-content-above-services-tab">
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>Service Type</th>
+                  <th>State</th>
+                  <th>Notes</th>
+                  <th>Cost</th>
+                  <th>Serviced By</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Service Type</td>
+                  <td>State</td>
+                  <td>Notes</td>
+                  <td>Cost</td>
+                  <td>Serviced By</td>
+                  <td>Start Date</td>
+                  <td>End Date</td>
+                </tr>
+                </tbody>
+              </table>
             </div>
             <!-- /.card-body -->
           </div>
@@ -440,4 +475,7 @@
     }
     loadDefaultValues()
 
+    function cloneAsset(){
+        window.location = "/new_asset_menu?ref_id=" + assetID
+    }
 </script>

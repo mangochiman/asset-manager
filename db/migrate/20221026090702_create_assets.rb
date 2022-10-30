@@ -19,6 +19,8 @@ class CreateAssets < ActiveRecord::Migration[6.0]
       t.date :warranty_end
       t.text :notes
       t.string :photo_url
+      t.integer :retired
+      t.string :retire_reason
       t.timestamps
     end
   end

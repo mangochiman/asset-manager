@@ -80,4 +80,6 @@ Rails.application.routes.draw do
   get '/list_assets' => 'pages#list_assets'
   get '/edit_asset' => 'pages#edit_asset'
   post '/edit_asset' => 'pages#edit_asset'
+  post '/delete_asset_attachment' => 'pages#delete_asset_attachment'
+
 end
