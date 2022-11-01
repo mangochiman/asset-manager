@@ -21,6 +21,9 @@ class CreateAssets < ActiveRecord::Migration[6.0]
       t.string :photo_url
       t.integer :retired
       t.string :retire_reason
+      t.date :date_retired
+      t.integer :retired_by
+      t.string :retire_comments
       t.timestamps
     end
   end

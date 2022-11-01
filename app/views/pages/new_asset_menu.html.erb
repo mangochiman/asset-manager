@@ -118,12 +118,15 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="form-check">
-                  <input type="checkbox" name="display_image" checked class="form-check-input" id="display_image">
-                  <label class="form-check-label" for="display_image">Copy display image</label>
+
+              <% if !@asset.asset_id.blank? %>
+                <div class="row">
+                  <div class="form-check">
+                    <input type="checkbox" name="display_image" checked class="form-check-input" id="display_image">
+                    <label class="form-check-label" for="display_image">Copy display image</label>
+                  </div>
                 </div>
-              </div>
+              <% end %>
             </div>
             <!-- /.card-body -->
           </div>

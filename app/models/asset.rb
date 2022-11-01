@@ -3,4 +3,8 @@ class Asset < ApplicationRecord
   self.primary_key = 'asset_id'
 
   has_many :asset_attachments, :foreign_key => :asset_id
+
+  def self.retire_reasons
+    %w[Damaged Expired Lost Released Sold Stolen Other]
+  end
 end

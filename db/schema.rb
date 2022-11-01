@@ -80,6 +80,11 @@ ActiveRecord::Schema.define(version: 2022_10_29_015727) do
     t.date "warranty_end"
     t.text "notes"
     t.string "photo_url"
+    t.integer "retired"
+    t.string "retire_reason"
+    t.date "date_retired"
+    t.integer "retired_by"
+    t.string "retire_comments"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

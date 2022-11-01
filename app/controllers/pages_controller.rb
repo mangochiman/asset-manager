@@ -210,6 +210,51 @@ class PagesController < ApplicationController
     @people = Person.all
     @vendors = Vendor.all
     @locations = Location.all
+    @retire_reasons = Asset.retire_reasons
+    @service_types = SelectionField.where(['field_type =?', 'service_type'])
+    @vendors = Vendor.all
+    @people = Person.all
+  end
+
+  def delete_asset
+    asset = Asset.find(params[:id])
+    asset_attachments = asset.asset_attachments
+    errors = []
+    ActiveRecord::Base.transaction do
+      if asset.delete
+        asset_attachments.each do |asset_attachment|
+          file_path = Rails.root.to_s + '/public' + asset_attachment.url.to_s
+          if asset_attachment.delete
+            File.delete(file_path) if File.exist?(file_path)
+          end
+        end
+      else
+        errors << asset.errors.full_messages.join('<br />')
+      end
+    end
+    if errors.blank?
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/list_assets") and return
+    else
+      flash[:error] = errors
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    end
+  end
+
+  def retire_asset
+    asset = Asset.find(params[:asset_id])
+    asset.retired = 1
+    asset.retire_reason = params[:retire_reason]
+    asset.date_retired = params[:retire_date]
+    asset.retired_by = '#' #TODO
+    asset.retire_comments = params[:comments]
+    if asset.save
+      flash[:notice] = 'Asset retirement was successful'
+      redirect_to("/list_assets") and return
+    else
+      flash[:error] = asset.errors.full_messages.join('<br />')
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    end
   end
 
   def delete_asset_attachment
