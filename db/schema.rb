@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 2022_10_29_015727) do
     t.datetime "end_date_actual"
     t.datetime "end_date_expected"
     t.integer "service_indefinite"
+    t.integer "available_on_date"
     t.string "state"
     t.string "performed_by"
     t.integer "vendor_id"
