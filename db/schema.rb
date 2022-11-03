@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 2022_10_29_015727) do
     t.integer "asset_id"
     t.string "name"
     t.datetime "checkout_date"
+    t.integer "checkout_indefinite"
     t.datetime "return_on"
     t.datetime "checkin_date"
     t.integer "person_id"

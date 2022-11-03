@@ -4,6 +4,7 @@ class CreateAssetActivities < ActiveRecord::Migration[6.0]
       t.integer :asset_id
       t.string :name
       t.datetime :checkout_date
+      t.integer :checkout_indefinite
       t.datetime :return_on
       t.datetime :checkin_date
       t.integer :person_id

@@ -88,5 +88,8 @@ Rails.application.routes.draw do
   post '/complete_service' => 'pages#complete_service'
   post '/extend_service' => 'pages#extend_service'
   post '/schedule_service' => 'pages#schedule_service'
+  post '/checkout_asset' => 'pages#checkout_asset'
+  post '/extend_checkout' => 'pages#extend_checkout'
+  post '/checkin_asset' => 'pages#checkin_asset'
 
 end

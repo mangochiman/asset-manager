@@ -947,4 +947,70 @@ class PagesController < ApplicationController
     end
   end
 
+  def checkout_asset
+    asset_activity = AssetActivity.new
+    asset_activity.asset_id = params[:asset_id]
+    asset_activity.name = 'Check-out'
+    asset_activity.checkout_date = Time.now
+    asset_activity.return_on = params[:return_date]
+    if params["checkout-indefinite"].to_s == "on"
+      asset_activity.checkout_indefinite = 1
+      asset_activity.return_on = ""
+    end
+    asset_activity.person_id = params[:person_id]
+    asset_activity.location_id = params[:location_id]
+    asset_activity.notes = params[:comments]
+    if asset_activity.save
+      flash[:notice] = 'Checkout was successful'
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    else
+      flash[:error] = asset_activity.errors.full_messages.join('<br />')
+      redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+    end
+  end
+
+  def extend_checkout
+    #Check-out
+    latest_asset_activity = AssetActivity.where(['asset_id =?', params[:asset_id]]).last
+    unless latest_asset_activity.blank?
+      if latest_asset_activity.name.downcase == "check-out"
+        latest_asset_activity.return_on = params[:extend_date]
+        if params["checkout-indefinite"].to_s == "on"
+          latest_asset_activity.checkout_indefinite = 1
+          latest_asset_activity.return_on = ""
+        end
+        if latest_asset_activity.save
+          flash[:notice] = 'Checkout extension was successful'
+          redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+        else
+          flash[:error] = latest_asset_activity.errors.full_messages.join('<br />')
+          redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+        end
+      end
+    end
+    #ignore-clash-reservation TODO
+  end
+
+  def checkin_asset
+    last_activity = AssetActivity.last_activity(params[:asset_id])
+    checkout_activity = false
+    unless last_activity.blank?
+      checkout_activity = true if last_activity.name.to_s.downcase == "check-out"
+    end
+    asset_activity = AssetActivity.new
+    asset_activity.asset_id = params[:asset_id]
+    asset_activity.name = 'Check-in'
+    asset_activity.checkin_date = params[:checkin_date]
+    asset_activity.person_id = last_activity.person_id if checkout_activity
+    asset_activity.location_id = params[:location_id]
+    asset_activity.notes = params[:comments]
+    if asset_activity.save
+      flash[:notice] = 'Checkin was successful'
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    else
+      flash[:error] = asset_activity.errors.full_messages.join('<br />')
+      redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+    end
+  end
+
 end
