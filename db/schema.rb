@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_29_015727) do
+ActiveRecord::Schema.define(version: 2022_11_03_132513) do
 
   create_table "asset_activities", primary_key: "asset_activity_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "asset_id"
@@ -32,6 +32,17 @@ ActiveRecord::Schema.define(version: 2022_10_29_015727) do
     t.string "url"
     t.string "size"
     t.integer "bytes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "asset_reservations", primary_key: "asset_reservation_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "asset_id"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer "person_id"
+    t.integer "location_id"
+    t.text "notes"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

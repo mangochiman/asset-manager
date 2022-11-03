@@ -1013,4 +1013,21 @@ class PagesController < ApplicationController
     end
   end
 
+  def reserve_asset
+    asset_reservation = AssetReservation.new
+    asset_reservation.asset_id = params[:asset_id]
+    asset_reservation.start_date = params[:from]
+    asset_reservation.end_date = params[:to]
+    asset_reservation.person_id = params[:person_id]
+    asset_reservation.location_id = params[:location_id]
+    asset_reservation.notes = params[:comments]
+    if asset_reservation.save
+      flash[:notice] = 'Asset reservation was successful'
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    else
+      flash[:error] = asset_reservation.errors.full_messages.join('<br />')
+      redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+    end
+  end
+
 end

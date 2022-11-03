@@ -703,7 +703,7 @@
 <div class="modal fade" id="assetReserveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="#" method="post">
+      <form action="/reserve_asset" method="post">
         <div class="modal-header">
           <h4 class="modal-title">New Reservation</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -733,7 +733,7 @@
 
           <div class="form-group">
             <label>To Location</label>
-            <select name="location_id" required class="form-control custom-select">
+            <select name="location_id" class="form-control custom-select">
               <option value="" selected disabled>Select one</option>
               <% @locations.each do |location| %>
                 <option value="<%= location.location_id %>"><%= location.name %></option>
