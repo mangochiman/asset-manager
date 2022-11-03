@@ -863,4 +863,13 @@ class PagesController < ApplicationController
     end
   end
 
+  def service_asset
+    raise params.inspect
+    #maintenance
+    #availability
+    if params[:availability] == "maintenance"
+
+    end
+  end
+
 end

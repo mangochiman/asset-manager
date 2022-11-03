@@ -38,8 +38,17 @@ ActiveRecord::Schema.define(version: 2022_10_29_015727) do
   create_table "asset_service_logs", primary_key: "asset_service_log_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "service_item_id"
     t.integer "asset_id"
-    t.date "service_date"
+    t.datetime "start_date_actual"
+    t.datetime "start_date_expected"
+    t.datetime "end_date_actual"
+    t.datetime "end_date_expected"
+    t.integer "service_indefinite"
+    t.string "state"
+    t.string "performed_by"
+    t.integer "vendor_id"
+    t.integer "person_id"
     t.text "notes"
+    t.decimal "cost", precision: 10
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

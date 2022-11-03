@@ -467,7 +467,7 @@
 <div class="modal fade" id="serviceStartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="#" method="post">
+      <form action="/service_asset" method="post">
         <div class="modal-header">
           <h4 class="modal-title">Service Asset</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -476,33 +476,35 @@
         </div>
         <div class="modal-body" style="overflow: auto; max-height: calc(70vh - 90px);">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="service_unavailable" checked>
-            <label class="form-check-label">Make Item unavailable (Item will be put in maintenance state)</label>
+            <input class="form-check-input" value="maintenance" onchange="startServiceLogic(this)" id="serviceUnavailable" type="radio" name="availability" checked>
+            <label for="serviceUnavailable" class="form-check-label"> Make Item unavailable (Item will be put in
+              maintenance state)</label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="service_unavailable">
-            <label class="form-check-label">Create a service record. Do not make item unavailable</label>
+            <input class="form-check-input" value="available" onchange="startServiceLogic(this)" id="serviceLog" type="radio" name="availability">
+            <label for="serviceLog" class="form-check-label">Create a service record. Do not make item
+              unavailable</label>
           </div>
           <hr/>
-          <div class="form-group">
+          <div class="form-group service-asset-completion">
             <label>Expected Completion </label>
-            <input type="date" name="completion_date" required class="form-control">
+            <input type="date" name="completion_date" class="form-control">
+            <div class="form-check">
+              <input id="service_indefinite" class="form-check-input" type="checkbox" name="service_indefinite">
+              <label for="service_indefinite" class="form-check-label">Under service indefinitely</label>
+            </div>
           </div>
-          <div class="form-group">
+          <div class="form-group service-asset-start" style="display: none">
             <label>From </label>
-            <input type="date" name="from" required class="form-control">
+            <input type="date" name="from" class="form-control">
           </div>
-          <div class="form-group">
+          <div class="form-group service-asset-end" style="display: none">
             <label>To </label>
-            <input type="date" name="to" required class="form-control">
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="service_indefinite">
-            <label class="form-check-label">Under service indefinitely</label>
+            <input type="date" name="to" class="form-control">
           </div>
           <div class="form-group">
             <label>Service Type</label>
-            <select name="selection_field_id" required id="inputServiceType" class="form-control custom-select">
+            <select name="selection_field_id" id="inputServiceType" class="form-control custom-select">
               <% @service_types.each do |service_type| %>
                 <option value="<%= service_type.selection_field_id %>"><%= service_type.field_name %></option>
               <% end %>
@@ -510,16 +512,16 @@
           </div>
           <div class="form-group">
             <label>Service Performed By</label>
-            <select name="service_performer" required class="form-control custom-select">
+            <select onchange="updateServicePerformer(this)" name="service_performer" class="form-control custom-select">
               <option value="" selected disabled>Select one</option>
               <option>Vendor</option>
               <option>Member</option>
             </select>
           </div>
 
-          <div class="form-group">
+          <div class="form-group service-asset-vendor" style="display: none;">
             <label>Vendor</label>
-            <select name="vendor_id" required class="form-control custom-select">
+            <select name="vendor_id" class="form-control custom-select">
               <option value="" selected disabled>Select one</option>
               <% @vendors.each do |vendor| %>
                 <option value="<%= vendor.vendor_id %>"><%= vendor.name %></option>
@@ -527,9 +529,9 @@
             </select>
           </div>
 
-          <div class="form-group">
+          <div class="form-group service-asset-member" style="display: none;">
             <label>Member</label>
-            <select name="person_id" required class="form-control custom-select">
+            <select name="person_id" class="form-control custom-select">
               <option value="" selected disabled>Select one</option>
               <% @people.each do |person| %>
                 <% display_name = person.first_name.to_s + " " + person.last_name.to_s + "(" + person.email.to_s + ")" %>
@@ -643,7 +645,8 @@
 
           <div class="form-check">
             <input class="form-check-input" type="checkbox" name="make-item-unavailable">
-            <label class="form-check-label">Put item into maintenance and make it unavailable at the starting date.</label>
+            <label class="form-check-label">Put item into maintenance and make it unavailable at the starting
+              date.</label>
           </div>
           <div class="form-group">
             <label>Service Type</label>
@@ -837,7 +840,7 @@
         </div>
         <div class="modal-body" style="overflow: auto; max-height: calc(70vh - 90px);">
           <div class="form-group">
-            <label> Extend Asset Checkout Till  </label>
+            <label> Extend Asset Checkout Till </label>
             <input type="date" name="extend_date" required class="form-control">
           </div>
 
@@ -938,6 +941,32 @@
         $("#assetForm").submit();
     }
 
+    function startServiceLogic(obj) {
+        var objID = jQuery(obj).attr("id")
+        if (objID == "serviceUnavailable") {
+            jQuery(".service-asset-start").hide()
+            jQuery(".service-asset-end").hide()
+            jQuery(".service-asset-completion").show()
+        }
+        if (objID == "serviceLog") {
+            jQuery(".service-asset-start").show()
+            jQuery(".service-asset-end").show()
+            jQuery(".service-asset-completion").hide()
+        }
+    }
+
+    function updateServicePerformer(obj) {
+        var objVal = jQuery(obj).val()
+        if (objVal == "Vendor") {
+            jQuery(".service-asset-vendor").show()
+            jQuery(".service-asset-member").hide()
+        }
+        if (objVal == "Member") {
+            jQuery(".service-asset-vendor").hide()
+            jQuery(".service-asset-member").show()
+        }
+    }
+
     var asset_type_id = '<%= @asset.asset_type_id %>';
     var location_id = '<%= @asset.location_id %>';
     var condition_selection_field_id = '<%= @asset.condition_id %>';
@@ -1028,11 +1057,11 @@
         jQuery('#checkoutAssetModal').modal('show');
     }
 
-    function showExtendCheckoutModal(){
+    function showExtendCheckoutModal() {
         jQuery('#extendCheckoutAssetModal').modal('show');
     }
 
-    function showCheckinAssetModal(){
+    function showCheckinAssetModal() {
         jQuery('#assetCheckinModal').modal('show');
     }
 

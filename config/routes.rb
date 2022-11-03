@@ -83,4 +83,7 @@ Rails.application.routes.draw do
   post '/delete_asset_attachment' => 'pages#delete_asset_attachment'
   post '/delete_asset' => 'pages#delete_asset'
   post '/retire_asset' => 'pages#retire_asset'
+
+  #service_asset
+  post '/service_asset' => 'pages#service_asset'
 end
