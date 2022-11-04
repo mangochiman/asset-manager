@@ -922,6 +922,7 @@ class PagesController < ApplicationController
 
   def extend_service
     started_service_logs = AssetServiceLog.where(['state =? AND asset_id =?', 'Started', params[:asset_id]])
+    errors = []
     started_service_logs.each do |service_log|
       service_log.end_date_expected = params[:expected_completion]
       service_log.end_date_actual = ''
@@ -929,7 +930,14 @@ class PagesController < ApplicationController
         service_log.service_indefinite = 1
         service_log.end_date_expected = ""
       end
-      service_log.save
+      if service_log.save
+      else
+        errors << service_log.errors.full_messages.join('<br />')
+      end
+    end
+    unless errors.blank?
+      flash[:error] = errors.join('<br />')
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     end
     flash[:notice] = 'Record update was successful'
     redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
