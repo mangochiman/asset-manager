@@ -76,14 +76,14 @@
                 <% end %>
 
                 <% if @retired %>
-                  <button type="button" class="btn btn-primary">
-                    <i class="fa fa-arrow-circle-right"></i> ACTIVATE
+                  <button onclick="activateAsset()" type="button" class="btn btn-primary">
+                    <i class="fa fa-unlock"></i> ACTIVATE
                   </button>
                 <% end %>
 
                 <% if @service_started || @retired %>
                   <button type="button" class="btn btn-primary">
-                    <i class="fa fa-arrow-circle-right"></i> PRINT LABEL
+                    <i class="fa fa-print"></i> PRINT LABEL
                   </button>
                 <% end %>
               </div>
@@ -1179,4 +1179,22 @@
 
         form.submit();
     }
+
+    function activateAsset(){
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/activate_asset";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = '<%= params[:asset_id] %>';
+        input.name = "asset_id";
+        form.appendChild(input);
+
+        form.submit();
+    }
+
 </script>

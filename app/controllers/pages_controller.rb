@@ -1033,4 +1033,20 @@ class PagesController < ApplicationController
     end
   end
 
+  def activate_asset
+    asset = Asset.find(params[:asset_id])
+    asset.retired = 0
+    asset.retire_reason = ""
+    asset.date_retired = ""
+    asset.retired_by = ""
+    asset.retire_comments = ""
+    if asset.save
+      flash[:notice] = 'Asset activation was successful'
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    else
+      flash[:error] = asset.errors.full_messages.join('<br />')
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    end
+  end
+
 end

@@ -92,5 +92,6 @@ Rails.application.routes.draw do
   post '/extend_checkout' => 'pages#extend_checkout'
   post '/checkin_asset' => 'pages#checkin_asset'
   post '/reserve_asset' => 'pages#reserve_asset'
+  post '/activate_asset' => 'pages#activate_asset'
 
 end
