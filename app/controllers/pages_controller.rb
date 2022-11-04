@@ -204,6 +204,9 @@ class PagesController < ApplicationController
     end
 
     @page_header = @asset.name
+    @service_started = @asset.service_started? #checked_out?
+    @checked_out = @asset.checked_out?
+    @retired = @asset.retired?
     @asset_types = AssetType.all
     @status_selection_fields = SelectionField.where(['field_type =?', 'status'])
     @condition_selection_fields = SelectionField.where(['field_type =?', 'condition'])
