@@ -28,6 +28,15 @@ class Asset < ApplicationRecord
     checked_out
   end
 
+  def checked_out_date
+    check_out_date = ""
+    checked_out_activity = self.asset_activities.last
+    unless checked_out_activity.blank?
+      check_out_date = checked_out_activity.checkout_date if checked_out_activity.name.to_s.downcase == "check-out"
+    end
+    check_out_date
+  end
+
   def checked_in?
     checked_in = false
     checked_in_activity = self.asset_activities.last
@@ -43,4 +52,14 @@ class Asset < ApplicationRecord
     retired
   end
 
+  def state
+    asset_state = ""
+    asset_state = "Checked out" if self.checked_out?
+    asset_state = "Available" if self.checked_in?
+    asset_state = "Maintenance" if self.service_started?
+    asset_state = "Retired" if self.retired?
+    asset_state
+  end
+
 end
+

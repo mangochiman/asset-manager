@@ -207,6 +207,8 @@ class PagesController < ApplicationController
     @service_started = @asset.service_started? #checked_out?
     @checked_out = @asset.checked_out?
     @retired = @asset.retired?
+    @state = @asset.state
+    @checked_out_date = @asset.checked_out_date
     @asset_types = AssetType.all
     @status_selection_fields = SelectionField.where(['field_type =?', 'status'])
     @condition_selection_fields = SelectionField.where(['field_type =?', 'condition'])
@@ -880,6 +882,10 @@ class PagesController < ApplicationController
       asset_service_log.start_date_actual = Time.now
       asset_service_log.start_date_expected = Time.now
       asset_service_log.end_date_expected = params[:completion_date]
+      if params[:completion_date].to_date < Date.today
+        flash[:error] = "Expected completion should be a future date"
+        redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+      end
       if params[:service_indefinite].to_s == "on"
         asset_service_log.service_indefinite = 1
         asset_service_log.end_date_expected = ""
@@ -899,7 +905,7 @@ class PagesController < ApplicationController
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
       flash[:error] = asset_service_log.errors.full_messages.join('<br />')
-      redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     end
   end
 
@@ -946,7 +952,7 @@ class PagesController < ApplicationController
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
       flash[:error] = asset_service_log.errors.full_messages.join('<br />')
-      redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     end
   end
 
@@ -968,7 +974,7 @@ class PagesController < ApplicationController
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
       flash[:error] = asset_activity.errors.full_messages.join('<br />')
-      redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     end
   end
 
@@ -987,7 +993,7 @@ class PagesController < ApplicationController
           redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
         else
           flash[:error] = latest_asset_activity.errors.full_messages.join('<br />')
-          redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+          redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
         end
       end
     end
@@ -1012,7 +1018,7 @@ class PagesController < ApplicationController
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
       flash[:error] = asset_activity.errors.full_messages.join('<br />')
-      redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     end
   end
 
@@ -1029,7 +1035,7 @@ class PagesController < ApplicationController
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
       flash[:error] = asset_reservation.errors.full_messages.join('<br />')
-      redirect_to("/dit_asset?asset_id=#{params[:asset_id]}") and return
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     end
   end
 

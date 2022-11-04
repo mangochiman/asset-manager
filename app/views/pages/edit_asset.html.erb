@@ -92,7 +92,13 @@
         </div>
       </div>
 
-      <p><span class="badge bg-success">Maintenance</span></p>
+      <%
+        bg_color = "default"
+        bg_color = "warning" if @state.to_s.match(/Maintenance/i)
+        bg_color = "success" if @state.to_s.match(/Available/i)
+        bg_color = "info" if @state.to_s.match(/out/i)
+      %>
+      <p>Asset status: <span class="badge bg-<%= bg_color %>"><%= @state %></span></p>
       <ul class="nav nav-tabs" id="custom-content-above-tab" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="custom-content-above-home-tab" data-toggle="pill" href="#custom-content-above-home" role="tab" aria-controls="custom-content-above-home" aria-selected="true">General</a>
@@ -505,7 +511,7 @@
           </button>
         </div>
         <div class="modal-body" style="overflow: auto; max-height: calc(70vh - 90px);">
-          <% if !@checked_out %>
+          <% if !@checked_out && @service_started != true %>
             <div class="form-check">
               <input class="form-check-input" value="maintenance" onchange="startServiceLogic(this)" id="serviceUnavailable" type="radio" name="availability" checked>
               <label for="serviceUnavailable" class="form-check-label"> Make Item unavailable (Item will be put in
@@ -529,7 +535,7 @@
             </div>
           <% end %>
           <hr/>
-          <% if !@checked_out %>
+          <% if !@checked_out && @service_started != true %>
             <div class="form-group service-asset-completion">
               <label>Expected Completion </label>
               <input type="date" name="completion_date" class="form-control">
@@ -539,7 +545,7 @@
               </div>
             </div>
           <% end %>
-          <% if !@checked_out %>
+          <% if !@checked_out && @service_started != true %>
             <div class="form-group service-asset-start" style="display: none">
               <label>From </label>
               <input type="date" name="from" class="form-control">
@@ -551,11 +557,11 @@
           <% else %>
             <div class="form-group service-asset-start">
               <label>From </label>
-              <input type="date" name="from" class="form-control">
+              <input type="date" required name="from" class="form-control">
             </div>
             <div class="form-group service-asset-end">
               <label>To </label>
-              <input type="date" name="to" class="form-control">
+              <input type="date" required name="to" class="form-control">
             </div>
           <% end %>
           <div class="form-group">
@@ -852,7 +858,7 @@
 
           <div class="form-group">
             <label>Location</label>
-            <select name="location_id" required class="form-control custom-select">
+            <select name="location_id" class="form-control custom-select">
               <option value="" selected disabled>Select one</option>
               <% @locations.each do |location| %>
                 <option value="<%= location.location_id %>"><%= location.name %></option>
@@ -936,8 +942,8 @@
         </div>
         <div class="modal-body" style="overflow: auto; max-height: calc(70vh - 90px);">
           <div class="form-group">
-            <label>Checkout Date </label>
-            [DATE]
+            <label>Checkout Date: </label>
+            <%= @checked_out_date.to_date.strftime("%d.%b.%Y") rescue "" %>
           </div>
           <div class="form-group">
             <label>Checkin Date </label>
