@@ -114,7 +114,8 @@
             <span class="badge bg-info"><%= @asset_service_logs.count %></span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="custom-content-above-reservations-tab" data-toggle="pill" href="#custom-content-above-reservations" role="tab" aria-controls="custom-content-above-reservations" aria-selected="false">Reservations</a>
+          <a class="nav-link" id="custom-content-above-reservations-tab" data-toggle="pill" href="#custom-content-above-reservations" role="tab" aria-controls="custom-content-above-reservations" aria-selected="false">Reservations
+            <span class="badge bg-info"><%= @asset_reservations.count %></span></a></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="custom-content-above-settings-tab" data-toggle="pill" href="#custom-content-above-notes" role="tab" aria-controls="custom-content-above-notes" aria-selected="false">Notes</a>
@@ -352,7 +353,38 @@
         <div class="tab-pane fade" id="custom-content-above-reservations" role="tabpanel" aria-labelledby="custom-content-above-reservations-tab">
           <div class="card">
             <div class="card-body">
-              ###
+              <table class="table-striped table-condensed" style="width: 100%">
+                <thead>
+                <tr>
+                  <th>start_date</th>
+                  <th>end_date</th>
+                  <th>person_id</th>
+                  <th>location_id</th>
+                  <th>notes</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @asset_reservations.each do |asset_reservation| %>
+                  <tr>
+                    <%
+                      start_date = asset_reservation.start_date.to_date.strftime("%d.%b.%Y") rescue asset_reservation.start_date
+                      end_date = asset_reservation.end_date.to_date.strftime("%d.%b.%Y") rescue asset_reservation.end_date
+                    %>
+                    <td><%= start_date %></td>
+                    <td><%= end_date %></td>
+                    <td><%= asset_reservation.person_id %></td>
+                    <td><%= asset_reservation.location_id %></td>
+                    <td><%= asset_reservation.notes %></td>
+                    <td>
+                      <button onclick="voidAssetReservationConfirm('<%= asset_reservation.asset_reservation_id %>')" type="button" class="btn btn-danger btn-block">
+                        <i class="fa fa-trash"></i> Delete
+                      </button>
+                    </td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
             </div>
             <!-- /.card-body -->
           </div>
@@ -1033,6 +1065,30 @@
 
 
 
+<div class="modal fade" id="voidAssetReservationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidAssetReservation();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+
+
 <div class="modal fade" id="startScheduledServiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -1322,6 +1378,30 @@
         var input = document.createElement("input");
         input.type = "hidden";
         input.value = selectedAssetServiceLogID;
+        input.name = "id";
+        form.appendChild(input);
+
+        form.submit();
+    }
+
+    //voidAssetReservation
+    var selectedReservationID;
+    function voidAssetReservationConfirm(id) {
+        selectedReservationID = id;
+        jQuery('#voidAssetReservationModal').modal('show');
+    }
+
+    function voidAssetReservation() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_asset_reservation";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedReservationID;
         input.name = "id";
         form.appendChild(input);
 

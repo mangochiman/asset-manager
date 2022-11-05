@@ -220,6 +220,7 @@ class PagesController < ApplicationController
     @vendors = Vendor.all
     @people = Person.all
     @asset_service_logs = @asset.asset_service_logs
+    @asset_reservations = @asset.asset_reservations
   end
 
   def delete_asset
@@ -1109,6 +1110,18 @@ class PagesController < ApplicationController
     else
       flash[:error] = asset_service_log.errors.full_messages.join('<br />')
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    end
+  end
+
+  def delete_asset_reservation
+    asset_reservation = AssetReservation.find(params[:id])
+    asset_id = asset_reservation.asset_id
+    if asset_reservation.delete
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/edit_asset?asset_id=#{asset_id}") and return
+    else
+      flash[:error] = "Unable to delete record"
+      redirect_to("/edit_asset?asset_id=#{asset_id}") and return
     end
   end
 

@@ -5,6 +5,7 @@ class Asset < ApplicationRecord
   has_many :asset_attachments, :foreign_key => :asset_id
   has_many :asset_activities, :foreign_key => :asset_id
   has_many :asset_service_logs, :foreign_key => :asset_id
+  has_many :asset_reservations, :foreign_key => :asset_id
 
   validates_presence_of :name
 
