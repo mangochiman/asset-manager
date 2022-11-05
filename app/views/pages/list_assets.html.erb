@@ -34,8 +34,7 @@
               </button>
               <div class="dropdown-menu" role="menu">
                 <a class="dropdown-item" href="/edit_asset?asset_id=<%= asset.asset_id %>">Update</a>
-                <a class="dropdown-item" href="#">Clone</a>
-                <a class="dropdown-item" href="#">Retire</a>
+                <a class="dropdown-item" href="/new_asset_menu?ref_id=<%= asset.asset_id %>">Clone</a>
                 <a class="dropdown-item" href="#" onclick="voidAssetConfirm('<%= asset.asset_id %>')">Delete</a>
               </div>
             </div>

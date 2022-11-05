@@ -93,5 +93,7 @@ Rails.application.routes.draw do
   post '/checkin_asset' => 'pages#checkin_asset'
   post '/reserve_asset' => 'pages#reserve_asset'
   post '/activate_asset' => 'pages#activate_asset'
+  post '/delete_asset_service_log' => 'pages#delete_asset_service_log'
+  post '/start_scheduled_service' => 'pages#start_scheduled_service'
 
 end

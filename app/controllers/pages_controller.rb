@@ -219,6 +219,7 @@ class PagesController < ApplicationController
     @service_types = SelectionField.where(['field_type =?', 'service_type'])
     @vendors = Vendor.all
     @people = Person.all
+    @asset_service_logs = @asset.asset_service_logs
   end
 
   def delete_asset
@@ -1059,6 +1060,54 @@ class PagesController < ApplicationController
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
       flash[:error] = asset.errors.full_messages.join('<br />')
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    end
+  end
+
+  def delete_asset_service_log
+    asset_service_log = AssetServiceLog.find(params[:id])
+    asset_id = asset_service_log.asset_id
+    if asset_service_log.delete
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/edit_asset?asset_id=#{asset_id}") and return
+    else
+      flash[:error] = "Unable to delete record"
+      redirect_to("/edit_asset?asset_id=#{asset_id}") and return
+    end
+  end
+
+  def start_scheduled_service
+    asset_service_log = AssetServiceLog.find(params[:asset_service_log_id])
+    asset_service_log.performed_by = params[:service_performer]
+    asset_service_log.person_id = params[:person_id] if params[:service_performer].to_s.downcase == "member"
+    asset_service_log.vendor_id = params[:vendor_id] if params[:service_performer].to_s.downcase == "vendor"
+    asset_service_log.notes = params[:comments]
+    asset_service_log.start_date_actual = Time.now
+    asset_service_log.end_date_expected = params[:completion_date]
+
+    if params[:availability] == "maintenance"
+      asset_service_log.state = 'Started'
+      if params[:completion_date].to_date < Date.today
+        flash[:error] = "Expected completion should be a future date"
+        redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+      end
+      if params[:service_indefinite].to_s == "on"
+        asset_service_log.service_indefinite = 1
+        asset_service_log.end_date_expected = ""
+      end
+    end
+
+    if params[:availability] == "available"
+      asset_service_log.state = 'Completed'
+    end
+
+    if asset_service_log.save
+      asset = Asset.find(params[:asset_id])
+      asset.complete_all_started_services_except(params[:asset_service_log_id])
+      flash[:notice] = 'Record update was successful'
+      redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
+    else
+      flash[:error] = asset_service_log.errors.full_messages.join('<br />')
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     end
   end

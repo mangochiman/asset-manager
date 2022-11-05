@@ -61,5 +61,15 @@ class Asset < ApplicationRecord
     asset_state
   end
 
+  def complete_all_started_services_except(asset_service_log_id)
+    started_services = self.asset_service_logs.where(['asset_service_log_id != ? AND state =?',
+                                   asset_service_log_id, 'Started'])
+    started_services.each do |started_service|
+      started_service.state = 'Completed'
+      started_service.end_date_actual = Time.now
+      started_service.save
+    end
+  end
+
 end
 
