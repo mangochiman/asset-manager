@@ -221,6 +221,7 @@ class PagesController < ApplicationController
     @people = Person.all
     @asset_service_logs = @asset.asset_service_logs
     @asset_reservations = @asset.asset_reservations
+    @asset_check_in_out_activities = @asset.check_in_out_activities
   end
 
   def delete_asset

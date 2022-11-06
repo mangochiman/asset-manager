@@ -1,3 +1,39 @@
+<style>
+    ul.timeline {
+        list-style-type: none;
+        position: relative;
+    }
+
+    ul.timeline:before {
+        content: ' ';
+        background: #d4d9df;
+        display: inline-block;
+        position: absolute;
+        left: 29px;
+        width: 2px;
+        height: 100%;
+        z-index: 400;
+    }
+
+    ul.timeline > li {
+        margin: 20px 0;
+        padding-left: 50px;
+    }
+
+    ul.timeline > li:before {
+        content: ' ';
+        background: white;
+        display: inline-block;
+        position: absolute;
+        border-radius: 50%;
+        border: 3px solid #22c0e8;
+        left: 20px;
+        width: 20px;
+        height: 20px;
+        z-index: 400;
+    }
+</style>
+
 <form id="assetForm" action="/edit_asset" method="post" enctype="multipart/form-data">
   <div class="card card-primary card-outline">
 
@@ -32,7 +68,7 @@
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu" role="menu">
-                    <a class="dropdown-item" href="#">Check In/out History</a>
+                    <a class="dropdown-item" href="#" onclick="showCheckInOutActivitiesModal()">Check In/out History</a>
                     <a class="dropdown-item" href="#">Print Labels</a>
                   </div>
                 </div>
@@ -1087,8 +1123,6 @@
   <!-- /.modal-dialog -->
 </div>
 
-
-
 <div class="modal fade" id="startScheduledServiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -1111,14 +1145,14 @@
               unavailable</label>
           </div>
           <hr/>
-            <div class="form-group service-asset-completion">
-              <label>End Date </label>
-              <input type="date" required id="completion_date" name="completion_date" class="form-control">
-              <div class="form-check">
-                <input id="service_indefinite2" class="form-check-input" type="checkbox" name="service_indefinite">
-                <label for="service_indefinite2" class="form-check-label">Under service indefinitely</label>
-              </div>
+          <div class="form-group service-asset-completion">
+            <label>End Date </label>
+            <input type="date" required id="completion_date" name="completion_date" class="form-control">
+            <div class="form-check">
+              <input id="service_indefinite2" class="form-check-input" type="checkbox" name="service_indefinite">
+              <label for="service_indefinite2" class="form-check-label">Under service indefinitely</label>
             </div>
+          </div>
 
           <div class="form-group">
             <label>Service Performed By</label>
@@ -1169,294 +1203,352 @@
   <!-- /.modal-dialog -->
 </div>
 
-<script>
 
-    $(document).ready(function () {
-        // Summernote
-        jQuery('#summernote').summernote()
+<div class="modal fade" id="checkInOutActivitiesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">CHECK IN/OUT HISTORY</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="overflow: auto; max-height: calc(80vh - 90px);">
+        <div class="row">
+          <div class="col-md-6 offset-md-3">
+            <h4>HISTORY</h4>
+            <ul class="timeline">
+              <% @asset_check_in_out_activities.each do |activity| %>
+                <% if activity.name.to_s.match(/in/i) %>
+                  <li>
+                    <a href="#"><%= activity.name %></a> on
+                    <%
+                      checkin_date = activity.checkin_date.to_date.strftime("%d.%b.%Y") rescue activity.checkin_date
+                    %>
+                    <a href="#" class="float-right"><%= checkin_date %></a>
+                    <p>Checked in from: <%= activity.person_id %></p>
+                  </li>
+                <% else %>
+                  <li>
+                    <a href="#"><%= activity.name %></a> on
+                    <%
+                      checkout_date = activity.checkout_date.to_date.strftime("%d.%b.%Y") rescue activity.checkout_date
+                    %>
+                    <a href="#" class="float-right"><%= checkout_date %></a>
+                    <p>Checked out to: <%= activity.person_id %></p>
+                    <p>Location: <%= activity.location_id %></p>
+                  </li>
+                <% end %>
 
-        jQuery('.assets').addClass('active');
-        jQuery('.list_assets_menu').addClass('active');
-        jQuery('.assets-menu').addClass('menu-open');
+              <% end %>
 
-        jQuery("#assetForm").submit(function (event) {
-            var assetName = jQuery("#assetName").val().trim()
-            if (assetName == "") {
-                jQuery('#requiredModal').modal('show');
-                event.preventDefault();
-            }
-        });
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OKAY</button>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</div>
 
-        bsCustomFileInput.init();
-    })
+  <script>
 
-    function validateForm() {
-        $("#assetForm").submit();
-    }
+      $(document).ready(function () {
+          // Summernote
+          jQuery('#summernote').summernote()
 
-    function startServiceLogic(obj) {
-        var objID = jQuery(obj).attr("id")
-        if (objID == "serviceUnavailable") {
-            jQuery(".service-asset-start").hide()
-            jQuery(".service-asset-end").hide()
-            jQuery(".service-asset-completion").show()
-        }
-        if (objID == "serviceLog") {
-            jQuery(".service-asset-start").show()
-            jQuery(".service-asset-end").show()
-            jQuery(".service-asset-completion").hide()
-        }
-    }
+          jQuery('.assets').addClass('active');
+          jQuery('.list_assets_menu').addClass('active');
+          jQuery('.assets-menu').addClass('menu-open');
 
-    function updateServicePerformer(obj) {
-        var objVal = jQuery(obj).val()
-        if (objVal == "Vendor") {
-            jQuery(".service-asset-vendor").show()
-            jQuery(".service-asset-member").hide()
-        }
-        if (objVal == "Member") {
-            jQuery(".service-asset-vendor").hide()
-            jQuery(".service-asset-member").show()
-        }
-    }
+          jQuery("#assetForm").submit(function (event) {
+              var assetName = jQuery("#assetName").val().trim()
+              if (assetName == "") {
+                  jQuery('#requiredModal').modal('show');
+                  event.preventDefault();
+              }
+          });
 
-    function updateServiceSchedulePerformer(obj) {
-        var objVal = jQuery(obj).val()
-        if (objVal == "Vendor") {
-            jQuery(".service-schedule-vendor").show()
-            jQuery(".service-schedule-member").hide()
-        }
-        if (objVal == "Member") {
-            jQuery(".service-schedule-vendor").hide()
-            jQuery(".service-schedule-member").show()
-        }
-    }
+          bsCustomFileInput.init();
+      })
 
-    function updateStartServiceSchedulePerformer(obj) {
-        var objVal = jQuery(obj).val()
-        if (objVal == "Vendor") {
-            jQuery(".start-schedule-vendor").show()
-            jQuery(".start-schedule-member").hide()
-        }
-        if (objVal == "Member") {
-            jQuery(".start-schedule-vendor").hide()
-            jQuery(".start-schedule-member").show()
-        }
-    }
+      function validateForm() {
+          $("#assetForm").submit();
+      }
+
+      function startServiceLogic(obj) {
+          var objID = jQuery(obj).attr("id")
+          if (objID == "serviceUnavailable") {
+              jQuery(".service-asset-start").hide()
+              jQuery(".service-asset-end").hide()
+              jQuery(".service-asset-completion").show()
+          }
+          if (objID == "serviceLog") {
+              jQuery(".service-asset-start").show()
+              jQuery(".service-asset-end").show()
+              jQuery(".service-asset-completion").hide()
+          }
+      }
+
+      function updateServicePerformer(obj) {
+          var objVal = jQuery(obj).val()
+          if (objVal == "Vendor") {
+              jQuery(".service-asset-vendor").show()
+              jQuery(".service-asset-member").hide()
+          }
+          if (objVal == "Member") {
+              jQuery(".service-asset-vendor").hide()
+              jQuery(".service-asset-member").show()
+          }
+      }
+
+      function updateServiceSchedulePerformer(obj) {
+          var objVal = jQuery(obj).val()
+          if (objVal == "Vendor") {
+              jQuery(".service-schedule-vendor").show()
+              jQuery(".service-schedule-member").hide()
+          }
+          if (objVal == "Member") {
+              jQuery(".service-schedule-vendor").hide()
+              jQuery(".service-schedule-member").show()
+          }
+      }
+
+      function updateStartServiceSchedulePerformer(obj) {
+          var objVal = jQuery(obj).val()
+          if (objVal == "Vendor") {
+              jQuery(".start-schedule-vendor").show()
+              jQuery(".start-schedule-member").hide()
+          }
+          if (objVal == "Member") {
+              jQuery(".start-schedule-vendor").hide()
+              jQuery(".start-schedule-member").show()
+          }
+      }
 
 
-    var asset_type_id = '<%= @asset.asset_type_id %>';
-    var location_id = '<%= @asset.location_id %>';
-    var condition_selection_field_id = '<%= @asset.condition_id %>';
-    var vendor_id = '<%= @asset.vendor_id %>';
-    var asset_id = '<%= @asset.asset_id %>';
+      var asset_type_id = '<%= @asset.asset_type_id %>';
+      var location_id = '<%= @asset.location_id %>';
+      var condition_selection_field_id = '<%= @asset.condition_id %>';
+      var vendor_id = '<%= @asset.vendor_id %>';
+      var asset_id = '<%= @asset.asset_id %>';
 
-    var selectedAssetAttachmentID;
+      var selectedAssetAttachmentID;
 
-    function voidAssetAttachmentConfirm(id) {
-        selectedAssetAttachmentID = id;
-        jQuery('#voidAssetAttachmentModal').modal('show');
-    }
+      function voidAssetAttachmentConfirm(id) {
+          selectedAssetAttachmentID = id;
+          jQuery('#voidAssetAttachmentModal').modal('show');
+      }
 
-    var assetID = '<%= params[:asset_id] %>';
+      var assetID = '<%= params[:asset_id] %>';
 
-    function voidAssetAttachment() {
-        var body = document.getElementsByTagName("body")[0];
+      function voidAssetAttachment() {
+          var body = document.getElementsByTagName("body")[0];
 
-        var form = document.createElement("form");
-        form.method = "POST";
-        form.action = "/delete_asset_attachment";
-        body.appendChild(form);
+          var form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/delete_asset_attachment";
+          body.appendChild(form);
 
-        var input = document.createElement("input");
-        input.type = "hidden";
-        input.value = selectedAssetAttachmentID;
-        input.name = "id";
-        form.appendChild(input);
+          var input = document.createElement("input");
+          input.type = "hidden";
+          input.value = selectedAssetAttachmentID;
+          input.name = "id";
+          form.appendChild(input);
 
-        var input2 = document.createElement("input");
-        input2.type = "hidden";
-        input2.value = asset_id;
-        input2.name = "asset_id";
-        form.appendChild(input2);
+          var input2 = document.createElement("input");
+          input2.type = "hidden";
+          input2.value = asset_id;
+          input2.name = "asset_id";
+          form.appendChild(input2);
 
-        form.submit();
-    }
+          form.submit();
+      }
 
-    function loadDefaultValues() {
-        var location_id_option = document.getElementById('location_id_' + location_id)
-        if (location_id_option) {
-            location_id_option.selected = true;
-        }
+      function loadDefaultValues() {
+          var location_id_option = document.getElementById('location_id_' + location_id)
+          if (location_id_option) {
+              location_id_option.selected = true;
+          }
 
-        var asset_type_id_option = document.getElementById('asset_type_id_' + asset_type_id)
-        if (asset_type_id_option) {
-            asset_type_id_option.selected = true;
-        }
+          var asset_type_id_option = document.getElementById('asset_type_id_' + asset_type_id)
+          if (asset_type_id_option) {
+              asset_type_id_option.selected = true;
+          }
 
-        var condition_selection_field_id_option = document.getElementById('selection_field_id_' + condition_selection_field_id)
-        if (condition_selection_field_id_option) {
-            condition_selection_field_id_option.selected = true;
-        }
+          var condition_selection_field_id_option = document.getElementById('selection_field_id_' + condition_selection_field_id)
+          if (condition_selection_field_id_option) {
+              condition_selection_field_id_option.selected = true;
+          }
 
-        var vendor_id_option = document.getElementById('vendor_id_' + vendor_id)
-        if (vendor_id_option) {
-            vendor_id_option.selected = true;
-        }
-    }
+          var vendor_id_option = document.getElementById('vendor_id_' + vendor_id)
+          if (vendor_id_option) {
+              vendor_id_option.selected = true;
+          }
+      }
 
-    loadDefaultValues()
+      loadDefaultValues()
 
-    function cloneAsset() {
-        window.location = "/new_asset_menu?ref_id=" + assetID
-    }
+      function cloneAsset() {
+          window.location = "/new_asset_menu?ref_id=" + assetID
+      }
 
-    function showServiceCompleteModal() {
-        jQuery('#serviceCompleteModal').modal('show');
-    }
+      function showServiceCompleteModal() {
+          jQuery('#serviceCompleteModal').modal('show');
+      }
 
-    function showServiceStartModal() {
-        jQuery('#serviceStartModal').modal('show');
-    }
+      function showServiceStartModal() {
+          jQuery('#serviceStartModal').modal('show');
+      }
 
-    function showServiceExtendModal() {
-        jQuery('#serviceExtendModal').modal('show');
-    }
+      function showServiceExtendModal() {
+          jQuery('#serviceExtendModal').modal('show');
+      }
 
-    function showServiceScheduleModal() {
-        jQuery('#serviceScheduleModal').modal('show');
-    }
+      function showServiceScheduleModal() {
+          jQuery('#serviceScheduleModal').modal('show');
+      }
 
-    function showStartScheduledServiceModal(id, endDateExpected) {
-        jQuery("#asset_service_log_id").val(id);
-        jQuery("#completion_date").val(endDateExpected);
-        jQuery('#startScheduledServiceModal').modal('show');
-    }
+      function showStartScheduledServiceModal(id, endDateExpected) {
+          jQuery("#asset_service_log_id").val(id);
+          jQuery("#completion_date").val(endDateExpected);
+          jQuery('#startScheduledServiceModal').modal('show');
+      }
 
-    function showAssetReserveModal() {
-        jQuery('#assetReserveModal').modal('show');
-    }
+      function showAssetReserveModal() {
+          jQuery('#assetReserveModal').modal('show');
+      }
 
-    function showCheckoutAssetModal() {
-        jQuery('#checkoutAssetModal').modal('show');
-    }
+      function showCheckoutAssetModal() {
+          jQuery('#checkoutAssetModal').modal('show');
+      }
 
-    function showExtendCheckoutModal() {
-        jQuery('#extendCheckoutAssetModal').modal('show');
-    }
+      function showExtendCheckoutModal() {
+          jQuery('#extendCheckoutAssetModal').modal('show');
+      }
 
-    function showCheckinAssetModal() {
-        jQuery('#assetCheckinModal').modal('show');
-    }
+      function showCheckinAssetModal() {
+          jQuery('#assetCheckinModal').modal('show');
+      }
 
-    var selectedAssetID;
+      function showCheckInOutActivitiesModal() {
+          jQuery('#checkInOutActivitiesModal').modal('show');
+      }
 
-    function voidAssetConfirm(id) {
-        selectedAssetID = id;
-        jQuery('#voidAssetModal').modal('show');
-    }
+      var selectedAssetID;
 
-    function retireAssetConfirm(id) {
-        selectedAssetID = id;
-        jQuery('#retireAssetModal').modal('show');
-    }
+      function voidAssetConfirm(id) {
+          selectedAssetID = id;
+          jQuery('#voidAssetModal').modal('show');
+      }
 
-    var selectedAssetServiceLogID;
-    function voidAssetServiceLogConfirm(id) {
-        selectedAssetServiceLogID = id;
-        jQuery('#voidAssetServiceLogModal').modal('show');
-    }
+      function retireAssetConfirm(id) {
+          selectedAssetID = id;
+          jQuery('#retireAssetModal').modal('show');
+      }
 
-    function voidAssetServiceLog() {
-        var body = document.getElementsByTagName("body")[0];
+      var selectedAssetServiceLogID;
 
-        var form = document.createElement("form");
-        form.method = "POST";
-        form.action = "/delete_asset_service_log";
-        body.appendChild(form);
+      function voidAssetServiceLogConfirm(id) {
+          selectedAssetServiceLogID = id;
+          jQuery('#voidAssetServiceLogModal').modal('show');
+      }
 
-        var input = document.createElement("input");
-        input.type = "hidden";
-        input.value = selectedAssetServiceLogID;
-        input.name = "id";
-        form.appendChild(input);
+      function voidAssetServiceLog() {
+          var body = document.getElementsByTagName("body")[0];
 
-        form.submit();
-    }
+          var form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/delete_asset_service_log";
+          body.appendChild(form);
 
-    //voidAssetReservation
-    var selectedReservationID;
-    function voidAssetReservationConfirm(id) {
-        selectedReservationID = id;
-        jQuery('#voidAssetReservationModal').modal('show');
-    }
+          var input = document.createElement("input");
+          input.type = "hidden";
+          input.value = selectedAssetServiceLogID;
+          input.name = "id";
+          form.appendChild(input);
 
-    function voidAssetReservation() {
-        var body = document.getElementsByTagName("body")[0];
+          form.submit();
+      }
 
-        var form = document.createElement("form");
-        form.method = "POST";
-        form.action = "/delete_asset_reservation";
-        body.appendChild(form);
+      //voidAssetReservation
+      var selectedReservationID;
 
-        var input = document.createElement("input");
-        input.type = "hidden";
-        input.value = selectedReservationID;
-        input.name = "id";
-        form.appendChild(input);
+      function voidAssetReservationConfirm(id) {
+          selectedReservationID = id;
+          jQuery('#voidAssetReservationModal').modal('show');
+      }
 
-        form.submit();
-    }
+      function voidAssetReservation() {
+          var body = document.getElementsByTagName("body")[0];
 
-    function voidAsset() {
-        var body = document.getElementsByTagName("body")[0];
+          var form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/delete_asset_reservation";
+          body.appendChild(form);
 
-        var form = document.createElement("form");
-        form.method = "POST";
-        form.action = "/delete_asset";
-        body.appendChild(form);
+          var input = document.createElement("input");
+          input.type = "hidden";
+          input.value = selectedReservationID;
+          input.name = "id";
+          form.appendChild(input);
 
-        var input = document.createElement("input");
-        input.type = "hidden";
-        input.value = selectedAssetID;
-        input.name = "id";
-        form.appendChild(input);
+          form.submit();
+      }
 
-        form.submit();
-    }
+      function voidAsset() {
+          var body = document.getElementsByTagName("body")[0];
 
-    function retireAsset() {
-        var body = document.getElementsByTagName("body")[0];
+          var form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/delete_asset";
+          body.appendChild(form);
 
-        var form = document.createElement("form");
-        form.method = "POST";
-        form.action = "/retire_asset";
-        body.appendChild(form);
+          var input = document.createElement("input");
+          input.type = "hidden";
+          input.value = selectedAssetID;
+          input.name = "id";
+          form.appendChild(input);
 
-        var input = document.createElement("input");
-        input.type = "hidden";
-        input.value = selectedAssetID;
-        input.name = "id";
-        form.appendChild(input);
+          form.submit();
+      }
 
-        form.submit();
-    }
+      function retireAsset() {
+          var body = document.getElementsByTagName("body")[0];
 
-    function activateAsset() {
-        var body = document.getElementsByTagName("body")[0];
+          var form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/retire_asset";
+          body.appendChild(form);
 
-        var form = document.createElement("form");
-        form.method = "POST";
-        form.action = "/activate_asset";
-        body.appendChild(form);
+          var input = document.createElement("input");
+          input.type = "hidden";
+          input.value = selectedAssetID;
+          input.name = "id";
+          form.appendChild(input);
 
-        var input = document.createElement("input");
-        input.type = "hidden";
-        input.value = '<%= params[:asset_id] %>';
-        input.name = "asset_id";
-        form.appendChild(input);
+          form.submit();
+      }
 
-        form.submit();
-    }
+      function activateAsset() {
+          var body = document.getElementsByTagName("body")[0];
 
-</script>
+          var form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/activate_asset";
+          body.appendChild(form);
+
+          var input = document.createElement("input");
+          input.type = "hidden";
+          input.value = '<%= params[:asset_id] %>';
+          input.name = "asset_id";
+          form.appendChild(input);
+
+          form.submit();
+      }
+
+  </script>

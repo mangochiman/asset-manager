@@ -72,5 +72,10 @@ class Asset < ApplicationRecord
     end
   end
 
+  def check_in_out_activities
+    activities = self.asset_activities.where(['name IN (?)', %w[check-out check-in]])
+    activities
+  end
+
 end
 
