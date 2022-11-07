@@ -54,7 +54,7 @@ class Asset < ApplicationRecord
   end
 
   def state
-    asset_state = ""
+    asset_state = "Available"
     asset_state = "Checked out" if self.checked_out?
     asset_state = "Available" if self.checked_in?
     asset_state = "Maintenance" if self.service_started?
@@ -75,6 +75,16 @@ class Asset < ApplicationRecord
   def check_in_out_activities
     activities = self.asset_activities.where(['name IN (?)', %w[check-out check-in]])
     activities
+  end
+
+  def generate_qr
+    require 'barby'
+    require 'barby/barcode'
+    require 'barby/barcode/qr_code'
+    require 'barby/outputter/png_outputter'
+    text = self.name
+    base64_output = Barby::QrCode.new(text, level: :q, size: 15).to_image.to_data_url
+    base64_output
   end
 
 end

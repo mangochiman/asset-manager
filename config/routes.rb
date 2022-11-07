@@ -96,5 +96,6 @@ Rails.application.routes.draw do
   post '/delete_asset_service_log' => 'pages#delete_asset_service_log'
   post '/start_scheduled_service' => 'pages#start_scheduled_service'
   post '/delete_asset_reservation' => 'pages#delete_asset_reservation'
-
+  get '/asset_label' => 'pages#asset_label'
+  get '/download_asset_label' => 'pages#download_asset_label'
 end

@@ -1126,4 +1126,22 @@ class PagesController < ApplicationController
     end
   end
 
+  def asset_label
+    @asset = Asset.find(params[:asset_id])
+    @barcode_base64 = @asset.generate_qr
+    render layout: false
+  end
+
+  def download_asset_label
+    asset_id = params[:asset_id]
+    file_name = "asset-label-#{asset_id}.pdf"
+    source = "http://#{request.env["HTTP_HOST"]}/asset_label?asset_id=#{asset_id}"
+    destination = Rails.root.to_s + "/tmp/#{file_name}"
+    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    Thread.new{
+      Kernel.system wkhtmltopdf
+    }.join
+    send_file(destination)
+  end
+
 end
