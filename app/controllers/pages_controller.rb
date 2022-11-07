@@ -1,7 +1,17 @@
 class PagesController < ApplicationController
   def home
     @page_header = "Dashboard"
+    @asset_count = Asset.count
+    @people_count = Person.count
+    @vendors_count = Vendor.count
+    dirname = Rails.root.to_s + "/public/uploads/*"
+    file_storage_number = Dir[dirname].select { |f|
+      File.file?(f) }.sum { |f| File.size(f)
+    }
+    @file_storage_size = ActionController::Base.helpers.number_to_human_size(file_storage_number)
+    @recently_added_assets = Asset.order("created_at DESC").limit(10)
   end
+
 
   def new_asset_menu
     @page_header = "New Asset"
@@ -1142,6 +1152,26 @@ class PagesController < ApplicationController
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
+  end
+
+  def assets_summary_count
+    summary = {
+        "checked_out": 0,
+        "maintenance": 0,
+        "retired": 0,
+        "available": 0
+    }
+    Asset.all.each do |asset|
+      summary[:checked_out] += 1 if asset.state.to_s.match(/out/i)
+      summary[:maintenance] += 1 if asset.state.to_s.match(/Maintenance/i)
+      summary[:retired] += 1 if asset.state.to_s.match(/Retired/i)
+      summary[:available] += 1 if asset.state.to_s.match(/Available/i)
+    end
+
+    respond_to do |format|
+      format.json { render json: summary }
+      format.html {}
+    end
   end
 
 end

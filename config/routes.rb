@@ -98,4 +98,5 @@ Rails.application.routes.draw do
   post '/delete_asset_reservation' => 'pages#delete_asset_reservation'
   get '/asset_label' => 'pages#asset_label'
   get '/download_asset_label' => 'pages#download_asset_label'
+  post '/assets_summary_count' => 'pages#assets_summary_count'
 end
