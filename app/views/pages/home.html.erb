@@ -64,26 +64,20 @@
           </div><!-- /.card-header -->
           <div class="card-body">
             <ul class="products-list">
-              <li class="item">
-                <div>
-                  <a href="javascript:void(0)" class="product-title">Bicycle
-                    <span class="badge badge-info float-right">11 days ago</span>
-                  </a>
-                  <span class="product-description">
-                        26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+              <% @recently_system_activities.each do |system_activity| %>
+                <li class="item">
+                  <div>
+                    <a href="javascript:void(0)" class="product-title"><%= system_activity.person_details %>
+                      <span class="badge badge-info float-right">
+                        <%= time_ago_in_words(system_activity.created_at) %> ago
                       </span>
-                </div>
-              </li>
-              <li class="item">
-                <div>
-                  <a href="javascript:void(0)" class="product-title">Bicycle
-                    <span class="badge badge-info float-right">11 days ago</span>
-                  </a>
-                  <span class="product-description">
-                        26" Mongoose Dolomite Men's 7-speed, Navy Blue.
-                      </span>
-                </div>
-              </li>
+                    </a>
+                    <span class="product-description">
+                        <%= system_activity.description %>
+                    </span>
+                  </div>
+                </li>
+              <% end %>
               <!-- /.item -->
             </ul>
           </div><!-- /.card-body -->
@@ -95,7 +89,8 @@
           </div>
 
           <div class="card-body">
-
+            <div id="checkInOutActivity">
+            </div>
           </div>
         </div>
         <!-- /.card -->
@@ -134,7 +129,10 @@
                   </div>
                   <div class="product-info">
                     <a href="/edit_asset?asset_id=<%= asset.asset_id %>" class="product-title"><%= asset.name %>
-                      <span class="badge badge-info float-right"><%= asset.created_at.strftime("%d.%b.%Y") %></span></a>
+                      <span class="badge badge-info float-right">
+                        <%= time_ago_in_words(asset.created_at) %> ago
+                      </span>
+                    </a>
                     <span class="product-description">
                         Asset Type: <%= asset.asset_type_id %> | Serial Number: <%= asset.serial_number %> | brand: <%= asset.brand %>
                       </span>
@@ -213,6 +211,7 @@
     $(document).ready(function () {
         jQuery('.dashboard').addClass('active');
         loadAssetStats();
+        checkInOutActivityGraph();
     })
 
     function loadAssetStats(){
@@ -242,4 +241,65 @@
                 jQuery('#available-assets').html(available_count)
             }
         })}
+
+    function checkInOutActivityGraph() {
+        $('#checkInOutActivity').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            xAxis: {
+                categories: ['Jun 22', 'Jul 22', 'Aug 22', 'Sep 22', 'Oct 2022', 'Nov 22']
+            },
+            yAxis: {
+                min: 0,
+                max: 100,
+                title: {
+                    text: 'Check in/out activity'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white'
+                    }
+                }
+            },
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                floating: true,
+                backgroundColor: 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'Check-ins',
+                data: [10, 20, 30, 15, 12, 9],
+                color: '#dc3545'
+            }, {
+                name: 'CHeck-out',
+                data: [15, 13, 45, 40, 17, 7],
+                color: '#17a2b8'
+            }],
+            credits: {
+                enabled: false
+            }
+        })
+    }
 </script>

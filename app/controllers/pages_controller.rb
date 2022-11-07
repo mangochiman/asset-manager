@@ -10,6 +10,7 @@ class PagesController < ApplicationController
     }
     @file_storage_size = ActionController::Base.helpers.number_to_human_size(file_storage_number)
     @recently_added_assets = Asset.order("created_at DESC").limit(10)
+    @recently_system_activities = SystemActivity.order("created_at DESC").limit(10)
   end
 
 
@@ -41,6 +42,10 @@ class PagesController < ApplicationController
       asset.notes = params[:notes]
 
       if asset.save
+        person_id_param = "1" #TODO
+        action_params = "Add"
+        description_param = "Created new asset record: #{asset.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
         errors = []
         unless params[:file].blank?
           params[:file].each do |file_upload|
@@ -155,6 +160,10 @@ class PagesController < ApplicationController
       asset.notes = params[:notes]
 
       if asset.save
+        person_id_param = "1" #TODO
+        action_params = "Update"
+        description_param = "Created new asset record: #{asset.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
         errors = []
         unless params[:file].blank?
           params[:file].each do |file_upload|
@@ -240,6 +249,11 @@ class PagesController < ApplicationController
     errors = []
     ActiveRecord::Base.transaction do
       if asset.delete
+        person_id_param = "1" #TODO
+        action_params = "Delete"
+        description_param = "Deleted asset record: #{asset.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         asset_attachments.each do |asset_attachment|
           file_path = Rails.root.to_s + '/public' + asset_attachment.url.to_s
           if asset_attachment.delete
@@ -267,6 +281,10 @@ class PagesController < ApplicationController
     asset.retired_by = '#' #TODO
     asset.retire_comments = params[:comments]
     if asset.save
+      person_id_param = "1" #TODO
+      action_params = "Retired"
+      description_param = "Retired asset record: #{asset.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
       flash[:notice] = 'Asset retirement was successful'
       redirect_to("/list_assets") and return
     else
@@ -294,6 +312,10 @@ class PagesController < ApplicationController
     if request.post?
       @active_system_plan.billing_email = params[:email]
       if @active_system_plan.save
+        person_id_param = "1" #TODO
+        action_params = "Update"
+        description_param = "Updated billing address: #{params[:email]}"
+        SystemActivity.log(person_id_param, action_params, description_param)
         flash[:notice] = 'Record update was successful'
         redirect_to('/system_overview') and return
       else
@@ -312,6 +334,11 @@ class PagesController < ApplicationController
       selection_field.field_type = params[:field_type].downcase
 
       if selection_field.save
+        person_id_param = "1" #TODO
+        action_params = "Add"
+        description_param = "Created new selection field: #{selection_field.field_type}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         flash[:notice] = 'Record update was successful'
         redirect_to("/selection_fields?field_type=#{params[:field_type]}") and return
       else
@@ -335,6 +362,11 @@ class PagesController < ApplicationController
     selection_field.field_name = params[:field_name]
     if selection_field.save
       flash[:notice] = 'Record update was successful'
+      person_id_param = "1" #TODO
+      action_params = "Update"
+      description_param = "Updated selection field: #{selection_field.field_name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       redirect_to("/selection_fields?field_type=#{params[:field_type]}") and return
     else
       flash[:error] = selection_field.errors.full_messages.join('<br />')
@@ -363,6 +395,11 @@ class PagesController < ApplicationController
       service_item.name = params[:name]
       service_item.selection_field_id = params[:selection_field_id]
       if service_item.save
+        person_id_param = "1" #TODO
+        action_params = "Add"
+        description_param = "Created new service item record"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         flash[:notice] = 'Record creation was successful'
         redirect_to("/service_items") and return
       else
@@ -377,6 +414,11 @@ class PagesController < ApplicationController
     service_item.name = params[:name]
     service_item.selection_field_id = params[:selection_field_id]
     if service_item.save
+      person_id_param = "1" #TODO
+      action_params = "Update"
+      description_param = "Updated service item record"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record update was successful'
       redirect_to("/service_items") and return
     else
@@ -455,6 +497,11 @@ class PagesController < ApplicationController
       vendor.country = params[:country]
       vendor.notes = params[:notes]
       if vendor.save
+        person_id_param = "1" #TODO
+        action_params = "Add"
+        description_param = "Created new vendor record: #{vendor.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         unless params[:file].blank?
           errors = []
           params[:file].each do |file_upload|
@@ -517,6 +564,11 @@ class PagesController < ApplicationController
       @vendor.country = params[:country]
       @vendor.notes = params[:notes]
       if @vendor.save
+        person_id_param = "1" #TODO
+        action_params = "Update"
+        description_param = "Updated vendor record: #{@vendor.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         unless params[:file].blank?
           errors = []
           params[:file].each do |file_upload|
@@ -579,6 +631,10 @@ class PagesController < ApplicationController
         File.delete(file_path) if File.exist?(file_path)
       end
       vendor.delete
+      person_id_param = "1" #TODO
+      action_params = "Delete"
+      description_param = "Deleted vendor record: #{vendor.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
     end
     flash[:notice] = 'Record deletion was successful'
     redirect_to("/list_vendors") and return
@@ -590,6 +646,11 @@ class PagesController < ApplicationController
       group = Group.new
       group.name = params[:name]
       if group.save
+        person_id_param = "1" #TODO
+        action_params = "Add"
+        description_param = "Created new group record: #{group.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         flash[:notice] = 'Record creation was successful'
         redirect_to("/groups") and return
       else
@@ -604,6 +665,11 @@ class PagesController < ApplicationController
     group = Group.find(params[:group_id])
     group.name = params[:name]
     if group.save
+      person_id_param = "1" #TODO
+      action_params = "Update"
+      description_param = "Updated group record: #{group.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record update was successful'
       redirect_to("/groups") and return
     else
@@ -615,6 +681,11 @@ class PagesController < ApplicationController
   def delete_group
     group = Group.find(params[:id])
     if group.delete
+      person_id_param = "1" #TODO
+      action_params = "Delete"
+      description_param = "Deleted group record: #{group.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record deletion was successful'
       redirect_to("/groups") and return
     else
@@ -629,6 +700,11 @@ class PagesController < ApplicationController
       location = Location.new
       location.name = params[:name]
       if location.save
+        person_id_param = "1" #TODO
+        action_params = "Add"
+        description_param = "Created new location record: #{location.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         flash[:notice] = 'Record creation was successful'
         redirect_to("/locations") and return
       else
@@ -642,6 +718,11 @@ class PagesController < ApplicationController
   def delete_location
     location = Location.find(params[:id])
     if location.delete
+      person_id_param = "1" #TODO
+      action_params = "Delete"
+      description_param = "Deleted location record: #{location.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record deletion was successful'
       redirect_to("/locations") and return
     else
@@ -654,6 +735,11 @@ class PagesController < ApplicationController
     location = Location.find(params[:location_id])
     location.name = params[:name]
     if location.save
+      person_id_param = "1" #TODO
+      action_params = "Update"
+      description_param = "Updated location record: #{location.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record update was successful'
       redirect_to("/locations") and return
     else
@@ -679,6 +765,11 @@ class PagesController < ApplicationController
       person.role = params[:role]
 
       if person.save
+        person_id_param = "1" #TODO
+        action_params = "Add"
+        description_param = "Created new person record: #{person.first_name.to_s + ' ' + person.last_name.to_s}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         unless params[:file].blank?
           errors = []
           params[:file].each do |file_upload|
@@ -756,6 +847,11 @@ class PagesController < ApplicationController
       end
 
       if person.save
+        person_id_param = "1" #TODO
+        action_params = "Add"
+        description_param = "Updated person record: #{person.first_name.to_s + ' ' + person.last_name.to_s}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         unless params[:file].blank?
           errors = []
           params[:file].each do |file_upload|
@@ -824,6 +920,10 @@ class PagesController < ApplicationController
       end
       person.user.delete unless person.user.blank?
       person.delete
+      person_id_param = "1" #TODO
+      action_params = "Delete"
+      description_param = "Deleted person record: #{person.first_name} #{person.last_name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
     end
     flash[:notice] = 'Record deletion was successful'
     redirect_to("/list_people") and return
@@ -848,6 +948,11 @@ class PagesController < ApplicationController
       asset_type = AssetType.new
       asset_type.name = params[:name]
       if asset_type.save
+        person_id_param = "1" #TODO
+        action_params = "Add"
+        description_param = "Created new asset type: #{asset_type.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
         flash[:notice] = 'Record creation was successful'
         redirect_to("/asset_types") and return
       else
@@ -862,6 +967,11 @@ class PagesController < ApplicationController
     asset_type = AssetType.find(params[:asset_type_id])
     asset_type.name = params[:name]
     if asset_type.save
+      person_id_param = "1" #TODO
+      action_params = "Update"
+      description_param = "Updated asset type record: #{asset_type.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record update was successful'
       redirect_to("/asset_types") and return
     else
@@ -873,6 +983,11 @@ class PagesController < ApplicationController
   def delete_asset_type
     asset_type = AssetType.find(params[:id])
     if asset_type.delete
+      person_id_param = "1" #TODO
+      action_params = "Delete"
+      description_param = "Deleted asset_type record: #{asset_type.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record deletion was successful'
       redirect_to("/asset_types") and return
     else
@@ -914,6 +1029,11 @@ class PagesController < ApplicationController
     end
 
     if asset_service_log.save
+      person_id_param = "1" #TODO
+      action_params = "Add"
+      description_param = "Created new service log record: #{asset_service_log.state}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record update was successful'
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
@@ -928,6 +1048,11 @@ class PagesController < ApplicationController
       service.state = 'Completed'
       service.end_date_actual = Time.now
       service.save
+
+      person_id_param = "1" #TODO
+      action_params = "Update"
+      description_param = "Updated service record: #{service.state}"
+      SystemActivity.log(person_id_param, action_params, description_param)
     end
     flash[:notice] = 'Record update was successful'
     redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
@@ -944,6 +1069,10 @@ class PagesController < ApplicationController
         service_log.end_date_expected = ""
       end
       if service_log.save
+        person_id_param = "1" #TODO
+        action_params = "Update"
+        description_param = "Extended service to: #{service_log.end_date_expected}"
+        SystemActivity.log(person_id_param, action_params, description_param)
       else
         errors << service_log.errors.full_messages.join('<br />')
       end
@@ -969,6 +1098,11 @@ class PagesController < ApplicationController
     asset_service_log.end_date_expected = params[:expected_end_date]
     asset_service_log.available_on_date = 0 if params["make-item-unavailable"].to_s == "on"
     if asset_service_log.save
+      person_id_param = "1" #TODO
+      action_params = "Add"
+      description_param = "Scheduled service: #{asset_service_log.start_date_expected} - #{asset_service_log.end_date_expected}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Service schedule was successful'
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
@@ -991,6 +1125,11 @@ class PagesController < ApplicationController
     asset_activity.location_id = params[:location_id]
     asset_activity.notes = params[:comments]
     if asset_activity.save
+      person_id_param = "1" #TODO
+      action_params = "Checked out"
+      description_param = "Checked out asset: #{asset_activity.asset_id}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Checkout was successful'
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
@@ -1035,6 +1174,11 @@ class PagesController < ApplicationController
     asset_activity.location_id = params[:location_id]
     asset_activity.notes = params[:comments]
     if asset_activity.save
+      person_id_param = "1" #TODO
+      action_params = "Checkin"
+      description_param = "Checked asset: #{asset_activity.asset_id}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Checkin was successful'
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
@@ -1052,6 +1196,11 @@ class PagesController < ApplicationController
     asset_reservation.location_id = params[:location_id]
     asset_reservation.notes = params[:comments]
     if asset_reservation.save
+      person_id_param = "1" #TODO
+      action_params = "Add"
+      description_param = "Created new asset servation: #{asset_reservation.asset_id}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Asset reservation was successful'
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
@@ -1068,6 +1217,11 @@ class PagesController < ApplicationController
     asset.retired_by = ""
     asset.retire_comments = ""
     if asset.save
+      person_id_param = "1" #TODO
+      action_params = "Activate"
+      description_param = "Activate asset: #{asset.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Asset activation was successful'
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
@@ -1080,6 +1234,11 @@ class PagesController < ApplicationController
     asset_service_log = AssetServiceLog.find(params[:id])
     asset_id = asset_service_log.asset_id
     if asset_service_log.delete
+      person_id_param = "1" #TODO
+      action_params = "Delete"
+      description_param = "Deleted service log record: #{asset_service_log.state}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record deletion was successful'
       redirect_to("/edit_asset?asset_id=#{asset_id}") and return
     else
@@ -1128,6 +1287,11 @@ class PagesController < ApplicationController
     asset_reservation = AssetReservation.find(params[:id])
     asset_id = asset_reservation.asset_id
     if asset_reservation.delete
+      person_id_param = "1" #TODO
+      action_params = "Delete"
+      description_param = "Deleted asset reservation record"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
       flash[:notice] = 'Record deletion was successful'
       redirect_to("/edit_asset?asset_id=#{asset_id}") and return
     else
