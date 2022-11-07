@@ -1338,4 +1338,37 @@ class PagesController < ApplicationController
     end
   end
 
+  def check_in_out_activity_summary
+    dates = []
+    start_date = Date.today.beginning_of_month - 5.months
+    end_date = Date.today
+    while start_date < end_date
+      dates << start_date
+      start_date = start_date + 1.month
+    end
+
+    checkout_counts = []
+    checkin_counts = []
+
+    dates.each do |date|
+      s_date = date
+      e_date = date.end_of_month
+      checkout_activities = AssetActivity.where(['DATE(checkout_date) >=? AND DATE(checkout_date) <=?', s_date, e_date])
+      checkout_counts << checkout_activities.length
+      checkin_activities = AssetActivity.where(['DATE(checkin_date) >=? AND DATE(checkin_date) <=?', s_date, e_date])
+      checkin_counts << checkin_activities.length
+    end
+
+    x_axis = dates.collect{|d|d.strftime("%b %y")}
+    summary = {
+        checkout_counts: checkout_counts,
+        checkin_counts: checkin_counts,
+        x_axis: x_axis
+    }
+    respond_to do |format|
+      format.json { render json: summary }
+      format.html {}
+    end
+  end
+
 end

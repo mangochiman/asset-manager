@@ -242,64 +242,81 @@
             }
         })}
 
-    function checkInOutActivityGraph() {
-        $('#checkInOutActivity').highcharts({
-            chart: {
-                type: 'column'
+
+    function checkInOutActivityGraph(){
+        jQuery.ajax({
+            type: "POST",
+            url: "/check_in_out_activity_summary",
+            data: "",
+            beforeSend: function () {
+
             },
-            title: {
-                text: ''
+            error: function (xhr, ajaxOptions, thrownError) {
+
             },
-            xAxis: {
-                categories: ['Jun 22', 'Jul 22', 'Aug 22', 'Sep 22', 'Oct 2022', 'Nov 22']
-            },
-            yAxis: {
-                min: 0,
-                max: 100,
-                title: {
-                    text: 'Check in/out activity'
-                },
-                stackLabels: {
-                    enabled: true,
-                    style: {
-                        fontWeight: 'bold',
-                        color: 'white'
+            success: function (result) {
+                var checkout_counts =  result["checkout_counts"];
+                var checkin_counts =  result["checkin_counts"];
+                var x_axis =  result["x_axis"];
+
+                $('#checkInOutActivity').highcharts({
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: x_axis
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Check in/out activity'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                color: 'white'
+                            }
+                        }
+                    },
+                    legend: {
+                        align: 'right',
+                        verticalAlign: 'top',
+                        floating: true,
+                        backgroundColor: 'white',
+                        borderColor: '#CCC',
+                        borderWidth: 1,
+                        shadow: false
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x}</b><br/>',
+                        pointFormat: '{series.name}: {point.y}<br/>'
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Check-ins',
+                        data: checkin_counts,
+                        color: '#ffc107'
+                    }, {
+                        name: 'Check-out',
+                        data: checkout_counts,
+                        color: '#28a745'
+                    }],
+                    credits: {
+                        enabled: false
                     }
-                }
-            },
-            legend: {
-                align: 'right',
-                verticalAlign: 'top',
-                floating: true,
-                backgroundColor: 'white',
-                borderColor: '#CCC',
-                borderWidth: 1,
-                shadow: false
-            },
-            tooltip: {
-                headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '{series.name}: {point.y}<br/>'
-            },
-            plotOptions: {
-                column: {
-                    stacking: 'normal',
-                    dataLabels: {
-                        enabled: true
-                    }
-                }
-            },
-            series: [{
-                name: 'Check-ins',
-                data: [10, 20, 30, 15, 12, 9],
-                color: '#dc3545'
-            }, {
-                name: 'CHeck-out',
-                data: [15, 13, 45, 40, 17, 7],
-                color: '#17a2b8'
-            }],
-            credits: {
-                enabled: false
+                })
             }
-        })
-    }
+        })}
+
 </script>
