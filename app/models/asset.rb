@@ -6,7 +6,10 @@ class Asset < ApplicationRecord
   has_many :asset_activities, :foreign_key => :asset_id
   has_many :asset_service_logs, :foreign_key => :asset_id
   has_many :asset_reservations, :foreign_key => :asset_id
+  belongs_to :location, :foreign_key => :location_id
+  belongs_to :selection_field, :foreign_key => :condition_id
 
+  belongs_to :asset_type, :foreign_key => :asset_type_id
   validates_presence_of :name
 
   def self.retire_reasons
@@ -85,6 +88,21 @@ class Asset < ApplicationRecord
     text = self.name
     base64_output = Barby::QrCode.new(text, level: :q, size: 15).to_image.to_data_url
     base64_output
+  end
+
+  def asset_type_details
+    type_name = self.asset_type.name rescue ""
+    type_name
+  end
+
+  def location_details
+    location_name = self.location.name rescue ""
+    location_name
+  end
+
+  def condition_details
+    condition_name = self.selection_field.field_name rescue ""
+    condition_name
   end
 
 end

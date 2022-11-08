@@ -1,0 +1,40 @@
+
+
+<!-- Default box -->
+<div class="card">
+  <div class="card-body ">
+    <table class="table-striped table-condensed" style="width: 100%;">
+      <thead>
+      <tr>
+        <th style="width: 4em;">#</th>
+        <th>Person</th>
+        <th>Action</th>
+        <th>description</th>
+        <th>created_at</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% count = 1 %>
+      <% @system_activities.each do |system_activity| %>
+        <tr>
+          <td><%= count %></td>
+          <td><%= system_activity.person_details %></td>
+          <td><%= system_activity.action %></td>
+          <td><%= system_activity.description %></td>
+          <td><%= system_activity.created_at.strftime("%d.%b.%Y %H:%M") %></td>
+        </tr>
+        <% count += 1 %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.dashboard').addClass('active');
+    })
+
+</script>

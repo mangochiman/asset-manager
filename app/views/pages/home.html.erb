@@ -62,7 +62,7 @@
               System Activity
             </h3>
           </div><!-- /.card-header -->
-          <div class="card-body">
+          <div class="card-body" style="overflow: auto; max-height: calc(70vh - 90px);">
             <ul class="products-list">
               <% @recently_system_activities.each do |system_activity| %>
                 <li class="item">
@@ -81,6 +81,9 @@
               <!-- /.item -->
             </ul>
           </div><!-- /.card-body -->
+          <div class="card-footer text-center">
+            <a href="/list_system_activities" class="uppercase">View All System Activities</a>
+          </div>
         </div>
 
         <div class="card">
@@ -114,7 +117,7 @@
             </div>
           </div>
           <!-- /.card-header -->
-          <div class="card-body p-0">
+          <div class="card-body p-0" style="overflow: auto; max-height: calc(70vh - 90px);">
             <ul class="products-list product-list-in-card pl-2 pr-2">
               <!-- /.item -->
               <!-- /.item -->
@@ -134,7 +137,7 @@
                       </span>
                     </a>
                     <span class="product-description">
-                        Asset Type: <%= asset.asset_type_id %> | Serial Number: <%= asset.serial_number %> | brand: <%= asset.brand %>
+                        Asset Type: <%= asset.asset_type_details %> | Serial Number: <%= asset.serial_number %> | brand: <%= asset.brand %>
                       </span>
                   </div>
                 </li>

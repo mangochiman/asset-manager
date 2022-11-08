@@ -103,5 +103,6 @@ Rails.application.routes.draw do
   get '/files' => 'pages#files'
   post '/delete_file' => 'pages#delete_file'
   get '/download_file' => 'pages#download_file'
+  get '/list_system_activities' => 'pages#list_system_activities'
 
 end

@@ -8,6 +8,9 @@ class AssetReservation < ApplicationRecord
 
   validate :no_reservation_overlap, :start_date_cannot_be_in_the_past, :end_date_is_after_start_date
 
+  belongs_to :person, :foreign_key => :person_id
+  belongs_to :location, :foreign_key => :location_id
+
   scope :overlapping, ->(period_start, period_end, asset_id) do
     where "((start_date <= ?) and (end_date >= ?) and (asset_id = ?) )", period_end, period_start, asset_id
   end
@@ -19,8 +22,7 @@ class AssetReservation < ApplicationRecord
   end
 
   def start_date_cannot_be_in_the_past
-    errors.add(:start_date, "can't be in the past") if
-        !start_date.blank? and start_date < Date.today
+    errors.add(:start_date, "can't be in the past") if !start_date.blank? and start_date < Date.today
   end
 
   def end_date_is_after_start_date
@@ -30,4 +32,21 @@ class AssetReservation < ApplicationRecord
       errors.add(:base, "End date cannot be before the start date")
     end
   end
+
+  def person_details
+    details = ""
+    if !self.person.blank?
+      first_name = self.person.first_name
+      last_name = self.person.last_name
+      email = self.person.email
+      details = "#{first_name} #{last_name} (#{email})"
+    end
+    details
+  end
+
+  def location_details
+    location_name = self.location.name rescue ""
+    location_name
+  end
+
 end

@@ -355,11 +355,11 @@
                 <tbody>
                 <% @asset_service_logs.each do |asset_service_log| %>
                   <tr>
-                    <td><%= asset_service_log.service_item_id %></td>
+                    <td><%= asset_service_log.service_type_details %></td>
                     <td><%= asset_service_log.state %></td>
                     <td><%= asset_service_log.notes %></td>
                     <td><%= asset_service_log.cost %></td>
-                    <td><%= asset_service_log.performed_by %></td>
+                    <td><%= asset_service_log.serviced_by_details %></td>
                     <%
                       start_date_expected = asset_service_log.start_date_expected.to_date.strftime("%d.%b.%Y") rescue asset_service_log.start_date_expected
                       end_date_expected = asset_service_log.end_date_expected.to_date.strftime("%d.%b.%Y") rescue asset_service_log.end_date_expected
@@ -392,11 +392,11 @@
               <table class="table-striped table-condensed" style="width: 100%">
                 <thead>
                 <tr>
-                  <th>start_date</th>
-                  <th>end_date</th>
-                  <th>person_id</th>
-                  <th>location_id</th>
-                  <th>notes</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Reserved For</th>
+                  <th>Location</th>
+                  <th>Notes</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -409,8 +409,8 @@
                     %>
                     <td><%= start_date %></td>
                     <td><%= end_date %></td>
-                    <td><%= asset_reservation.person_id %></td>
-                    <td><%= asset_reservation.location_id %></td>
+                    <td><%= asset_reservation.person_details %></td>
+                    <td><%= asset_reservation.location_details %></td>
                     <td><%= asset_reservation.notes %></td>
                     <td>
                       <button onclick="voidAssetReservationConfirm('<%= asset_reservation.asset_reservation_id %>')" type="button" class="btn btn-danger btn-block">

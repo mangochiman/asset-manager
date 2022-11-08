@@ -1013,7 +1013,7 @@ class PagesController < ApplicationController
       if params[:completion_date].to_date < Date.today
         flash[:error] = "Expected completion should be a future date"
         redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
-      end
+      end rescue ""
       if params[:service_indefinite].to_s == "on"
         asset_service_log.service_indefinite = 1
         asset_service_log.end_date_expected = ""
@@ -1390,6 +1390,10 @@ class PagesController < ApplicationController
   def download_file
     file  = params[:file]
     send_file(file)
+  end
+
+  def list_system_activities
+    @system_activities = SystemActivity.order("created_at DESC")
   end
 
 end
