@@ -1,6 +1,34 @@
+<form action="/search_assets" method="get">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="input-group" id="adv-search">
+        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          Asset Name
+        </button>
+        <ul class="dropdown-menu" style="">
+          <li class="dropdown-item"><a href="#">Asset Name</a></li>
+          <li class="dropdown-item"><a href="#">Asset Location</a></li>
+          <li class="dropdown-item"><a href="#">Asset Status</a></li>
+          <li class="dropdown-item"><a href="#">Asset Model</a></li>
+          <li class="dropdown-item"><a href="#">Asset Barcode</a></li>
+        </ul>
+        <input type="text" name="q" required class="form-control" placeholder="Search"/>
+        <div class="input-group-btn">
+
+          <div class="btn-group" role="group">
+            <button type="submit" class="btn btn-success">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<br />
 
 
-<!-- Default box -->
+
 <div class="card">
   <div class="card-body ">
     <table class="table-striped table-condensed" style="width: 100%;">
