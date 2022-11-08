@@ -1,0 +1,106 @@
+
+
+<!-- Default box -->
+<div class="card">
+  <div class="card-body ">
+    <table class="table-striped table-condensed" style="width: 100%;">
+      <thead>
+      <tr>
+        <th style="width: 4em;">#</th>
+        <th>File</th>
+        <th>File Size</th>
+        <th>Date Created</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% count = 1 %>
+      <% @files.each do |file| %>
+      <% date_created =  File.ctime(file).strftime("%d.%m.%Y")
+         file_size = number_to_human_size(File.size(file))
+      %>
+        <tr>
+          <td><%= count %></td>
+          <td><%= file %></td>
+          <td><%= file_size %></td>
+          <td><%= date_created %></td>
+          <td>
+            <div class="btn-group btn-block">
+              <button type="button" class="btn btn-success">Action</button>
+              <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu" role="menu">
+                <a class="dropdown-item" href="#" onclick="download_file('<%= file %>')">Download</a>
+                <a class="dropdown-item" href="#" onclick="voidFileConfirm('<%= file %>')">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <% count += 1 %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="voidFileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidFile();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.dashboard').addClass('active');
+    })
+
+    function download_file(file){
+        window.location = "/download_file?file=" + file
+    }
+
+    var selectedFileID;
+
+    function voidFileConfirm(id) {
+        selectedFileID = id;
+        jQuery('#voidFileModal').modal('show');
+    }
+
+    function voidFile() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_file";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedFileID;
+        input.name = "id";
+        form.appendChild(input);
+
+        form.submit();
+    }
+</script>

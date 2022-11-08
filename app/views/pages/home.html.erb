@@ -46,7 +46,7 @@
 
             <p>File storage</p>
           </div>
-          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          <a href="/files" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
@@ -230,7 +230,6 @@
             },
             success: function (result) {
                 var checked_out_count =  result["checked_out"]
-                console.log(checked_out_count)
                 var maintenance_count =  result["maintenance"]
                 var retired_count =  result["retired"]
                 var available_count =  result["available"]

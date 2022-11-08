@@ -1371,4 +1371,25 @@ class PagesController < ApplicationController
     end
   end
 
+  def files
+    dirname = Rails.root.to_s + "/public/uploads/*"
+    @files = Dir[dirname]
+    file_storage_number = Dir[dirname].select { |f|
+      File.file?(f) }.sum { |f| File.size(f)
+    }
+    file_storage_size = ActionController::Base.helpers.number_to_human_size(file_storage_number)
+    @page_header = "Files - #{file_storage_size}"
+  end
+
+  def delete_file
+    File.delete(params[:id]) if File.exist?(params[:id])
+    flash[:notice] = 'Record deletion was successful'
+    redirect_to("/files") and return
+  end
+
+  def download_file
+    file  = params[:file]
+    send_file(file)
+  end
+
 end

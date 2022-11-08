@@ -100,5 +100,8 @@ Rails.application.routes.draw do
   get '/download_asset_label' => 'pages#download_asset_label'
   post '/assets_summary_count' => 'pages#assets_summary_count'
   post '/check_in_out_activity_summary' => 'pages#check_in_out_activity_summary'
+  get '/files' => 'pages#files'
+  post '/delete_file' => 'pages#delete_file'
+  get '/download_file' => 'pages#download_file'
 
 end
