@@ -1,18 +1,19 @@
-<form action="/search_assets" method="get">
+<form action="/list_assets" method="get">
   <div class="row">
     <div class="col-md-12">
       <div class="input-group" id="adv-search">
-        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <button type="button" id="adv-search-btn" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
           Asset Name
         </button>
-        <ul class="dropdown-menu" style="">
-          <li class="dropdown-item"><a href="#">Asset Name</a></li>
-          <li class="dropdown-item"><a href="#">Asset Location</a></li>
-          <li class="dropdown-item"><a href="#">Asset Status</a></li>
-          <li class="dropdown-item"><a href="#">Asset Model</a></li>
-          <li class="dropdown-item"><a href="#">Asset Barcode</a></li>
+        <ul class="dropdown-menu">
+          <li class="dropdown-item" onclick="updateSearchParam('Asset Name', 'name')"><a href="#">Asset Name</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Asset Location', 'location')"><a href="#">Asset Location</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Asset Model', 'model')"><a href="#">Asset Model</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Asset Barcode', 'barcode')"><a href="#">Asset Barcode</a></li>
         </ul>
-        <input type="text" name="q" required class="form-control" placeholder="Search"/>
+        <input type="text" name="q" id="search" required class="form-control" placeholder="Search"/>
+        <input type="hidden" name="search_field" id="searchField" class="form-control" value="name"/>
+        <input type="hidden" name="search_caption" id="searchCaption" class="form-control" value="Asset Name"/>
         <div class="input-group-btn">
 
           <div class="btn-group" role="group">
@@ -25,9 +26,7 @@
     </div>
   </div>
 </form>
-<br />
-
-
+<br/>
 
 <div class="card">
   <div class="card-body ">
@@ -106,6 +105,7 @@
         jQuery('.assets').addClass('active');
         jQuery('.list_assets_menu').addClass('active');
         jQuery('.assets-menu').addClass('menu-open');
+        loadDefaults()
     })
 
     var selectedAssetID;
@@ -130,5 +130,20 @@
         form.appendChild(input);
 
         form.submit();
+    }
+
+    function updateSearchParam(key, value){
+        jQuery("#adv-search-btn").html(key);
+        jQuery("#searchField").val(value);
+        jQuery("#searchCaption").val(key);
+    }
+    var value = '<%= params[:q] %>'
+    var search_caption = '<%= params[:search_caption] %>'
+    function loadDefaults(){
+        if (value){
+            jQuery("#adv-search-btn").html(search_caption);
+            jQuery("#search").val(value);
+            jQuery("#searchCaption").val(search_caption);
+        }
     }
 </script>

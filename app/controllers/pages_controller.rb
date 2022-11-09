@@ -133,7 +133,14 @@ class PagesController < ApplicationController
 
   def list_assets
     @page_header = "List assets"
-    @assets = Asset.order('asset_id DESC')
+    if params[:q]
+      search_value = params[:q]
+      search_field = params[:search_field]
+      @assets = Asset.search(search_field, search_value)
+      @page_header = "Search assets: #{@assets.length} result(s)"
+    else
+      @assets = Asset.order('asset_id DESC')
+    end
   end
 
   def edit_asset
@@ -542,7 +549,14 @@ class PagesController < ApplicationController
 
   def list_vendors
     @page_header = "Vendors List"
-    @vendors = Vendor.order('vendor_id DESC')
+    if params[:q]
+      search_value = params[:q]
+      search_field = params[:search_field]
+      @vendors = Vendor.search(search_field, search_value)
+      @page_header = "Search vendors: #{@vendors.length} result(s)"
+    else
+      @vendors = Vendor.order('vendor_id DESC')
+    end
   end
 
   def edit_vendor
@@ -825,7 +839,14 @@ class PagesController < ApplicationController
 
   def list_people
     @page_header = "List people"
-    @people = Person.order("person_id DESC")
+    if params[:q]
+      search_value = params[:q]
+      search_field = params[:search_field]
+      @people = Person.search(search_field, search_value)
+      @page_header = "Search people: #{@people.length} result(s)"
+    else
+      @people = Person.order("person_id DESC")
+    end
   end
 
   def edit_person

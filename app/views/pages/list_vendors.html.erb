@@ -1,4 +1,33 @@
+<form action="/list_vendors" method="get">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="input-group" id="adv-search">
+        <button type="button" id="adv-search-btn" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          Vendor Name
+        </button>
+        <ul class="dropdown-menu">
+          <li class="dropdown-item" onclick="updateSearchParam('Vendor Name', 'name')"><a href="#">Vendor Name</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Vendor Barcode', 'number')"><a href="#">Vendor Barcode</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Vendor Email', 'email')"><a href="#">Vendor Email</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Vendor Contact Name', 'contact_name')"><a href="#">Vendor Contact Name</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Vendor Phone Number', 'phone')"><a href="#">Vendor Phone Number</a></li>
+        </ul>
+        <input type="text" name="q" id="search" required class="form-control" placeholder="Search"/>
+        <input type="hidden" name="search_field" id="searchField" class="form-control" value="name"/>
+        <input type="hidden" name="search_caption" id="searchCaption" class="form-control" value="Vendor Name"/>
+        <div class="input-group-btn">
 
+          <div class="btn-group" role="group">
+            <button type="submit" class="btn btn-success">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<br/>
 
 <!-- Default box -->
 <div class="card">
@@ -69,6 +98,7 @@
         jQuery('.vendors').addClass('active');
         jQuery('.list_vendors_menu').addClass('active');
         jQuery('.vendors-menu').addClass('menu-open');
+        loadDefaults();
     })
 
     var selectedVendorID;
@@ -94,4 +124,20 @@
 
         form.submit();
     }
+
+    function updateSearchParam(key, value){
+        jQuery("#adv-search-btn").html(key);
+        jQuery("#searchField").val(value);
+        jQuery("#searchCaption").val(key);
+    }
+    var value = '<%= params[:q] %>'
+    var search_caption = '<%= params[:search_caption] %>'
+    function loadDefaults(){
+        if (value){
+            jQuery("#adv-search-btn").html(search_caption);
+            jQuery("#search").val(value);
+            jQuery("#searchCaption").val(search_caption);
+        }
+    }
+
 </script>

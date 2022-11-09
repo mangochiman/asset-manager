@@ -67,7 +67,7 @@ class Asset < ApplicationRecord
 
   def complete_all_started_services_except(asset_service_log_id)
     started_services = self.asset_service_logs.where(['asset_service_log_id != ? AND state =?',
-                                   asset_service_log_id, 'Started'])
+                                                      asset_service_log_id, 'Started'])
     started_services.each do |started_service|
       started_service.state = 'Completed'
       started_service.end_date_actual = Time.now
@@ -105,5 +105,14 @@ class Asset < ApplicationRecord
     condition_name
   end
 
+  def self.search(key, value)
+    assets = []
+    key = key.to_s.downcase
+    assets = Asset.where(["name LIKE ?", '%' + value + '%']) if key == "name"
+    assets = Asset.where(["model LIKE ?", '%' + value + '%']) if key == "model"
+    assets = Asset.where(["barcode LIKE ?", '%' + value + '%']) if key == "barcode"
+    assets = Asset.joins(:location).where(["locations.name LIKE ?", '%' + value + '%']) if key == "location"
+    assets
+  end
 end
 
