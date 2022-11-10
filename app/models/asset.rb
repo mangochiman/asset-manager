@@ -8,6 +8,7 @@ class Asset < ApplicationRecord
   has_many :asset_reservations, :foreign_key => :asset_id
   belongs_to :location, :foreign_key => :location_id
   belongs_to :selection_field, :foreign_key => :condition_id
+  belongs_to :vendor, :foreign_key => :vendor_id
 
   belongs_to :asset_type, :foreign_key => :asset_type_id
   validates_presence_of :name
@@ -39,6 +40,15 @@ class Asset < ApplicationRecord
       check_out_date = checked_out_activity.checkout_date if checked_out_activity.name.to_s.downcase == "check-out"
     end
     check_out_date
+  end
+
+  def return_on_date
+    return_date = ""
+    checked_out_activity = self.asset_activities.last
+    unless checked_out_activity.blank?
+      return_date = checked_out_activity.return_on if checked_out_activity.name.to_s.downcase == "check-out"
+    end
+    return_date
   end
 
   def checked_in?
@@ -98,6 +108,11 @@ class Asset < ApplicationRecord
   def location_details
     location_name = self.location.name rescue ""
     location_name
+  end
+
+  def vendor_details
+    vendor_name = self.vendor.name rescue ""
+    vendor_name
   end
 
   def condition_details

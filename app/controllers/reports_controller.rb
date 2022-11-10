@@ -5,11 +5,16 @@ class ReportsController < ApplicationController
   end
 
   def asset_details
-
+    @page_header = "Asset Details"
+    @assets = Asset.all
   end
 
   def assets_checked_out
-
+    @page_header = "Assets Checked Out"
+    @assets = []
+    Asset.all.each do |asset|
+      @assets << asset if asset.state.to_s.match(/out/i)
+    end
   end
 
 
