@@ -1,0 +1,72 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                <th>Asset Name</th>
+                <th>Asset Number</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Last Update</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @assets.each do |asset| %>
+                <tr>
+                  <td><%= asset.name %></td>
+                  <td><%= asset.barcode %></td>
+                  <td><%= asset.location_details %></td>
+                  <td><%= asset.state %></td>
+                  <td><%= asset.brand %></td>
+                  <td><%= asset.model %></td>
+                  <td><%= asset.updated_at.strftime("%d.%m.%Y") %></td>
+                </tr>
+              <% end %>
+              </tbody>
+              <tfoot>
+              <tr>
+                <th>Asset Name</th>
+                <th>Asset Number</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Last Update</th>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.asset-list').addClass('active');
+        jQuery('.asset-reports-menu').addClass('active');
+        jQuery('.reports-menu').addClass('menu-open');
+
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        jQuery(".dt-buttons").removeClass("btn-group")
+        jQuery(".dt-buttons > .btn-secondary").removeClass("btn-secondary").addClass("btn-primary")
+    })
+</script>

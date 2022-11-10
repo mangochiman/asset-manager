@@ -16,6 +16,9 @@
   <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
   <link rel="stylesheet" href="/assets/bootstrap-fileupload.min.css" />
 
+  <link rel="stylesheet" href="/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="/AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
   <!-- summernote -->
   <link rel="stylesheet" href="/AdminLTE/plugins/summernote/summernote-bs4.min.css">
@@ -223,8 +226,8 @@
 
 
           <li class="nav-header">Reports</li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
+          <li class="nav-item reports-menu">
+            <a href="#" class="nav-link asset-reports-menu">
               <i class="nav-icon fas fa-circle"></i>
               <p>
                 Asset Reports
@@ -233,7 +236,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="/asset_list" class="nav-link asset-list">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Asset List</p>
                 </a>
@@ -248,18 +251,6 @@
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Assets Checked out</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Audit Checklist</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Warranty Expiration</p>
                 </a>
               </li>
             </ul>
@@ -439,6 +430,20 @@
 <!-- jQuery -->
 <!-- Bootstrap -->
 <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/AdminLTE/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/AdminLTE/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/AdminLTE/plugins/jszip/jszip.min.js"></script>
+<script src="/AdminLTE/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="/AdminLTE/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="/AdminLTE/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/AdminLTE/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/AdminLTE/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
 <!-- AdminLTE -->
 <script src="/AdminLTE/dist/js/adminlte.js"></script>
 

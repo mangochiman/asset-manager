@@ -105,4 +105,10 @@ Rails.application.routes.draw do
   get '/download_file' => 'pages#download_file'
   get '/list_system_activities' => 'pages#list_system_activities'
 
+  #reports
+  get '/asset_list' => 'reports#asset_list'
+  get '/asset_details' => 'reports#asset_details'
+  get '/assets_checked_out' => 'reports#assets_checked_out'
+
+
 end
