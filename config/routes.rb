@@ -111,5 +111,7 @@ Rails.application.routes.draw do
   get '/assets_checked_out' => 'reports#assets_checked_out'
   get '/personnel_list' => 'reports#personnel_list'
   get '/vendor_list' => 'reports#vendor_list'
-
+  get '/completed_service' => 'reports#completed_service'
+  get '/overdue_service' => 'reports#overdue_service'
+  get '/service_schedule' => 'reports#service_schedule'
 end

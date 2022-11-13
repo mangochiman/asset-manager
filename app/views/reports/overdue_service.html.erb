@@ -1,0 +1,101 @@
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Buttons with Icons -->
+      <div class="card">
+        <div class="card-body row">
+          <div>
+            <button type="button" class="btn btn-primary">
+              <i class="fa fa-file-csv"></i> Download CSV
+            </button>
+            <button type="button" class="btn btn-primary">
+              <i class="fa fa-file-excel"></i> Download Excel
+            </button>
+            <button type="button" class="btn btn-primary">
+              <i class="fa fa-file-pdf"></i> Download PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+
+          <div class="card-body">
+            <table id="example1" class="table-striped table-condensed" style="width: 100%;">
+              <thead>
+              <tr>
+                <th>Asset Name</th>
+                <th>Start Date Expected</th>
+                <th>Start Date Actual</th>
+                <th>End Date Expected</th>
+                <th>End Date Actual</th>
+                <th>Service Type</th>
+                <th>Notes</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @overdue_service.each do |asset_service_log| %>
+                <%
+                  start_date_expected = asset_service_log.start_date_expected.strftime("%d.%m.%Y") rescue asset_service_log.start_date_expected
+                  start_date_actual = asset_service_log.start_date_actual.strftime("%d.%m.%Y") rescue asset_service_log.start_date_actual
+
+                  end_date_expected = asset_service_log.end_date_expected.strftime("%d.%m.%Y") rescue asset_service_log.end_date_expected
+                  end_date_actual = asset_service_log.end_date_actual.strftime("%d.%m.%Y") rescue asset_service_log.end_date_actual
+                %>
+                <tr>
+                  <td><%= asset_service_log.asset_details %></td>
+                  <td><%= start_date_expected %></td>
+                  <td><%= start_date_actual %></td>
+                  <td><%= end_date_expected %></td>
+                  <td><%= end_date_actual %></td>
+                  <td><%= asset_service_log.service_type_details %></td>
+                  <td><%= asset_service_log.notes %></td>
+                </tr>
+              <% end %>
+              </tbody>
+              <tfoot>
+              <tr>
+                <th>Asset Name</th>
+                <th>Start Date Expected</th>
+                <th>Start Date Actual</th>
+                <th>End Date Expected</th>
+                <th>End Date Actual</th>
+                <th>Service Type</th>
+                <th>Notes</th>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.overdue-service').addClass('active');
+        jQuery('.service-reports').addClass('active');
+        jQuery('.service-reports-menu').addClass('menu-open');
+
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        jQuery(".dt-buttons").removeClass("btn-group")
+        jQuery(".dt-buttons > .btn-secondary").removeClass("btn-secondary").addClass("btn-primary")
+    })
+</script>

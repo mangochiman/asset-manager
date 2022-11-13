@@ -27,4 +27,19 @@ class ReportsController < ApplicationController
     @vendors = Vendor.all
   end
 
+  def completed_service
+    @page_header = "Completed Service Report"
+    @completed_services = AssetServiceLog.completed_service
+  end
+
+  def overdue_service
+    @page_header = "Overdue Service Report"
+    @overdue_service = AssetServiceLog.overdue_service
+  end
+
+  def service_schedule
+    @page_header = "Service Schedule Report"
+    @scheduled_services = AssetServiceLog.service_schedule
+  end
+
 end

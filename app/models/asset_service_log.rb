@@ -8,6 +8,7 @@ class AssetServiceLog < ApplicationRecord
   validate :end_date_expected_is_after_start_date_expected, :end_date_actual_is_after_start_date_actual
 
   belongs_to :selection_field, :foreign_key => :service_item_id
+  belongs_to :asset, :foreign_key => :asset_id
 
   def end_date_expected_is_after_start_date_expected
     return if end_date_expected.blank? || start_date_expected.blank?
@@ -30,6 +31,13 @@ class AssetServiceLog < ApplicationRecord
     service_name
   end
 
+  def asset_details
+    asset = self.asset
+    asset_info = ""
+    asset_info = "#{asset.name}" if !asset.blank?
+    asset_info
+  end
+
   def serviced_by_details
     performed_by = self.performed_by
     details = performed_by.to_s + " : "
@@ -44,6 +52,22 @@ class AssetServiceLog < ApplicationRecord
       details = (details + " " + person.first_name.to_s + " " +  person.last_name.to_s) if !person.blank?
     end
     details
+  end
+
+  def self.completed_service
+    completed_services = AssetServiceLog.where(["state =?", "completed"])
+    completed_services
+  end
+
+  def self.overdue_service
+    overdue_services = AssetServiceLog.where(["state !=? AND DATE(end_date_expected) < ?",
+                                              "completed", Date.today])
+    overdue_services
+  end
+
+  def self.service_schedule
+    scheduled_services = AssetServiceLog.where(["state =?", "scheduled"])
+    scheduled_services
   end
 
 end
