@@ -107,6 +107,11 @@ Rails.application.routes.draw do
 
   #reports
   get '/asset_list' => 'reports#asset_list'
+  get '/asset_list_csv' => 'reports#asset_list_csv'
+  get '/asset_list_work_book' => 'reports#asset_list_work_book'
+  get '/asset_list_pdf' => 'reports#asset_list_pdf'
+  get '/download_asset_list_pdf' => 'reports#download_asset_list_pdf'
+
   get '/asset_details' => 'reports#asset_details'
   get '/assets_checked_out' => 'reports#assets_checked_out'
   get '/personnel_list' => 'reports#personnel_list'
