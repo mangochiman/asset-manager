@@ -17,5 +17,14 @@ class ReportsController < ApplicationController
     end
   end
 
+  def personnel_list
+    @page_header = "Personnel List Report"
+    @people = Person.all
+  end
+
+  def vendor_list
+    @page_header = "Vendor List Report"
+    @vendors = Vendor.all
+  end
 
 end

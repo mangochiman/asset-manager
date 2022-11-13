@@ -1,0 +1,91 @@
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Buttons with Icons -->
+      <div class="card">
+        <div class="card-body row">
+          <div>
+            <button type="button" class="btn btn-primary">
+              <i class="fa fa-file-csv"></i> Download CSV
+            </button>
+            <button type="button" class="btn btn-primary">
+              <i class="fa fa-file-excel"></i> Download Excel
+            </button>
+            <button type="button" class="btn btn-primary">
+              <i class="fa fa-file-pdf"></i> Download PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+
+          <div class="card-body">
+            <table id="example1" class="table-striped table-condensed" style="width: 100%;">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Number</th>
+                <th>Phone #</th>
+                <th>Contact Name</th>
+                <th>Email</th>
+                <th>Last Update</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @vendors.each do |vendor| %>
+                <tr>
+                  <td><%= vendor.name %></td>
+                  <td><%= vendor.number %></td>
+                  <td><%= vendor.phone %></td>
+                  <td><%= vendor.contact_name %></td>
+                  <td><%= vendor.email %></td>
+                  <td><%= vendor.updated_at.strftime("%d.%m.%Y") %></td>
+                </tr>
+              <% end %>
+              </tbody>
+              <tfoot>
+              <tr>
+                <th>Name</th>
+                <th>Number</th>
+                <th>Phone #</th>
+                <th>Contact Name</th>
+                <th>Email</th>
+                <th>Last Update</th>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.vendor-list').addClass('active');
+        jQuery('.other-reports').addClass('active');
+        jQuery('.other-reports-menu').addClass('menu-open');
+
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        jQuery(".dt-buttons").removeClass("btn-group")
+        jQuery(".dt-buttons > .btn-secondary").removeClass("btn-secondary").addClass("btn-primary")
+    })
+</script>
