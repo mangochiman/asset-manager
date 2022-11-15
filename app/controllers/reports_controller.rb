@@ -183,6 +183,78 @@ class ReportsController < ApplicationController
     @completed_services = AssetServiceLog.completed_service
   end
 
+  def completed_services_csv
+    completed_services = AssetServiceLog.completed_service
+    file = "#{Rails.root}/tmp/completed-services.csv"
+    headers = ["Asset Name", "Start Date Expected", "Start Date Actual", "End Date Expected", "End Date Actual", "Service Type", "Notes"]
+    CSV.open(file, 'w', write_headers: true, headers: headers) do |csv|
+      completed_services.each do |asset_service_log|
+        start_date_expected = asset_service_log.start_date_expected.strftime("%d.%m.%Y") rescue asset_service_log.start_date_expected
+        start_date_actual = asset_service_log.start_date_actual.strftime("%d.%m.%Y") rescue asset_service_log.start_date_actual
+        end_date_expected = asset_service_log.end_date_expected.strftime("%d.%m.%Y") rescue asset_service_log.end_date_expected
+        end_date_actual = asset_service_log.end_date_actual.strftime("%d.%m.%Y") rescue asset_service_log.end_date_actual
+
+        csv << [asset_service_log.asset_details, start_date_expected, start_date_actual, end_date_expected, end_date_actual, asset_service_log.service_type_details, asset_service_log.notes]
+      end
+    end
+    send_file(file)
+  end
+
+  def completed_services_work_book
+    completed_services = AssetServiceLog.completed_service
+    file = "#{Rails.root}/tmp/completed-services.xlsx"
+    workbook = WriteXLSX.new(file)
+    worksheet = workbook.add_worksheet
+
+    row_pos = 0
+    worksheet.write(row_pos, 0, "Asset Name")
+    worksheet.write(row_pos, 1, "Start Date Expected")
+    worksheet.write(row_pos, 2, "Start Date Actual")
+    worksheet.write(row_pos, 3, "End Date Expected")
+    worksheet.write(row_pos, 4, "End Date Actual")
+    worksheet.write(row_pos, 5, "Service Type")
+    worksheet.write(row_pos, 6, "Notes")
+
+    completed_services.each do |asset_service_log|
+      row_pos = row_pos + 1
+      start_date_expected = asset_service_log.start_date_expected.strftime("%d.%m.%Y") rescue asset_service_log.start_date_expected
+      start_date_actual = asset_service_log.start_date_actual.strftime("%d.%m.%Y") rescue asset_service_log.start_date_actual
+      end_date_expected = asset_service_log.end_date_expected.strftime("%d.%m.%Y") rescue asset_service_log.end_date_expected
+      end_date_actual = asset_service_log.end_date_actual.strftime("%d.%m.%Y") rescue asset_service_log.end_date_actual
+
+      worksheet.write(row_pos, 0, asset_service_log.asset_details)
+      worksheet.write(row_pos, 1, start_date_expected)
+      worksheet.write(row_pos, 2, start_date_actual)
+      worksheet.write(row_pos, 3, end_date_expected)
+      worksheet.write(row_pos, 4, end_date_actual)
+      worksheet.write(row_pos, 5, asset_service_log.service_type_details)
+      worksheet.write(row_pos, 6, asset_service_log.notes)
+    end
+    # write to file
+    workbook.close
+    send_file(file)
+  end
+
+  def completed_services_pdf
+    @page_header = "Completed Services Report"
+    @completed_services = AssetServiceLog.completed_service
+    report_option = ReportOption.last
+    @header = report_option.header rescue nil
+    @footer = report_option.footer rescue nil
+    @logo_url = report_option.logo_url rescue nil
+  end
+
+  def download_completed_services_pdf
+    file_name = "completed-services.pdf"
+    source = "http://#{request.env["HTTP_HOST"]}/completed_services_pdf"
+    destination = Rails.root.to_s + "/tmp/#{file_name}"
+    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    Thread.new{
+      Kernel.system wkhtmltopdf
+    }.join
+    send_file(destination)
+  end
+
   def overdue_service
     @page_header = "Overdue Service Report"
     @overdue_service = AssetServiceLog.overdue_service

@@ -125,7 +125,13 @@ Rails.application.routes.draw do
 
   get '/personnel_list' => 'reports#personnel_list'
   get '/vendor_list' => 'reports#vendor_list'
+
   get '/completed_service' => 'reports#completed_service'
+  get '/completed_services_csv' => 'reports#completed_services_csv'
+  get '/completed_services_work_book' => 'reports#completed_services_work_book'
+  get '/completed_services_pdf' => 'reports#completed_services_pdf'
+  get '/download_completed_services_pdf' => 'reports#download_completed_services_pdf'
+
   get '/overdue_service' => 'reports#overdue_service'
   get '/service_schedule' => 'reports#service_schedule'
 end
