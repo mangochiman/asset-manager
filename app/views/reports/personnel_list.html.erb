@@ -5,13 +5,13 @@
       <div class="card">
         <div class="card-body row">
           <div>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadPersonnelListCSV()" type="button" class="btn btn-primary">
               <i class="fa fa-file-csv"></i> Download CSV
             </button>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadPersonnelListWorkBook()" type="button" class="btn btn-primary">
               <i class="fa fa-file-excel"></i> Download Excel
             </button>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadPersonnelListPDF()" type="button" class="btn btn-primary">
               <i class="fa fa-file-pdf"></i> Download PDF
             </button>
           </div>
@@ -88,4 +88,15 @@
         jQuery(".dt-buttons").removeClass("btn-group")
         jQuery(".dt-buttons > .btn-secondary").removeClass("btn-secondary").addClass("btn-primary")
     })
+
+    function downloadPersonnelListCSV(){
+        window.location = "/personnel_list_csv"
+    }
+    function downloadPersonnelListWorkBook(){
+        window.location = "/personnel_list_work_book"
+    }
+    function downloadPersonnelListPDF(){
+        window.location = "/download_personnel_list_pdf"
+    }
+
 </script>

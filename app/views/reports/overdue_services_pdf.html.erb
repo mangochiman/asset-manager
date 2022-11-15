@@ -1,0 +1,71 @@
+<style>
+    #companyLogo {
+        border: 2px solid gray;
+        float: right;
+        right: 20px;
+        margin-top: -120px;
+        position: absolute !important;
+    }
+</style>
+<hr />
+<div class="container-fluid">
+  <dl class="row">
+    <dt class="col-sm-4">Company Name</dt>
+    <dd class="col-sm-8"><%= @header || "N/A"%></dd>
+    <dt class="col-sm-4">Report Type</dt>
+    <dd class="col-sm-8"><%= @page_header %></dd>
+  </dl>
+  <% unless @logo_url.blank? %>
+    <div class="image">
+      <img id="companyLogo" height="80px" src="<%= @logo_url %>" class="elevation-2" alt="User Image">
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+
+        <div class="card-body">
+          <table id="example1" class="table-striped table-condensed" style="width: 100%">
+            <thead>
+            <tr>
+              <th>Asset Name</th>
+              <th>Start Date Expected</th>
+              <th>Start Date Actual</th>
+              <th>End Date Expected</th>
+              <th>End Date Actual</th>
+              <th>Service Type</th>
+              <th>Notes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @overdue_services.each do |asset_service_log| %>
+              <%
+                start_date_expected = asset_service_log.start_date_expected.strftime("%d.%m.%Y") rescue asset_service_log.start_date_expected
+                start_date_actual = asset_service_log.start_date_actual.strftime("%d.%m.%Y") rescue asset_service_log.start_date_actual
+
+                end_date_expected = asset_service_log.end_date_expected.strftime("%d.%m.%Y") rescue asset_service_log.end_date_expected
+                end_date_actual = asset_service_log.end_date_actual.strftime("%d.%m.%Y") rescue asset_service_log.end_date_actual
+              %>
+              <tr>
+                <td><%= asset_service_log.asset_details %></td>
+                <td><%= start_date_expected %></td>
+                <td><%= start_date_actual %></td>
+                <td><%= end_date_expected %></td>
+                <td><%= end_date_actual %></td>
+                <td><%= asset_service_log.service_type_details %></td>
+                <td><%= asset_service_log.notes %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <%= @footer %> | Generated on <%= Time.now %>
+  <!-- /.row -->
+</div>
+<!-- /.container-fluid -->

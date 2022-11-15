@@ -124,7 +124,16 @@ Rails.application.routes.draw do
   get '/download_assets_checked_out_pdf' => 'reports#download_assets_checked_out_pdf'
 
   get '/personnel_list' => 'reports#personnel_list'
+  get '/personnel_list_csv' => 'reports#personnel_list_csv'
+  get '/personnel_list_work_book' => 'reports#personnel_list_work_book'
+  get '/personnel_list_pdf' => 'reports#personnel_list_pdf'
+  get '/download_personnel_list_pdf' => 'reports#download_personnel_list_pdf'
+
   get '/vendor_list' => 'reports#vendor_list'
+  get '/vendor_list_csv' => 'reports#vendor_list_csv'
+  get '/vendor_list_work_book' => 'reports#vendor_list_work_book'
+  get '/vendor_list_pdf' => 'reports#vendor_list_pdf'
+  get '/download_vendor_list_pdf' => 'reports#download_vendor_list_pdf'
 
   get '/completed_service' => 'reports#completed_service'
   get '/completed_services_csv' => 'reports#completed_services_csv'
@@ -133,5 +142,15 @@ Rails.application.routes.draw do
   get '/download_completed_services_pdf' => 'reports#download_completed_services_pdf'
 
   get '/overdue_service' => 'reports#overdue_service'
+  get '/overdue_services_csv' => 'reports#overdue_services_csv'
+  get '/overdue_services_work_book' => 'reports#overdue_services_work_book'
+  get '/overdue_services_pdf' => 'reports#overdue_services_pdf'
+  get '/download_overdue_services_pdf' => 'reports#download_overdue_services_pdf'
+
   get '/service_schedule' => 'reports#service_schedule'
+  get '/service_schedule_csv' => 'reports#service_schedule_csv'
+  get '/service_schedule_work_book' => 'reports#service_schedule_work_book'
+  get '/service_schedule_pdf' => 'reports#service_schedule_pdf'
+  get '/download_service_schedule_pdf' => 'reports#download_service_schedule_pdf'
+
 end

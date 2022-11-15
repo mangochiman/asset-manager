@@ -1,0 +1,62 @@
+<style>
+    #companyLogo {
+        border: 2px solid gray;
+        float: right;
+        right: 20px;
+        margin-top: -120px;
+        position: absolute !important;
+    }
+</style>
+<hr />
+<div class="container-fluid">
+  <dl class="row">
+    <dt class="col-sm-4">Company Name</dt>
+    <dd class="col-sm-8"><%= @header || "N/A"%></dd>
+    <dt class="col-sm-4">Report Type</dt>
+    <dd class="col-sm-8"><%= @page_header %></dd>
+  </dl>
+  <% unless @logo_url.blank? %>
+    <div class="image">
+      <img id="companyLogo" height="80px" src="<%= @logo_url %>" class="elevation-2" alt="User Image">
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+
+        <div class="card-body">
+          <table id="example1" class="table-striped table-condensed" style="width: 100%">
+            <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Personnel Number</th>
+              <th>Email</th>
+              <th>Phone #</th>
+              <th>Last Update</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @people.each do |person| %>
+              <tr>
+                <td><%= person.first_name %></td>
+                <td><%= person.last_name %></td>
+                <td><%= person.barcode %></td>
+                <td><%= person.email %></td>
+                <td><%= person.phone %></td>
+                <td><%= person.updated_at.strftime("%d.%m.%Y") %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <%= @footer %> | Generated on <%= Time.now %>
+  <!-- /.row -->
+</div>
+<!-- /.container-fluid -->

@@ -5,13 +5,13 @@
       <div class="card">
         <div class="card-body row">
           <div>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadOverdueServicesCSV()" type="button" class="btn btn-primary">
               <i class="fa fa-file-csv"></i> Download CSV
             </button>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadOverdueServicesWorkBook()" type="button" class="btn btn-primary">
               <i class="fa fa-file-excel"></i> Download Excel
             </button>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadOverdueServicesPDF()" type="button" class="btn btn-primary">
               <i class="fa fa-file-pdf"></i> Download PDF
             </button>
           </div>
@@ -98,4 +98,14 @@
         jQuery(".dt-buttons").removeClass("btn-group")
         jQuery(".dt-buttons > .btn-secondary").removeClass("btn-secondary").addClass("btn-primary")
     })
+
+    function downloadOverdueServicesCSV(){
+        window.location = "/overdue_services_csv"
+    }
+    function downloadOverdueServicesWorkBook(){
+        window.location = "/overdue_services_work_book"
+    }
+    function downloadOverdueServicesPDF(){
+        window.location = "/download_overdue_services_pdf"
+    }
 </script>
