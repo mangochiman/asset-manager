@@ -33,6 +33,14 @@ class Asset < ApplicationRecord
     checked_out
   end
 
+  def self.checked_out
+    assets = []
+    Asset.all.each do |asset|
+      assets << asset if asset.state.to_s.match(/out/i)
+    end
+    assets
+  end
+
   def checked_out_date
     check_out_date = ""
     checked_out_activity = self.asset_activities.last

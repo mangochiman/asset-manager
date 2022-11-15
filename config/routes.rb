@@ -112,8 +112,17 @@ Rails.application.routes.draw do
   get '/asset_list_pdf' => 'reports#asset_list_pdf'
   get '/download_asset_list_pdf' => 'reports#download_asset_list_pdf'
 
-  get '/asset_details' => 'reports#asset_details'
+  get '/asset_details' => 'reports#asset_details' #asset_details_pdf
+
+  get '/asset_details_pdf' => 'reports#asset_details_pdf'
+  get '/download_asset_details_pdf' => 'reports#download_asset_details_pdf'
+
   get '/assets_checked_out' => 'reports#assets_checked_out'
+  get '/assets_checked_out_csv' => 'reports#assets_checked_out_csv'
+  get '/assets_checked_out_work_book' => 'reports#assets_checked_out_work_book'
+  get '/assets_checked_out_pdf' => 'reports#assets_checked_out_pdf'
+  get '/download_assets_checked_out_pdf' => 'reports#download_assets_checked_out_pdf'
+
   get '/personnel_list' => 'reports#personnel_list'
   get '/vendor_list' => 'reports#vendor_list'
   get '/completed_service' => 'reports#completed_service'

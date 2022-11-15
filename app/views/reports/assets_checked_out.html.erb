@@ -5,13 +5,13 @@
       <div class="card">
         <div class="card-body row">
           <div>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadAssetsCheckedOutCSV()" type="button" class="btn btn-primary">
               <i class="fa fa-file-csv"></i> Download CSV
             </button>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadAssetsCheckedOutWorkBook()" type="button" class="btn btn-primary">
               <i class="fa fa-file-excel"></i> Download Excel
             </button>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadAssetsCheckedOutPDF()" type="button" class="btn btn-primary">
               <i class="fa fa-file-pdf"></i> Download PDF
             </button>
           </div>
@@ -94,4 +94,15 @@
         jQuery(".dt-buttons").removeClass("btn-group")
         jQuery(".dt-buttons > .btn-secondary").removeClass("btn-secondary").addClass("btn-primary")
     })
+
+    function downloadAssetsCheckedOutCSV(){
+        window.location = "/assets_checked_out_csv"
+    }
+    function downloadAssetsCheckedOutWorkBook(){
+        window.location = "/assets_checked_out_work_book"
+    }
+    function downloadAssetsCheckedOutPDF(){
+        window.location = "/download_assets_checked_out_pdf"
+    }
+
 </script>

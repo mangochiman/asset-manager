@@ -34,7 +34,8 @@
               <th>Status</th>
               <th>Brand</th>
               <th>Model</th>
-              <th>Last Update</th>
+              <th>Checked out Date</th>
+              <th>Return On</th>
             </tr>
             </thead>
             <tbody>
@@ -46,7 +47,8 @@
                 <td><%= asset.state %></td>
                 <td><%= asset.brand %></td>
                 <td><%= asset.model %></td>
-                <td><%= asset.updated_at.strftime("%d.%m.%Y") %></td>
+                <td><%= asset.checked_out_date.strftime("%d.%m.%Y") %></td>
+                <td><%= asset.return_on_date.strftime("%d.%m.%Y") %></td>
               </tr>
             <% end %>
             </tbody>

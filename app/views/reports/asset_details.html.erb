@@ -5,13 +5,7 @@
       <div class="card">
         <div class="card-body row">
           <div>
-            <button type="button" class="btn btn-primary">
-              <i class="fa fa-file-csv"></i> Download CSV
-            </button>
-            <button type="button" class="btn btn-primary">
-              <i class="fa fa-file-excel"></i> Download Excel
-            </button>
-            <button type="button" class="btn btn-primary">
+            <button onclick="downloadAssetDetailsPDF()" type="button" class="btn btn-primary">
               <i class="fa fa-file-pdf"></i> Download PDF
             </button>
           </div>
@@ -119,4 +113,8 @@
         jQuery(".dt-buttons").removeClass("btn-group")
         jQuery(".dt-buttons > .btn-secondary").removeClass("btn-secondary").addClass("btn-primary")
     })
+
+    function downloadAssetDetailsPDF(){
+        window.location = "/download_asset_details_pdf"
+    }
 </script>

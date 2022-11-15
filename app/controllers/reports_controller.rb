@@ -75,12 +75,97 @@ class ReportsController < ApplicationController
     @assets = Asset.all
   end
 
+  def asset_details_pdf
+    @page_header = "Asset Details Report"
+    report_option = ReportOption.last
+    @header = report_option.header rescue nil
+    @footer = report_option.footer rescue nil
+    @logo_url = report_option.logo_url rescue nil
+    @assets = Asset.all
+  end
+
+  def download_asset_details_pdf
+    file_name = "asset-details.pdf"
+    source = "http://#{request.env["HTTP_HOST"]}/asset_details_pdf"
+    destination = Rails.root.to_s + "/tmp/#{file_name}"
+    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    Thread.new{
+      Kernel.system wkhtmltopdf
+    }.join
+    send_file(destination)
+  end
+
   def assets_checked_out
     @page_header = "Assets Checked Out"
-    @assets = []
-    Asset.all.each do |asset|
-      @assets << asset if asset.state.to_s.match(/out/i)
+    @assets = Asset.checked_out
+  end
+
+  def assets_checked_out_csv
+    assets = Asset.checked_out
+    file = "#{Rails.root}/tmp/assets_checked_out.csv"
+    headers = ["Asset Name", "Asset Number", "Location", "Status", "Brand", "Model",
+               "Checked Out Date", "Return On"]
+    CSV.open(file, 'w', write_headers: true, headers: headers) do |csv|
+      assets.each do |asset|
+        csv << [asset.name, asset.barcode, asset.location_details, asset.state, asset.brand, asset.model,
+                asset.checked_out_date.strftime("%d.%m.%Y"), asset.return_on_date.strftime("%d.%m.%Y")  ]
+      end
     end
+    send_file(file)
+  end
+
+  def assets_checked_out_work_book
+    assets = Asset.checked_out
+    file = "#{Rails.root}/tmp/assets_checked_out.xlsx"
+    workbook = WriteXLSX.new(file)
+    worksheet = workbook.add_worksheet
+    # Add and define a format
+    row_pos = 0
+    worksheet.write(row_pos, 0, "Asset Name")
+    worksheet.write(row_pos, 1, "Asset Number")
+    worksheet.write(row_pos, 2, "Location")
+    worksheet.write(row_pos, 3, "Status")
+    worksheet.write(row_pos, 4, "Brand")
+    worksheet.write(row_pos, 5, "Model")
+    worksheet.write(row_pos, 6, "Checked Out Date")
+    worksheet.write(row_pos, 7, "Return On")
+
+    assets.each do |asset|
+      row_pos = row_pos + 1
+      checked_out_date = asset.checked_out_date.strftime("%d.%m.%Y")
+      return_on = asset.return_on_date.strftime("%d.%m.%Y")
+      worksheet.write(row_pos, 0, asset.name)
+      worksheet.write(row_pos, 1, asset.barcode)
+      worksheet.write(row_pos, 2, asset.location_details)
+      worksheet.write(row_pos, 3, asset.state)
+      worksheet.write(row_pos, 4, asset.brand)
+      worksheet.write(row_pos, 5, asset.model)
+      worksheet.write(row_pos, 6, checked_out_date)
+      worksheet.write(row_pos, 7, return_on)
+    end
+    # write to file
+    workbook.close
+    send_file(file)
+  end
+
+  def assets_checked_out_pdf
+    @page_header = "Assets Checked Out Report"
+    report_option = ReportOption.last
+    @header = report_option.header rescue nil
+    @footer = report_option.footer rescue nil
+    @logo_url = report_option.logo_url rescue nil
+    @assets = Asset.checked_out
+  end
+
+  def download_assets_checked_out_pdf
+    file_name = "assets-checked-out.pdf"
+    source = "http://#{request.env["HTTP_HOST"]}/assets_checked_out_pdf"
+    destination = Rails.root.to_s + "/tmp/#{file_name}"
+    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    Thread.new{
+      Kernel.system wkhtmltopdf
+    }.join
+    send_file(destination)
   end
 
   def personnel_list
