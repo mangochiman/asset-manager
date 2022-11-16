@@ -1,3 +1,4 @@
+require 'csv'
 class PagesController < ApplicationController
   def home
     @page_header = "Dashboard"
@@ -13,6 +14,44 @@ class PagesController < ApplicationController
     @recently_system_activities = SystemActivity.order("created_at DESC").limit(10)
   end
 
+  def upload_assets_from_file
+    @page_header = "Upload Assets From File"
+    if request.post?
+      unless params[:file].blank?
+        file_extension = File.extname(params[:file]).downcase
+        if file_extension != ".csv"
+          flash[:error] = "Unsupported file. Please upload a CSV file"
+          redirect_to("/upload_assets_from_file") and return
+        end
+      end
+
+      file = params[:file].path
+      data = File.open(file)
+      CSV.foreach(data, headers: true) do |row|
+        asset_name = row['Asset Name'].to_s
+        asset_code = row['Asset Code'].to_s
+        asset_type = row['Asset Type'].to_s
+        asset_location = row['Asset Location'].to_s
+        manufacturer = row['Manufacturer'].to_s
+        brand = row['Brand'].to_s
+        serial_no = row['Serial No'].to_s
+        description = row['Description'].to_s
+        model = row['Model'].to_s
+        condition = row['Condition'].to_s
+        vendor_name = row['Vendor Name'].to_s
+        po_number = row['PO Number'].to_s
+        unit_price = row['Unit Price'].to_s
+        date_purchased = row['Date Purchased(YYYY/MM/DD)'].to_s
+        account_code = row['Account Code'].to_s
+        warranty_end = row['Warranty End(YYYY/MM/DD)'].to_s
+      end
+    end
+  end
+
+  def download_asset_template
+    file = Rails.root.to_s + "/config/asset_template.csv"
+    send_file(file)
+  end
 
   def new_asset_menu
     @page_header = "New Asset"

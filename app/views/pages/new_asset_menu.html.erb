@@ -12,7 +12,7 @@
                 <button onclick="validateForm()" type="button" class="btn btn-primary">
                   <i class="fa fa-save"></i> Save
                 </button>
-                <button type="button" class="btn btn-success">
+                <button onclick="uploadAssetsFromCSV()" type="button" class="btn btn-success">
                   <i class="fa fa-upload"></i> Upload Assets From CSV
                 </button>
                 <button type="button" class="btn btn-default">
@@ -328,6 +328,10 @@
 
     function validateForm() {
         $("#assetForm").submit();
+    }
+
+    function uploadAssetsFromCSV(){
+        window.location = "/upload_assets_from_file"
     }
 
     function loadDefaultValues() {

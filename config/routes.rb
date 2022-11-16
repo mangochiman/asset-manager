@@ -24,6 +24,10 @@ Rails.application.routes.draw do
   get '/new_asset_menu' => 'pages#new_asset_menu'
   post '/new_asset_menu' => 'pages#new_asset_menu'
 
+  get '/upload_assets_from_file' => 'pages#upload_assets_from_file'
+  post '/upload_assets_from_file' => 'pages#upload_assets_from_file'
+  get '/download_asset_template' => 'pages#download_asset_template'
+
   get '/system_overview' => 'pages#system_overview' #selection_fields
   post '/system_overview' => 'pages#system_overview'
 
