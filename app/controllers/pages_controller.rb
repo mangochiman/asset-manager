@@ -27,6 +27,8 @@ class PagesController < ApplicationController
 
       file = params[:file].path
       data = File.open(file)
+      errors = []
+      count = 0
       CSV.foreach(data, headers: true) do |row|
         asset_name = row['Asset Name'].to_s
         asset_code = row['Asset Code'].to_s
@@ -44,7 +46,42 @@ class PagesController < ApplicationController
         date_purchased = row['Date Purchased(YYYY/MM/DD)'].to_s
         account_code = row['Account Code'].to_s
         warranty_end = row['Warranty End(YYYY/MM/DD)'].to_s
+
+        location = Location.find_or_create_by(name: asset_location)
+        vendor = Vendor.find_or_create_by(name: vendor_name)
+        asset_type = AssetType.find_or_create_by(name: asset_type)
+        selection_field = SelectionField.find_or_create_by({field_type: 'condition',
+                                                            field_name: condition})
+        asset = Asset.new
+        asset.name = asset_name
+        asset.barcode = asset_code
+        asset.asset_type_id = asset_type.asset_type_id rescue ""
+        asset.location_id = location.location_id rescue ""
+        asset.condition_id = selection_field.selection_field_id rescue ""
+        asset.vendor_id = vendor.vendor_id rescue ""
+        asset.serial_number = serial_no
+        asset.manufacturer = manufacturer
+        asset.brand = brand
+        asset.model = model
+        asset.unit_price = unit_price
+        asset.date_purchased = date_purchased
+        asset.order_number = po_number
+        asset.account_code = account_code
+        asset.warranty_end = warranty_end
+        asset.notes = description
+        if asset.save
+          count = count + 1
+        else
+          errors << asset.errors.full_messages.join('<br />')
+        end
       end
+
+      unless errors.blank?
+        flash[:error] = errors.join('<br />')
+        redirect_to("/upload_assets_from_file") and return
+      end
+      flash[:notice] = "You have successfully imported #{count} assets"
+      redirect_to("/list_assets")
     end
   end
 

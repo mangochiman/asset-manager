@@ -30,7 +30,7 @@
 
 <div class="card">
   <div class="card-body ">
-    <table class="table-striped table-condensed" style="width: 100%;">
+    <table id="example1" class="table-striped table-condensed" style="width: 100%;">
       <thead>
       <tr>
         <th>Asset Name</th>
@@ -105,7 +105,16 @@
         jQuery('.assets').addClass('active');
         jQuery('.list_assets_menu').addClass('active');
         jQuery('.assets-menu').addClass('menu-open');
-        loadDefaults()
+        loadDefaults();
+
+        $("#example1").DataTable({
+            "aaSorting": [],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "bFilter": false
+        })
+        console.log("dd")
     })
 
     var selectedAssetID;

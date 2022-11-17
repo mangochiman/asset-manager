@@ -8,8 +8,8 @@ class AssetReservation < ApplicationRecord
 
   validate :no_reservation_overlap, :start_date_cannot_be_in_the_past, :end_date_is_after_start_date
 
-  belongs_to :person, :foreign_key => :person_id
-  belongs_to :location, :foreign_key => :location_id
+  belongs_to :person, :foreign_key => :person_id, optional: true
+  belongs_to :location, :foreign_key => :location_id, optional: true
 
   scope :overlapping, ->(period_start, period_end, asset_id) do
     where "((start_date <= ?) and (end_date >= ?) and (asset_id = ?) )", period_end, period_start, asset_id

@@ -6,11 +6,11 @@ class Asset < ApplicationRecord
   has_many :asset_activities, :foreign_key => :asset_id
   has_many :asset_service_logs, :foreign_key => :asset_id
   has_many :asset_reservations, :foreign_key => :asset_id
-  belongs_to :location, :foreign_key => :location_id
-  belongs_to :selection_field, :foreign_key => :condition_id
-  belongs_to :vendor, :foreign_key => :vendor_id
 
-  belongs_to :asset_type, :foreign_key => :asset_type_id
+  belongs_to :location, :foreign_key => :location_id, optional: true
+  belongs_to :selection_field, :foreign_key => :condition_id, optional: true
+  belongs_to :vendor, :foreign_key => :vendor_id, optional: true
+  belongs_to :asset_type, :foreign_key => :asset_type_id, optional: true
   validates_presence_of :name
 
   def self.retire_reasons
