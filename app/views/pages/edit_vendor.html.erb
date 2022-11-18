@@ -4,13 +4,16 @@
     <div class="card-body">
 
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <!-- Buttons with Icons -->
           <div class="card">
             <div class="card-body row">
               <div class="">
                 <button onclick="validateForm()" type="button" class="btn btn-primary">
                   <i class="fa fa-save"></i> Update
+                </button>
+                <button onclick="goBack()" type="button" class="btn btn-default">
+                  <i class="fa fa-arrow-circle-left"></i> Cancel
                 </button>
               </div>
             </div>
@@ -125,8 +128,33 @@
 
         <div class="tab-pane fade" id="custom-content-above-profile" role="tabpanel" aria-labelledby="custom-content-above-profile-tab">
           <div class="card">
-            <div class="card-body">
-              <p>Nothing to show</p>
+            <div class="card-body" style="overflow: auto; height: 40vh;">
+              <table id="example1" class="table-striped table-condensed" style="width: 100%;">
+                <thead>
+                <tr>
+                  <th>Asset Name</th>
+                  <th>Asset Number</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                  <th>Brand</th>
+                  <th>Model</th>
+                  <th>Last Update</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @assets.each do |asset| %>
+                  <tr>
+                    <td><%= asset.name %></td>
+                    <td><%= asset.barcode %></td>
+                    <td><%= asset.location_details %></td>
+                    <td><%= asset.state %></td>
+                    <td><%= asset.brand %></td>
+                    <td><%= asset.model %></td>
+                    <td><%= asset.updated_at.strftime("%d.%m.%Y") %></td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
             </div>
             <!-- /.card-body -->
           </div>
@@ -165,7 +193,7 @@
             </div>
           </div>
 
-          <table class="table table-striped">
+          <table class="table-striped table-condensed" style="width: 100%">
             <thead>
             <tr>
               <th>File Name</th>

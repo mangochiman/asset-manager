@@ -14,6 +14,11 @@ class PagesController < ApplicationController
     @recently_system_activities = SystemActivity.order("created_at DESC").limit(10)
   end
 
+  def assets_by_state
+    raise params.inspect
+    @page_header = "Assets"
+  end
+
   def upload_assets_from_file
     @page_header = "Upload Assets From File"
     if request.post?
@@ -696,6 +701,7 @@ class PagesController < ApplicationController
       end
     end
 
+    @assets = @vendor.assets
   end
 
   def delete_vendor_attachment
@@ -1413,6 +1419,21 @@ class PagesController < ApplicationController
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
+  end
+
+  def items_count
+    summary = {
+        "assets_count": Asset.all.count,
+        "asset_types_count": AssetType.all.count,
+        "people_count": Person.all.count,
+        "groups_count": Group.all.count,
+        "locations_count": Location.all.count,
+        "vendors_count": Vendor.all.count
+    }
+    respond_to do |format|
+      format.json { render json: summary }
+      format.html {}
+    end
   end
 
   def assets_summary_count

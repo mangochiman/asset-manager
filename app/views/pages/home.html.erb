@@ -137,7 +137,8 @@
                       </span>
                     </a>
                     <span class="product-description">
-                        Asset Type: <%= asset.asset_type_details %> | Serial Number: <%= asset.serial_number %> | brand: <%= asset.brand %>
+                        Asset Type: <%= asset.asset_type_details %> | Serial Number: <%= asset.serial_number %>
+                      | brand: <%= asset.brand %>
                       </span>
                   </div>
                 </li>
@@ -164,17 +165,18 @@
             <div class="info-box mb-3 bg-warning">
               <span class="info-box-icon"><i class="fas fa-cart-plus"></i></span>
 
-              <div class="info-box-content">
+              <div class="info-box-content" onclick="assetByState('checked_out')" style="cursor: pointer">
                 <span class="info-box-text">Total Assets Checked Out</span>
                 <span class="info-box-number" id="assets-checked-out">&nbsp; </span>
               </div>
               <!-- /.info-box-content -->
+
             </div>
             <!-- /.info-box -->
             <div class="info-box mb-3 bg-success">
               <span class="info-box-icon"><i class="fas fa-lock"></i></span>
 
-              <div class="info-box-content">
+              <div class="info-box-content" onclick="assetByState('maintenance')" style="cursor: pointer">
                 <span class="info-box-text">Assets in Maintenance</span>
                 <span class="info-box-number" id="assets-in-maintenance">&nbsp;</span>
               </div>
@@ -184,7 +186,7 @@
             <div class="info-box mb-3 bg-danger">
               <span class="info-box-icon"><i class="fas fa-archive"></i></span>
 
-              <div class="info-box-content">
+              <div class="info-box-content" onclick="assetByState('retired')" style="cursor: pointer">
                 <span class="info-box-text">Retired Assets</span>
                 <span class="info-box-number" id="retired-assets">&nbsp;</span>
               </div>
@@ -194,7 +196,7 @@
             <div class="info-box mb-3 bg-info">
               <span class="info-box-icon"><i class="fas fa-lock-open"></i></span>
 
-              <div class="info-box-content">
+              <div class="info-box-content" onclick="assetByState('available')" style="cursor: pointer">
                 <span class="info-box-text">Available Assets</span>
                 <span class="info-box-number" id="available-assets">&nbsp;</span>
               </div>
@@ -217,7 +219,7 @@
         checkInOutActivityGraph();
     })
 
-    function loadAssetStats(){
+    function loadAssetStats() {
         jQuery.ajax({
             type: "POST",
             url: "/assets_summary_count",
@@ -232,20 +234,21 @@
 
             },
             success: function (result) {
-                var checked_out_count =  result["checked_out"]
-                var maintenance_count =  result["maintenance"]
-                var retired_count =  result["retired"]
-                var available_count =  result["available"]
+                var checked_out_count = result["checked_out"]
+                var maintenance_count = result["maintenance"]
+                var retired_count = result["retired"]
+                var available_count = result["available"]
 
                 jQuery('#assets-checked-out').html(checked_out_count)
                 jQuery('#assets-in-maintenance').html(maintenance_count)
                 jQuery('#retired-assets').html(retired_count)
                 jQuery('#available-assets').html(available_count)
             }
-        })}
+        })
+    }
 
 
-    function checkInOutActivityGraph(){
+    function checkInOutActivityGraph() {
         jQuery.ajax({
             type: "POST",
             url: "/check_in_out_activity_summary",
@@ -257,9 +260,9 @@
 
             },
             success: function (result) {
-                var checkout_counts =  result["checkout_counts"];
-                var checkin_counts =  result["checkin_counts"];
-                var x_axis =  result["x_axis"];
+                var checkout_counts = result["checkout_counts"];
+                var checkin_counts = result["checkin_counts"];
+                var x_axis = result["x_axis"];
 
                 $('#checkInOutActivity').highcharts({
                     chart: {
@@ -319,6 +322,10 @@
                     }
                 })
             }
-        })}
+        })
+    }
 
+    function assetByState(state) {
+        window.location = "/assets_by_state?state=" + state
+    }
 </script>

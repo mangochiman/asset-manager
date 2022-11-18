@@ -103,12 +103,13 @@ Rails.application.routes.draw do
   get '/asset_label' => 'pages#asset_label'
   get '/download_asset_label' => 'pages#download_asset_label'
   post '/assets_summary_count' => 'pages#assets_summary_count'
+  post '/items_count' => 'pages#items_count'
   post '/check_in_out_activity_summary' => 'pages#check_in_out_activity_summary'
   get '/files' => 'pages#files'
   post '/delete_file' => 'pages#delete_file'
   get '/download_file' => 'pages#download_file'
   get '/list_system_activities' => 'pages#list_system_activities'
-
+  get '/assets_by_state' => 'pages#assets_by_state'
   #reports
   get '/asset_list' => 'reports#asset_list'
   get '/asset_list_csv' => 'reports#asset_list_csv'
