@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_07_162012) do
+ActiveRecord::Schema.define(version: 2022_11_18_115215) do
 
   create_table "asset_activities", primary_key: "asset_activity_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "asset_id"
@@ -107,6 +107,15 @@ ActiveRecord::Schema.define(version: 2022_11_07_162012) do
     t.date "date_retired"
     t.integer "retired_by"
     t.string "retire_comments"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "exports", primary_key: "export_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.date "export_date"
+    t.integer "bytes"
+    t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

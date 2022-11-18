@@ -15,8 +15,25 @@ class PagesController < ApplicationController
   end
 
   def assets_by_state
-    raise params.inspect
-    @page_header = "Assets"
+    @page_header = "Unknown state"
+    state = params[:state].to_s.downcase.squish
+    @assets = []
+    if state == "checked_out"
+      @page_header = "Assets checked out"
+      @assets = Asset.checked_out
+    end
+    if state == "maintenance"
+      @page_header = "Assets under maintenance"
+      @assets = Asset.maintenance_assets
+    end
+    if state == "retired"
+      @page_header = "Retired Assets"
+      @assets = Asset.retired_assets
+    end
+    if state == "available"
+      @page_header = "Available Assets"
+      @assets = Asset.available_assets
+    end
   end
 
   def upload_assets_from_file
@@ -1512,6 +1529,14 @@ class PagesController < ApplicationController
 
   def list_system_activities
     @system_activities = SystemActivity.order("created_at DESC")
+  end
+
+  def export_data
+
+  end
+
+  def export_files
+
   end
 
 end

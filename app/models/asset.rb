@@ -1,3 +1,4 @@
+require 'write_xlsx'
 class Asset < ApplicationRecord
   self.table_name = 'assets'
   self.primary_key = 'asset_id'
@@ -41,6 +42,22 @@ class Asset < ApplicationRecord
     assets
   end
 
+  def self.maintenance_assets
+    assets = []
+    Asset.all.each do |asset|
+      assets << asset if asset.state.to_s.match(/Maintenance/i)
+    end
+    assets
+  end
+
+  def self.available_assets
+    assets = []
+    Asset.all.each do |asset|
+      assets << asset if asset.state.to_s.match(/Available/i)
+    end
+    assets
+  end
+
   def checked_out_date
     check_out_date = ""
     checked_out_activity = self.asset_activities.last
@@ -72,6 +89,10 @@ class Asset < ApplicationRecord
     retired = false
     retired = true if self.retired.to_i == 1
     retired
+  end
+
+  def self.retired_assets
+    Asset.where(["retired = 1"])
   end
 
   def state
@@ -136,6 +157,66 @@ class Asset < ApplicationRecord
     assets = Asset.where(["barcode LIKE ?", '%' + value + '%']) if key == "barcode"
     assets = Asset.joins(:location).where(["locations.name LIKE ?", '%' + value + '%']) if key == "location"
     assets
+  end
+
+  def self.work_book
+    assets = Asset.all
+    file = "#{Rails.root}/tmp/assets.xlsx"
+    workbook = WriteXLSX.new(file)
+    worksheet = workbook.add_worksheet
+    row_pos = 0
+    worksheet.write(row_pos, 0, "Asset Name")
+    worksheet.write(row_pos, 1, "Asset Barcode")
+    worksheet.write(row_pos, 2, "asset_type")
+    worksheet.write(row_pos, 3, "location")
+    worksheet.write(row_pos, 4, "condition")
+    worksheet.write(row_pos, 5, "vendor")
+    worksheet.write(row_pos, 6, "serial_number")
+    worksheet.write(row_pos, 7, "manufacturer")
+    worksheet.write(row_pos, 8, "brand")
+    worksheet.write(row_pos, 9, "model")
+    worksheet.write(row_pos, 10, "unit_price")
+    worksheet.write(row_pos, 11, "date_purchased")
+    worksheet.write(row_pos, 12, "order_number")
+    worksheet.write(row_pos, 13, "account_code")
+    worksheet.write(row_pos, 14, "warranty_end")
+    worksheet.write(row_pos, 15, "notes")
+    worksheet.write(row_pos, 16, "retired")
+    worksheet.write(row_pos, 17, "retire_reason")
+    worksheet.write(row_pos, 19, "date_retired")
+    worksheet.write(row_pos, 19, "retired_by")
+    worksheet.write(row_pos, 20, "retire_comments")
+    worksheet.write(row_pos, 21, "created_at")
+
+    assets.each do |asset|
+      row_pos = row_pos + 1
+      created_at = asset.created_at.strftime("%d.%m.%Y")
+      worksheet.write(row_pos, 0, asset.name)
+      worksheet.write(row_pos, 1, asset.barcode)
+      worksheet.write(row_pos, 2, asset.asset_type_details)
+      worksheet.write(row_pos, 3, asset.location_details)
+      worksheet.write(row_pos, 4, asset.condition_details)
+      worksheet.write(row_pos, 5, asset.vendor_details)
+      worksheet.write(row_pos, 6, asset.serial_number)
+      worksheet.write(row_pos, 7, asset.manufacturer)
+      worksheet.write(row_pos, 8, asset.brand)
+      worksheet.write(row_pos, 9, asset.model)
+      worksheet.write(row_pos, 10, asset.unit_price)
+      worksheet.write(row_pos, 11, asset.date_purchased)
+      worksheet.write(row_pos, 12, asset.order_number)
+      worksheet.write(row_pos, 13, asset.account_code)
+      worksheet.write(row_pos, 14, asset.warranty_end)
+      worksheet.write(row_pos, 15, asset.notes)
+      worksheet.write(row_pos, 16, asset.retired)
+      worksheet.write(row_pos, 17, asset.retire_reason)
+      worksheet.write(row_pos, 19, asset.date_retired)
+      worksheet.write(row_pos, 19, asset.retired_by)
+      worksheet.write(row_pos, 20, asset.retire_comments)
+      worksheet.write(row_pos, 21, created_at)
+    end
+    # write to file
+    workbook.close
+    file
   end
 end
 

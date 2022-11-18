@@ -110,6 +110,8 @@ Rails.application.routes.draw do
   get '/download_file' => 'pages#download_file'
   get '/list_system_activities' => 'pages#list_system_activities'
   get '/assets_by_state' => 'pages#assets_by_state'
+  get '/export_data' => 'pages#export_data'
+  get '/export_files' => 'pages#export_files'
   #reports
   get '/asset_list' => 'reports#asset_list'
   get '/asset_list_csv' => 'reports#asset_list_csv'

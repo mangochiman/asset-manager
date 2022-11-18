@@ -1,0 +1,61 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+
+          <div class="card-body">
+            <table id="example1" class="table-striped table-condensed" style="width: 100%;">
+              <thead>
+              <tr>
+                <th>Asset Name</th>
+                <th>Asset Number</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Checked out Date</th>
+                <th>Return On</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @assets.each do |asset| %>
+                <tr>
+                  <td><%= asset.name %></td>
+                  <td><%= asset.barcode %></td>
+                  <td><%= asset.location_details %></td>
+                  <td><%= asset.state %></td>
+                  <td><%= asset.brand %></td>
+                  <td><%= asset.model %></td>
+                  <td><%= asset.checked_out_date.strftime("%d.%m.%Y") rescue "" %></td>
+                  <td><%= asset.return_on_date.strftime("%d.%m.%Y") rescue "" %></td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["csv", "excel", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        jQuery(".dt-buttons").removeClass("btn-group")
+        jQuery(".dt-buttons > .btn-secondary").removeClass("btn-secondary").addClass("btn-primary")
+    })
+
+</script>
