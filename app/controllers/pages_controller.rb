@@ -2,6 +2,8 @@ require 'csv'
 
 class PagesController < ApplicationController
   before_action :authorize
+  before_action :check_admin_privileges, only: [:new_asset_menu, :new_vendor, :new_person]
+
   def home
     @page_header = "Dashboard"
     @asset_count = Asset.count
