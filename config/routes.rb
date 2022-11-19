@@ -112,6 +112,7 @@ Rails.application.routes.draw do
   get '/assets_by_state' => 'pages#assets_by_state'
   get '/export_data' => 'pages#export_data'
   get '/export_files' => 'pages#export_files'
+  get '/download_export_record' => 'pages#download_export_record'
   #reports
   get '/asset_list' => 'reports#asset_list'
   get '/asset_list_csv' => 'reports#asset_list_csv'

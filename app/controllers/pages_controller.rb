@@ -1,4 +1,5 @@
 require 'csv'
+
 class PagesController < ApplicationController
   def home
     @page_header = "Dashboard"
@@ -582,6 +583,37 @@ class PagesController < ApplicationController
 
   def export_all
     @page_header = "Export Data and Files"
+    data_export = Export.where(["name =?", "data"]).last
+    files_export = Export.where(["name =?", "files"]).last
+    @data_last_export_date = "-"
+    @data_storage_size = "-"
+    @data_export_id = ""
+
+    @files_last_export_date = "-"
+    @files_storage_size = "-"
+    @files_export_id = ""
+    unless data_export.blank?
+      @data_last_export_date = data_export.export_date.strftime("%d.%b.%Y")
+      @data_storage_size = ActionController::Base.helpers.number_to_human_size(data_export.bytes)
+      @data_export_id = data_export.export_id
+    end
+
+    unless files_export.blank?
+      @files_last_export_date = files_export.export_date.strftime("%d.%b.%Y")
+      @files_storage_size = ActionController::Base.helpers.number_to_human_size(files_export.bytes)
+      @files_export_id = files_export.export_id
+    end
+  end
+
+  def download_export_record
+    export = Export.find(params[:export_id]) rescue ""
+    file_path = export.url rescue ""
+    if File.exist?(file_path)
+      send_file(file_path)
+    else
+      flash[:error] = "Unable to download file. The file is missing. Export again"
+      redirect_to("/export_all")
+    end
   end
 
   def new_vendor
@@ -1432,7 +1464,7 @@ class PagesController < ApplicationController
     source = "http://#{request.env["HTTP_HOST"]}/asset_label?asset_id=#{asset_id}"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
     wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
-    Thread.new{
+    Thread.new {
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
@@ -1494,7 +1526,7 @@ class PagesController < ApplicationController
       checkin_counts << checkin_activities.length
     end
 
-    x_axis = dates.collect{|d|d.strftime("%b %y")}
+    x_axis = dates.collect { |d| d.strftime("%b %y") }
     summary = {
         checkout_counts: checkout_counts,
         checkin_counts: checkin_counts,
@@ -1523,7 +1555,7 @@ class PagesController < ApplicationController
   end
 
   def download_file
-    file  = params[:file]
+    file = params[:file]
     send_file(file)
   end
 
@@ -1532,11 +1564,49 @@ class PagesController < ApplicationController
   end
 
   def export_data
-
+    assets_xls = Asset.work_book
+    asset_types_xls = AssetType.work_book
+    people_xls = Person.work_book
+    groups_xls = Group.work_book
+    locations_xls = Location.work_book
+    vendors_xls = Vendor.work_book
+    files = {
+        "assets.xlsx" => assets_xls,
+        "asset_types.xlsx" => asset_types_xls,
+        "people.xlsx" => people_xls,
+        "groups.xlsx" => groups_xls,
+        "locations.xlsx" => locations_xls,
+        "vendors.xlsx" => vendors_xls
+    }
+    zip_file = Asset.zip_files(files, "data.zip")
+    file_size = File.size(zip_file)
+    data = {
+        "export_name": "data",
+        "file_size": file_size,
+        "file_path": zip_file
+    }
+    Export.log(data)
+    flash[:notice] = "You have successfully exported data. Click download to get the files"
+    redirect_to("/export_all") and return
   end
 
   def export_files
-
+    dirname = Rails.root.to_s + "/public/uploads/*"
+    files = {}
+    Dir[dirname].each do |file|
+      file_name = File.basename(file)
+      files[file_name] = file
+    end
+    zip_file = Asset.zip_files(files, "files.zip")
+    file_size = File.size(zip_file)
+    data = {
+        "export_name": "files",
+        "file_size": file_size,
+        "file_path": zip_file
+    }
+    Export.log(data)
+    flash[:notice] = "You have successfully exported data. Click download to get the files"
+    redirect_to("/export_all") and return
   end
 
 end

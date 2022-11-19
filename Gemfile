@@ -5,6 +5,7 @@ ruby '2.7.0'
 gem 'chunky_png'
 gem 'rqrcode','~> 0.4.2'
 gem 'barby', require: %w(barby barby/barcode/code_128 barby/outputter/png_outputter)
+gem 'rubyzip'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.0.5', '>= 6.0.5.1'
 # Use mysql as the database for Active Record

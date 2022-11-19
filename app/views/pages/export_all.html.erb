@@ -13,16 +13,32 @@
           </thead>
           <tbody>
           <tr>
-            <td><button class="btn btn-secondary">Export Data</button></td>
-            <td>01.01.2020</td>
-            <td>10KB</td>
-            <td><a href="#">Download</a></td>
+            <td>
+              <button onclick="exportData()" class="btn btn-info btn-block">Export Data</button>
+            </td>
+            <td><%= @data_last_export_date %></td>
+            <td><%= @data_storage_size %></td>
+            <td>
+              <% if !@data_export_id.blank? %>
+                <a href="/download_export_record?export_id=<%= @data_export_id %>">Download</a>
+              <% else %>
+                -
+              <% end %>
+            </td>
           </tr>
           <tr>
-            <td><button class="btn btn-secondary">Export Files</button></td>
-            <td>01.01.2020</td>
-            <td>10KB</td>
-            <td><a href="#">Download</a></td>
+            <td>
+              <button onclick="exportFiles()" class="btn btn-info btn-block">Export Files</button>
+            </td>
+            <td><%= @files_last_export_date %></td>
+            <td><%= @files_storage_size %></td>
+            <td>
+              <% if !@files_export_id.blank? %>
+                <a href="/download_export_record?export_id=<%= @files_export_id %>">Download</a>
+              <% else %>
+                -
+              <% end %>
+            </td>
           </tr>
 
           </tbody>
@@ -39,4 +55,13 @@
     $(document).ready(function () {
         jQuery('.export_all').addClass('active');
     })
+
+    function exportData() {
+        window.location = "/export_data"
+    }
+
+    function exportFiles() {
+        window.location = "/export_files"
+    }
+
 </script>

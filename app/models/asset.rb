@@ -1,4 +1,5 @@
 require 'write_xlsx'
+require 'zip'
 class Asset < ApplicationRecord
   self.table_name = 'assets'
   self.primary_key = 'asset_id'
@@ -218,5 +219,17 @@ class Asset < ApplicationRecord
     workbook.close
     file
   end
+
+  def self.zip_files(files, zip_name)
+    zip_path = "#{Rails.root}/tmp/#{zip_name}"
+    File.delete(zip_path) if File.exist?(zip_path)
+    Zip::File.open(zip_path, Zip::File::CREATE) do |zip_file|
+      files.each do |filename, file_path|
+        zip_file.add(filename, file_path)
+      end
+    end
+    zip_path
+  end
+
 end
 
