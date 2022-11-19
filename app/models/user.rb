@@ -4,17 +4,10 @@ class User < ActiveRecord::Base
   self.table_name = 'users'
   self.primary_key = 'user_id'
 
-  #has_many :user_roles, :dependent => :destroy
   has_many :password_reminders, :dependent => :destroy
 
-  #validates_presence_of :first_name, :message => ' can not be blank'
-  #validates_presence_of :last_name, :message => ' can not be blank'
   validates_presence_of :username, :message => ' can not be blank'
-  #validates_presence_of :phone_number, :message => ' can not be blank'
-  #validates_presence_of :email, :message => ' can not be blank'
   validates_uniqueness_of :username, :message => ' already taken'
-  #validates_uniqueness_of :email, :message => ' already taken'
-  #validates_uniqueness_of :phone_number, :phone_number => ' already taken'
   belongs_to :person, :foreign_key => :person_id
 
   default_scope {where('voided = 0')}

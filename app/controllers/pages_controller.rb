@@ -1280,7 +1280,7 @@ class PagesController < ApplicationController
     if asset_activity.save
       person_id_param = "1" #TODO
       action_params = "Checked out"
-      description_param = "Checked out asset: #{asset_activity.asset_id}"
+      description_param = "Checked out asset: #{asset_activity.asset_details}"
       SystemActivity.log(person_id_param, action_params, description_param)
 
       flash[:notice] = 'Checkout was successful'

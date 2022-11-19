@@ -9,6 +9,11 @@ class Person < ApplicationRecord
   belongs_to :location, :foreign_key => :location_id,  :optional => true
   belongs_to :group, :foreign_key => :group_id,  :optional => true
 
+  validates_presence_of :email
+  validates_uniqueness_of :email
+  validates_presence_of :first_name
+  validates_presence_of :last_name
+  validates_uniqueness_of :phone
 
   def self.search(key, value)
     people = []

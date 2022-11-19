@@ -27,15 +27,20 @@ class UsersController < ApplicationController
 
   def update_profile
     user = User.find(session[:user]['user_id'])
-    user.first_name = params[:user][:first_name]
-    user.last_name = params[:user][:last_name]
-    user.code = params[:user][:code]
-    user.email = params[:user][:email]
-    user.phone_number = params[:user][:phone_number]
     user.username = params[:user][:username]
     if user.save
-      flash[:notice] = 'Account was updated successfully'
-      redirect_to('/my_profile') and return
+      person = user.person
+      person.first_name = params[:person][:first_name]
+      person.last_name = params[:person][:last_name]
+      person.email = params[:person][:email]
+      person.phone = params[:person][:phone]
+      if person.save
+        flash[:notice] = 'Account was updated successfully'
+        redirect_to('/my_profile') and return
+      else
+        flash[:error] = person.errors.full_messages.join('<br />')
+        redirect_to('/my_profile') and return
+      end
     else
       flash[:error] = user.errors.full_messages.join('<br />')
       redirect_to('/my_profile') and return
