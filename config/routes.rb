@@ -161,4 +161,7 @@ Rails.application.routes.draw do
   get '/service_schedule_pdf' => 'reports#service_schedule_pdf'
   get '/download_service_schedule_pdf' => 'reports#download_service_schedule_pdf'
 
+  get "/404", to: "errors#not_found", :via => :all
+  get "/422", to: "errors#unacceptable", :via => :all
+  get "/500", to: "errors#internal_error", :via => :all
 end
