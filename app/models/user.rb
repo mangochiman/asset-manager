@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :message => ' already taken'
   #validates_uniqueness_of :email, :message => ' already taken'
   #validates_uniqueness_of :phone_number, :phone_number => ' already taken'
-
+  belongs_to :person, :foreign_key => :person_id
 
   default_scope {where('voided = 0')}
 
@@ -138,6 +138,14 @@ class User < ActiveRecord::Base
   def self.per_page
     per_page = 10
     return per_page
+  end
+
+  def person_details
+    person = self.person
+    first_name = person.first_name rescue ""
+    last_name = person.last_name rescue ""
+    person_names = "#{first_name} #{last_name}"
+    person_names
   end
 
 end

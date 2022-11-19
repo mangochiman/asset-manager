@@ -1,6 +1,7 @@
 require 'csv'
 
 class PagesController < ApplicationController
+  before_action :authorize
   def home
     @page_header = "Dashboard"
     @asset_count = Asset.count
@@ -1560,6 +1561,7 @@ class PagesController < ApplicationController
   end
 
   def list_system_activities
+    @page_header = "System Activities"
     @system_activities = SystemActivity.order("created_at DESC")
   end
 

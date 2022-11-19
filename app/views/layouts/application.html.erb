@@ -48,7 +48,7 @@
         <a href="/" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">My profile</a>
+        <a href="/logout" class="nav-link">Logout</a>
       </li>
     </ul>
 
@@ -110,7 +110,7 @@
           <img src="/assets/user.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Ernest Matola</a>
+          <a href="/my_profile" class="d-block"><%= current_user.person_details %></a>
         </div>
       </div>
 

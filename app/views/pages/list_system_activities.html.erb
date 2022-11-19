@@ -3,7 +3,7 @@
 <!-- Default box -->
 <div class="card">
   <div class="card-body ">
-    <table class="table-striped table-condensed" style="width: 100%;">
+    <table id="example1" class="table-striped table-condensed" style="width: 100%;">
       <thead>
       <tr>
         <th style="width: 4em;">#</th>
@@ -35,6 +35,16 @@
 <script type="text/javascript">
     $(document).ready(function () {
         jQuery('.dashboard').addClass('active');
+
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["csv", "excel", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        jQuery(".dt-buttons").removeClass("btn-group")
+        jQuery(".dt-buttons > .btn-secondary").removeClass("btn-secondary").addClass("btn-primary")
     })
 
 </script>
