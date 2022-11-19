@@ -2,7 +2,11 @@ require 'csv'
 
 class PagesController < ApplicationController
   before_action :authorize
-  before_action :check_admin_privileges, only: [:new_asset_menu, :new_vendor, :new_person]
+  before_action :check_admin_privileges, only: [:new_asset_menu, :new_vendor, :new_person, :delete_selection_field,
+                                                :delete_service_item, :delete_vendor, :delete_vendor_attachment,
+                                                :delete_group, :delete_location, :delete_person, :delete_person_attachment,
+                                                :delete_asset_type, :delete_asset_attachment, :delete_asset, :delete_asset_service_log,
+                                                :delete_asset_reservation, :delete_file]
 
   def home
     @page_header = "Dashboard"

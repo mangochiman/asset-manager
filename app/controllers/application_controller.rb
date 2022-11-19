@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_admin_privileges
-    redirect_to "/", flash: {error: "You dont have enough permissions to be here"} if !user_is_admin?
+    redirect_to "/", flash: {error: "You dont have enough permissions to perform that action"} if !user_is_admin?
   end
 
 end
