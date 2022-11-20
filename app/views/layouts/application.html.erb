@@ -397,11 +397,13 @@
 
   <!-- Main Footer -->
   <footer class="main-footer d-none d-sm-inline-block">
-    <strong>Copyright &copy; 2022 <a href="#">###</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 1.0
-    </div>
+    <b>Subscription Plan:</b> <b id="subscriptionPlan">&nbsp;</b> |
+    <b>Assets Quota:</b> <b id="assetsQuota">&nbsp;</b> |
+    <b>Assets Usage:</b> <b id="assetsQuotaUsage">&nbsp;</b> |
+    <b>File Storage Quota:</b> <b id="fileStorageQuota">&nbsp;</b> |
+    <b>File Storage Usage:</b> <b id="fileStorageUsage">&nbsp;</b> |
+    <b>Administrator Quota:</b> <b id="administratorQuota">&nbsp;</b> |
+    <b>Administrator Usage:</b> <b id="administratorQuotaUsage">&nbsp;</b>
   </footer>
 </div>
 <!-- ./wrapper -->
@@ -475,6 +477,41 @@
               jQuery('#groupsCount').html(groups_count)
               jQuery('#locationsCount').html(locations_count)
               jQuery('#vendorsCount').html(vendors_count)
+          }
+      })
+
+      jQuery.ajax({
+          type: "POST",
+          url: "/subscription_plan_summary",
+          data: "",
+          beforeSend: function () {
+              jQuery('#subscriptionPlan').html("Loading...")
+              jQuery('#assetsQuota').html("Loading...")
+              jQuery('#assetsQuotaUsage').html("Loading...")
+              jQuery('#fileStorageQuota').html("Loading...")
+              jQuery('#fileStorageUsage').html("Loading...")
+              jQuery('#administratorQuota').html("Loading...")
+              jQuery('#administratorQuotaUsage').html("Loading...")
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+
+          },
+          success: function (result) {
+              var subscription_plan = result["subscription_plan"]
+              var admin_quota = result["admin_quota"]
+              var admin_usage = result["admin_usage"]
+              var assets_quota = result["assets_quota"]
+              var assets_usage = result["assets_usage"]
+              var file_storage_quota = result["file_storage_quota"]
+              var file_storage_usage = result["file_storage_usage"]
+
+              jQuery('#subscriptionPlan').html("<a href='#'>" + subscription_plan + "</a>")
+              jQuery('#assetsQuota').html("<a href='#'>" + assets_quota + "</a>")
+              jQuery('#assetsQuotaUsage').html("<a href='#'>" + assets_usage + "</a>")
+              jQuery('#fileStorageQuota').html("<a href='#'>" + file_storage_quota + "</a>")
+              jQuery('#fileStorageUsage').html("<a href='#'>" + file_storage_usage + "</a>")
+              jQuery('#administratorQuota').html("<a href='#'>" + admin_quota + "</a>")
+              jQuery('#administratorQuotaUsage').html("<a href='#'>" + admin_usage + "</a>")
           }
       })
   })

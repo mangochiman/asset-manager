@@ -113,6 +113,8 @@ Rails.application.routes.draw do
   get '/export_data' => 'pages#export_data'
   get '/export_files' => 'pages#export_files'
   get '/download_export_record' => 'pages#download_export_record'
+  get '/subscription_plan_summary' => 'pages#subscription_plan_summary'
+  post '/subscription_plan_summary' => 'pages#subscription_plan_summary'
   #reports
   get '/asset_list' => 'reports#asset_list'
   get '/asset_list_csv' => 'reports#asset_list_csv'
@@ -162,6 +164,9 @@ Rails.application.routes.draw do
   get '/download_service_schedule_pdf' => 'reports#download_service_schedule_pdf'
 
   get "/404", to: "errors#not_found", :via => :all
+  post "/404", to: "errors#not_found", :via => :all
   get "/422", to: "errors#unacceptable", :via => :all
+  post "/422", to: "errors#unacceptable", :via => :all
   get "/500", to: "errors#internal_error", :via => :all
+  post "/500", to: "errors#internal_error", :via => :all
 end

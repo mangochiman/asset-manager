@@ -1617,4 +1617,41 @@ class PagesController < ApplicationController
     redirect_to("/export_all") and return
   end
 
+  def subscription_plan_summary
+    dirname = Rails.root.to_s + "/public/uploads/*"
+    file_storage_in_bytes = Dir[dirname].select { |f|
+      File.file?(f) }.sum { |f| File.size(f)
+    }
+    file_storage_size = ActionController::Base.helpers.number_to_human_size(file_storage_in_bytes)
+
+    active_system_plan = SystemPlan.where('active =?', 1).last
+    storage_quota = active_system_plan.storage_quota
+    subscription_plan = active_system_plan.subscription_plan
+    admin_quota = active_system_plan.admin_quota
+    assets_quota = active_system_plan.assets_quota
+    assets_count = Asset.all.count
+    storage_quota_in_bytes = storage_quota * 1024 * 1024 * 102
+
+    file_usage_percent = ((file_storage_size.to_f/storage_quota_in_bytes.to_f) * 100).round(1)
+    assets_usage_percent = ((assets_count.to_f/assets_quota.to_f) * 100).round(1)
+
+    admin_count = Person.where(["role =?", "System Administrator"]).count
+    admin_usage_percent = ((admin_count.to_f/admin_quota.to_f) * 100).round(1)
+
+    info = {
+        "subscription_plan": subscription_plan,
+        "admin_quota": admin_quota,
+        "admin_usage": "#{admin_count} (#{admin_usage_percent} %)",
+        "assets_quota": assets_quota,
+        "assets_usage": "#{assets_count} (#{assets_usage_percent} %)",
+        "file_storage_quota": "#{storage_quota} GB",
+        "file_storage_usage": "#{file_storage_size} (#{file_usage_percent} %)"
+    }
+
+    respond_to do |format|
+      format.json { render json: info }
+      format.html {}
+    end
+  end
+
 end
