@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :message => ' already taken'
   belongs_to :person, :foreign_key => :person_id
 
+  validate :admin_quota_validation
+
   default_scope {where('voided = 0')}
 
   def try_to_login
@@ -139,6 +141,22 @@ class User < ActiveRecord::Base
     last_name = person.last_name rescue ""
     person_names = "#{first_name} #{last_name}"
     person_names
+  end
+
+  def self.max_file_size_quota_mb
+    max_Size = 50
+    max_Size
+  end
+
+  def admin_quota_validation
+    active_system_plan = SystemPlan.where('active =?', 1).last
+    admin_quota = active_system_plan.admin_quota
+    admin_count = Person.where(["role =?", "System Administrator"]).all
+
+    if admin_count > admin_quota
+      self.person.delete
+      errors.add(:base, "Your plan allows for up to #{admin_quota} Administrators.")
+    end
   end
 
 end

@@ -1,5 +1,6 @@
 require 'write_xlsx'
 require 'zip'
+
 class Asset < ApplicationRecord
   self.table_name = 'assets'
   self.primary_key = 'asset_id'
@@ -14,6 +15,8 @@ class Asset < ApplicationRecord
   belongs_to :vendor, :foreign_key => :vendor_id, optional: true
   belongs_to :asset_type, :foreign_key => :asset_type_id, optional: true
   validates_presence_of :name
+
+  validate :asset_quota_validation
 
   def self.retire_reasons
     %w[Damaged Expired Lost Released Sold Stolen Other]
@@ -229,6 +232,15 @@ class Asset < ApplicationRecord
       end
     end
     zip_path
+  end
+
+  def asset_quota_validation
+    active_system_plan = SystemPlan.where('active =?', 1).last
+    assets_quota = active_system_plan.assets_quota
+    total_assets = Asset.all.count
+    if total_assets > assets_quota
+      errors.add(:base, "Your current subscription allows maximum of <b>#{assets_quota}</b> assets. Please upgrade your account")
+    end
   end
 
 end

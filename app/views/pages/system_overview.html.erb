@@ -23,6 +23,12 @@
             </td>
           </tr>
           <tr>
+            <td>Assets Quota:<br/>
+              <strong><%= @active_system_plan.assets_quota %></strong>
+            </td>
+            <td> Your plan allows managing up to <%= @active_system_plan.assets_quota %> assets.</td>
+          </tr>
+          <tr>
             <td>File Storage Quota:<br/>
               <strong><%= @active_system_plan.storage_quota %> GB</strong>
             </td>
@@ -38,9 +44,9 @@
           </tr>
           <tr>
             <td> Standard User Quota:<br/>
-              <strong><%= @active_system_plan.user_quota %></strong>
+              <strong><b>Unlimited</b><%#= @active_system_plan.user_quota %></strong>
             </td>
-            <td> Your plan allows for <%= @active_system_plan.user_quota %> Standard User Accounts.
+            <td> Your plan allows for <b>Unlimited</b><%#= @active_system_plan.user_quota %> Standard User Accounts.
             </td>
           </tr>
           </tbody>
