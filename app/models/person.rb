@@ -13,7 +13,6 @@ class Person < ApplicationRecord
   validates_uniqueness_of :email
   validates_presence_of :first_name
   validates_presence_of :last_name
-  validates_uniqueness_of :phone
 
   def self.search(key, value)
     people = []
@@ -69,6 +68,10 @@ class Person < ApplicationRecord
   def group_details
     group_name = self.group.name rescue ""
     group_name
+  end
+
+  def self.system_admins
+    Person.joins([:user]).where(["role =?", "System Administrator"])
   end
 
 end

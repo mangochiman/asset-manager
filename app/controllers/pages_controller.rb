@@ -172,7 +172,7 @@ class PagesController < ApplicationController
                 file.write(file_upload.read)
               end
             else
-              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+              errors << asset_attachment.errors.full_messages.join('<br />')
             end
           end
         end
@@ -275,7 +275,7 @@ class PagesController < ApplicationController
       if asset.save
         person_id_param = @current_user.person.person_id 
         action_params = "Update"
-        description_param = "Created new asset record: #{asset.name}"
+        description_param = "Updated asset record: #{asset.name}"
         SystemActivity.log(person_id_param, action_params, description_param)
         errors = []
         unless params[:file].blank?
@@ -297,7 +297,7 @@ class PagesController < ApplicationController
                 file.write(file_upload.read)
               end
             else
-              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+              errors << asset_attachment.errors.full_messages.join('<br />')
             end
           end
         end
@@ -313,7 +313,7 @@ class PagesController < ApplicationController
             errors << "Unsupported file for asset picture. You can only upload .png, .jpeg, .jpg file extensions"
           else
             file_path = Rails.root.to_s + '/public' + asset.photo_url.to_s
-            File.delete(file_path) if File.exist?(file_path)
+            File.delete(file_path) if File.exist?(file_path) && !asset.photo_url.to_s.blank?
             File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
               file.write(params[:picture].read)
             end
@@ -370,7 +370,7 @@ class PagesController < ApplicationController
         asset_attachments.each do |asset_attachment|
           file_path = Rails.root.to_s + '/public' + asset_attachment.url.to_s
           if asset_attachment.delete
-            File.delete(file_path) if File.exist?(file_path)
+            File.delete(file_path) if File.exist?(file_path) && !asset_attachment.url.to_s.blank?
           end
         end
       else
@@ -410,7 +410,7 @@ class PagesController < ApplicationController
     asset_attachment = AssetAttachment.find(params[:id])
     file_path = Rails.root.to_s + '/public' + asset_attachment.url.to_s
     if asset_attachment.delete
-      File.delete(file_path) if File.exist?(file_path)
+      File.delete(file_path) if File.exist?(file_path) && !asset_attachment.url.to_s.blank?
       flash[:notice] = 'Record deletion was successful'
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
@@ -666,7 +666,7 @@ class PagesController < ApplicationController
                 file.write(file_upload.read)
               end
             else
-              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+              errors << vendor_attachment.errors.full_messages.join('<br />')
             end
           end
           unless errors.blank?
@@ -740,7 +740,7 @@ class PagesController < ApplicationController
                 file.write(file_upload.read)
               end
             else
-              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+              errors << vendor_attachment.errors.full_messages.join('<br />')
             end
           end
           unless errors.blank?
@@ -764,7 +764,7 @@ class PagesController < ApplicationController
     vendor_attachment = VendorAttachment.find(params[:id])
     file_path = Rails.root.to_s + '/public' + vendor_attachment.url.to_s
     if vendor_attachment.delete
-      File.delete(file_path) if File.exist?(file_path)
+      File.delete(file_path) if File.exist?(file_path) && !vendor_attachment.url.to_s.blank?
       flash[:notice] = 'Record deletion was successful'
       redirect_to("/edit_vendor?vendor_id=#{params[:vendor_id]}") and return
     else
@@ -780,7 +780,7 @@ class PagesController < ApplicationController
       vendor_attachments.each do |vendor_attachment|
         file_path = Rails.root.to_s + '/public' + vendor_attachment.url.to_s
         vendor_attachment.delete
-        File.delete(file_path) if File.exist?(file_path)
+        File.delete(file_path) if File.exist?(file_path) && !vendor_attachment.url.to_s.blank?
       end
       vendor.delete
       person_id_param = @current_user.person.person_id 
@@ -942,7 +942,7 @@ class PagesController < ApplicationController
                 file.write(file_upload.read)
               end
             else
-              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+              errors << person_attachment.errors.full_messages.join('<br />')
             end
           end
           unless errors.blank?
@@ -1031,7 +1031,7 @@ class PagesController < ApplicationController
                 file.write(file_upload.read)
               end
             else
-              errors << "#{original_filename} couldn't be uploaded. Check the file size"
+              errors << person_attachment.errors.full_messages.join('<br />')
             end
           end
           unless errors.blank?
@@ -1075,7 +1075,7 @@ class PagesController < ApplicationController
       person_attachments.each do |person_attachment|
         file_path = Rails.root.to_s + '/public' + person_attachment.url.to_s
         person_attachment.delete
-        File.delete(file_path) if File.exist?(file_path)
+        File.delete(file_path) if File.exist?(file_path) && !person_attachment.url.to_s.blank?
       end
       person.user.delete unless person.user.blank?
       person.delete
@@ -1092,7 +1092,7 @@ class PagesController < ApplicationController
     person_attachment = PersonAttachment.find(params[:id])
     file_path = Rails.root.to_s + '/public' + person_attachment.url.to_s
     if person_attachment.delete
-      File.delete(file_path) if File.exist?(file_path)
+      File.delete(file_path) if File.exist?(file_path) && !person_attachment.url.to_s.blank?
       flash[:notice] = 'Record deletion was successful'
       redirect_to("/edit_person?person_id=#{params[:person_id]}") and return
     else
@@ -1635,7 +1635,7 @@ class PagesController < ApplicationController
     file_usage_percent = ((file_storage_size.to_f/storage_quota_in_bytes.to_f) * 100).round(1)
     assets_usage_percent = ((assets_count.to_f/assets_quota.to_f) * 100).round(1)
 
-    admin_count = Person.where(["role =?", "System Administrator"]).count
+    admin_count = Person.system_admins.count
     admin_usage_percent = ((admin_count.to_f/admin_quota.to_f) * 100).round(1)
 
     info = {

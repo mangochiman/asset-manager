@@ -148,13 +148,17 @@ class User < ActiveRecord::Base
     max_Size
   end
 
+  def self.max_asset_photo_mb
+    max_Size = 10
+    max_Size
+  end
+
   def admin_quota_validation
     active_system_plan = SystemPlan.where('active =?', 1).last
     admin_quota = active_system_plan.admin_quota
-    admin_count = Person.where(["role =?", "System Administrator"]).count
+    admin_count = Person.system_admins.count
 
     if admin_count > admin_quota
-      self.person.delete
       errors.add(:base, "Your plan allows for up to #{admin_quota} Administrators.")
     end
   end

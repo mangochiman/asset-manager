@@ -16,7 +16,7 @@ class Asset < ApplicationRecord
   belongs_to :asset_type, :foreign_key => :asset_type_id, optional: true
   validates_presence_of :name
 
-  validate :asset_quota_validation
+  validate :asset_quota_validation, :picture_size_validation
 
   def self.retire_reasons
     %w[Damaged Expired Lost Released Sold Stolen Other]
@@ -240,6 +240,20 @@ class Asset < ApplicationRecord
     total_assets = Asset.all.count
     if total_assets > assets_quota
       errors.add(:base, "Your current subscription allows maximum of <b>#{assets_quota}</b> assets. Please upgrade your account")
+    end
+  end
+
+  def picture_size_validation
+    unless self.photo_url.blank?
+      file_path = Rails.root.to_s + '/public' + self.photo_url.to_s
+      uploaded_file_size_in_bytes = File.size(file_path) rescue 1
+      uploaded_file_size_in_mb =  uploaded_file_size_in_bytes.to_f/( 1024 * 1024) #from bytes to MB
+      max_file_size_quota_mb = User.max_asset_photo_mb
+
+      if uploaded_file_size_in_mb > max_file_size_quota_mb
+        File.delete(file_path) if File.exist?(file_path) && !self.photo_url.blank?
+        errors.add(:base, "Pictures above <b>#{max_file_size_quota_mb} MB</b> can not be uploaded")
+      end
     end
   end
 

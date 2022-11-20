@@ -25,9 +25,16 @@
       <% if flash[:error] %>
         <div class="alert alert-danger alert-dismissable">
           <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-          <%= flash[:error].html_safe %>
+          <span style="text-align: center"><%= flash[:error].html_safe %></span>
         </div>
       <% end %>
+      <% if flash[:notice] %>
+        <div class="alert alert-success alert-dismissable">
+          <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+          <span style="text-align: center"><%= flash[:notice].html_safe %></span>
+        </div>
+      <% end %>
+
       <p class="login-box-msg">Sign in to start your session</p>
       <form action="/login" method="post">
         <div class="input-group mb-3">

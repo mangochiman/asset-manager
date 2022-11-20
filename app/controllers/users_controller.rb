@@ -134,6 +134,7 @@ class UsersController < ApplicationController
 
   def logout
     reset_session #Destroy all sessions
+    flash[:notice] = "You have been logged out"
     redirect_to('/login') and return
   end
 end

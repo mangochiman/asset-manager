@@ -15,7 +15,7 @@ class AssetAttachment < ApplicationRecord
 
     if file_storage_in_bytes > storage_quota_in_bytes
       file_path = Rails.root.to_s + '/public' + self.url.to_s
-      File.delete(file_path) if File.exist?(file_path)
+      File.delete(file_path) if File.exist?(file_path) && !self.url.blank?
       errors.add(:base, "Your current subscription allows maximum file storage of <b>#{storage_quota} GB</b>. Please upgrade your account")
     end
   end
@@ -27,8 +27,8 @@ class AssetAttachment < ApplicationRecord
 
     if uploaded_file_size_in_mb > max_file_size_quota_mb
       file_path = Rails.root.to_s + '/public' + self.url.to_s
-      File.delete(file_path) if File.exist?(file_path)
-      errors.add(:base, "Files bigger than <b>#{max_file_size_quota_mb} MB</b> are not accepted.")
+      File.delete(file_path) if File.exist?(file_path) && !self.url.blank?
+      errors.add(:base, "Files bigger than <b>#{max_file_size_quota_mb} MB</b> can not be uploaded.")
     end
   end
 
