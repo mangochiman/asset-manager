@@ -4,5 +4,6 @@ class SelectionField < ApplicationRecord
 
   validates_presence_of :field_name
   validates_presence_of :field_type
+  validates_uniqueness_of :field_name
 
 end

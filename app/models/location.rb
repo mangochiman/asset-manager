@@ -3,6 +3,9 @@ class Location < ApplicationRecord
   self.table_name = 'locations'
   self.primary_key = 'location_id'
 
+  validates_presence_of :name
+  validates_uniqueness_of :name
+
   def self.work_book
     locations = Location.all
     file = "#{Rails.root}/tmp/locations.xlsx"

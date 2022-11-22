@@ -115,6 +115,8 @@ Rails.application.routes.draw do
   get '/download_export_record' => 'pages#download_export_record'
   get '/subscription_plan_summary' => 'pages#subscription_plan_summary'
   post '/subscription_plan_summary' => 'pages#subscription_plan_summary'
+  get '/package_expired' => 'pages#package_expired'
+  get '/pricing' => 'pages#pricing'
   #reports
   get '/asset_list' => 'reports#asset_list'
   get '/asset_list_csv' => 'reports#asset_list_csv'

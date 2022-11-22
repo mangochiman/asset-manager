@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asset Manager - Pricing</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+</head>
+<br />
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Pricing</h3>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            please contact us at: <a href="#">mangochiman@gmail.com</a>
+            <% @system_plans.in_groups_of(3).each do |groups| %>
+              <div class="row mt-4">
+                <% groups.each do |system_pan| %>
+                  <div class="col-sm-4">
+                    <div class="position-relative p-3 bg-gray" style="height: 180px">
+                      <div class="ribbon-wrapper ribbon-xl">
+                        <div class="ribbon bg-warning text-lg">
+                          <%= system_pan.subscription_plan %>
+                        </div>
+                      </div>
+                      COST: <b>$49/month (USD)</b><br />
+                      ASSETS: <b><%= system_pan.assets_quota %></b><br />
+                      ADMINISTRATOR ACCOUNT: <b><%= system_pan.admin_quota %></b><br />
+                      STANDARD USER ACCOUNTS: <b>UNLIMITED</b><br />
+                      FILE STORAGE: <b><%= system_pan.storage_quota %>GB</b><br />
+                      ADDITION ADMIN ACCOUNT: <b>$15/month/each</b><br />
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          <div class="card-footer">
+            <a href="/" class="btn btn-primary btn-block">
+              <i class="fa fa-home"></i> Go to dashboard
+            </a>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+</section>
+
+
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/AdminLTE/dist/js/adminlte.min.js"></script>
+</body>
+</html>

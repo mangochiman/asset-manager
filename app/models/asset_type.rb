@@ -3,6 +3,9 @@ class AssetType < ApplicationRecord
   self.table_name = 'asset_types'
   self.primary_key = 'asset_type_id'
 
+  validates_presence_of :name
+  validates_uniqueness_of :name
+
   def self.work_book
     asset_types = AssetType.all
     file = "#{Rails.root}/tmp/asset_types.xlsx"

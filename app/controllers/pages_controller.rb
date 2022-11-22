@@ -1654,4 +1654,12 @@ class PagesController < ApplicationController
     end
   end
 
+  def package_expired
+    render layout: false
+  end
+
+  def pricing
+    @system_plans = SystemPlan.all
+    render layout: false
+  end
 end

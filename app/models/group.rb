@@ -3,6 +3,9 @@ class Group < ApplicationRecord
   self.table_name = 'groups'
   self.primary_key = 'group_id'
 
+  validates_presence_of :name
+  validates_uniqueness_of :name
+
   def self.work_book
     groups = Group.all
     file = "#{Rails.root}/tmp/groups.xlsx"

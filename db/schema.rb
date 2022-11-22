@@ -69,10 +69,13 @@ ActiveRecord::Schema.define(version: 2022_11_18_115215) do
   create_table "asset_service_schedules", primary_key: "asset_service_schedule_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "service_item_id"
     t.integer "asset_id"
-    t.date "start_date"
-    t.date "end_date"
-    t.string "frequency"
-    t.string "notes"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer "service_indefinite"
+    t.string "performed_by"
+    t.integer "vendor_id"
+    t.integer "person_id"
+    t.text "notes"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
