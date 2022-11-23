@@ -10,6 +10,11 @@ class CreateSystemPlans < ActiveRecord::Migration[6.0]
       t.string :company_name
       t.string :billing_email
       t.integer :active
+      t.decimal :cost_per_month
+      t.decimal :addition_admin_cost
+      t.string :currency_symbol
+      t.string :currency_description
+
       t.timestamps
     end
   end

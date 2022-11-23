@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Asset Manager</title>
   <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+  <script src="/AdminLTE/plugins/jquery-ui/jquery-ui.js"></script>
   <script src="/Highcharts/js/highcharts.js" type="text/javascript"></script>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -14,7 +15,7 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="/assets/bootstrap-fileupload.min.css" />
+  <link rel="stylesheet" href="/assets/bootstrap-fileupload.min.css"/>
 
   <link rel="stylesheet" href="/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -386,14 +387,15 @@
       <!-- /.container-fluid -->
     </div>
     <!-- /.content -->
-
-    <div style="bottom: 2px; position: fixed; right: 0px; margin-right: 23px" class="d-none d-sm-inline-block">
-      <a href="/pricing" class="btn btn-primary">
-        <i class="fa fa-unlock"></i>
-        Upgrade your account <br />
-        <b>30 days remaining</b>
-      </a>
-    </div>
+    <% if system_is_trial? %>
+      <div style="bottom: 2px; position: fixed; right: 0px; margin-right: 23px" class="d-none d-sm-inline-block" id="draggable">
+        <a href="/pricing" class="btn btn-primary">
+          <i class="fa fa-unlock"></i>
+          Upgrade your account <br/>
+          <b><%= trial_days_remaining %> day(s) remaining</b>
+        </a>
+      </div>
+    <% end %>
   </div>
 
 
@@ -453,78 +455,80 @@
 <script src="/AdminLTE/plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
 <script src="/AdminLTE/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <script type="text/javascript">
-  function goBack(){
-      window.history.back()
-  }
+    function goBack() {
+        window.history.back()
+    }
 
-  $(document).ready(function () {
-      jQuery.ajax({
-          type: "POST",
-          url: "/items_count",
-          data: "",
-          beforeSend: function () {
-              jQuery('#assetsCount').html("Loading...")
-              jQuery('#assetTypesCount').html("Loading...")
-              jQuery('#peopleCount').html("Loading...")
-              jQuery('#groupsCount').html("Loading...")
-              jQuery('#locationsCount').html("Loading...")
-              jQuery('#vendorsCount').html("Loading...")
-          },
-          error: function (xhr, ajaxOptions, thrownError) {
+    $(document).ready(function () {
+        jQuery("#draggable").draggable();
 
-          },
-          success: function (result) {
-              var assets_count = result["assets_count"]
-              var asset_types_count = result["asset_types_count"]
-              var people_count = result["people_count"]
-              var groups_count = result["groups_count"]
-              var locations_count = result["locations_count"]
-              var vendors_count = result["vendors_count"]
+        jQuery.ajax({
+            type: "POST",
+            url: "/items_count",
+            data: "",
+            beforeSend: function () {
+                jQuery('#assetsCount').html("Loading...")
+                jQuery('#assetTypesCount').html("Loading...")
+                jQuery('#peopleCount').html("Loading...")
+                jQuery('#groupsCount').html("Loading...")
+                jQuery('#locationsCount').html("Loading...")
+                jQuery('#vendorsCount').html("Loading...")
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
 
-              jQuery('#assetsCount').html(assets_count)
-              jQuery('#assetTypesCount').html(asset_types_count)
-              jQuery('#peopleCount').html(people_count)
-              jQuery('#groupsCount').html(groups_count)
-              jQuery('#locationsCount').html(locations_count)
-              jQuery('#vendorsCount').html(vendors_count)
-          }
-      })
+            },
+            success: function (result) {
+                var assets_count = result["assets_count"]
+                var asset_types_count = result["asset_types_count"]
+                var people_count = result["people_count"]
+                var groups_count = result["groups_count"]
+                var locations_count = result["locations_count"]
+                var vendors_count = result["vendors_count"]
 
-      jQuery.ajax({
-          type: "POST",
-          url: "/subscription_plan_summary",
-          data: "",
-          beforeSend: function () {
-              jQuery('#subscriptionPlan').html("Loading...")
-              jQuery('#assetsQuota').html("Loading...")
-              jQuery('#assetsQuotaUsage').html("Loading...")
-              jQuery('#fileStorageQuota').html("Loading...")
-              jQuery('#fileStorageUsage').html("Loading...")
-              jQuery('#administratorQuota').html("Loading...")
-              jQuery('#administratorQuotaUsage').html("Loading...")
-          },
-          error: function (xhr, ajaxOptions, thrownError) {
+                jQuery('#assetsCount').html(assets_count)
+                jQuery('#assetTypesCount').html(asset_types_count)
+                jQuery('#peopleCount').html(people_count)
+                jQuery('#groupsCount').html(groups_count)
+                jQuery('#locationsCount').html(locations_count)
+                jQuery('#vendorsCount').html(vendors_count)
+            }
+        })
 
-          },
-          success: function (result) {
-              var subscription_plan = result["subscription_plan"]
-              var admin_quota = result["admin_quota"]
-              var admin_usage = result["admin_usage"]
-              var assets_quota = result["assets_quota"]
-              var assets_usage = result["assets_usage"]
-              var file_storage_quota = result["file_storage_quota"]
-              var file_storage_usage = result["file_storage_usage"]
+        jQuery.ajax({
+            type: "POST",
+            url: "/subscription_plan_summary",
+            data: "",
+            beforeSend: function () {
+                jQuery('#subscriptionPlan').html("Loading...")
+                jQuery('#assetsQuota').html("Loading...")
+                jQuery('#assetsQuotaUsage').html("Loading...")
+                jQuery('#fileStorageQuota').html("Loading...")
+                jQuery('#fileStorageUsage').html("Loading...")
+                jQuery('#administratorQuota').html("Loading...")
+                jQuery('#administratorQuotaUsage').html("Loading...")
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
 
-              jQuery('#subscriptionPlan').html("<a href='#'>" + subscription_plan + "</a>")
-              jQuery('#assetsQuota').html("<a href='#'>" + assets_quota + "</a>")
-              jQuery('#assetsQuotaUsage').html("<a href='#'>" + assets_usage + "</a>")
-              jQuery('#fileStorageQuota').html("<a href='#'>" + file_storage_quota + "</a>")
-              jQuery('#fileStorageUsage').html("<a href='#'>" + file_storage_usage + "</a>")
-              jQuery('#administratorQuota').html("<a href='#'>" + admin_quota + "</a>")
-              jQuery('#administratorQuotaUsage').html("<a href='#'>" + admin_usage + "</a>")
-          }
-      })
-  })
+            },
+            success: function (result) {
+                var subscription_plan = result["subscription_plan"]
+                var admin_quota = result["admin_quota"]
+                var admin_usage = result["admin_usage"]
+                var assets_quota = result["assets_quota"]
+                var assets_usage = result["assets_usage"]
+                var file_storage_quota = result["file_storage_quota"]
+                var file_storage_usage = result["file_storage_usage"]
+
+                jQuery('#subscriptionPlan').html("<a href='#'>" + subscription_plan + "</a>")
+                jQuery('#assetsQuota').html("<a href='#'>" + assets_quota + "</a>")
+                jQuery('#assetsQuotaUsage').html("<a href='#'>" + assets_usage + "</a>")
+                jQuery('#fileStorageQuota').html("<a href='#'>" + file_storage_quota + "</a>")
+                jQuery('#fileStorageUsage').html("<a href='#'>" + file_storage_usage + "</a>")
+                jQuery('#administratorQuota').html("<a href='#'>" + admin_quota + "</a>")
+                jQuery('#administratorQuotaUsage').html("<a href='#'>" + admin_usage + "</a>")
+            }
+        })
+    })
 </script>
 </body>
 </html>

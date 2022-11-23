@@ -19,7 +19,11 @@
             <td> Subscription Plan:<br/>
               <strong><%= @active_system_plan.subscription_plan %></strong>
             </td>
-            <td> This is a <%= @active_system_plan.subscription_plan %> Plan. You can upgrade anytime
+            <td> This is a <%= @active_system_plan.subscription_plan %> Plan.
+              <% if @is_trial %>
+                <span class="text-danger">This plan expires on <%= @trial_end_date.strftime("%d.%b.%Y") %>.</span>
+              <% end %>
+              You can upgrade anytime
             </td>
           </tr>
           <tr>

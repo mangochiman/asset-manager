@@ -9,12 +9,13 @@ def loadPlans
   company_id = User.random_string(6).upcase
   company_name = "[NAME]"
   billing_email = "billing@gmail.com"
-  SystemPlan.create!({subscription_plan: 'Team', assets_quota: 500, storage_quota: 5, admin_quota: 1, user_quota: 100, active: 1, company_id: company_id, company_name: company_name, billing_email: billing_email})
-  SystemPlan.create!({subscription_plan: 'Small Business', assets_quota: 2000, storage_quota: 20, admin_quota: 2, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email})
-  SystemPlan.create!({subscription_plan: 'Midsize Business', assets_quota: 5000, storage_quota: 50, admin_quota: 3, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email})
-  SystemPlan.create!({subscription_plan: 'Enterprise', assets_quota: 10000, storage_quota: 100, admin_quota: 5, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email})
-  SystemPlan.create!({subscription_plan: 'Jumbo 1', assets_quota: 15000, storage_quota: 125, admin_quota: 6, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email})
-  SystemPlan.create!({subscription_plan: 'Jumbo 2', assets_quota: 20000, storage_quota: 150, admin_quota: 7, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email})
+  SystemPlan.create!({subscription_plan: 'Trial', assets_quota: 300, storage_quota: 2, admin_quota: 1, user_quota: 100, active: 1, company_id: company_id, company_name: company_name, billing_email: billing_email, cost_per_month: 0, addition_admin_cost: 15, currency_symbol: "$", currency_description: "USD"})
+  SystemPlan.create!({subscription_plan: 'Team', assets_quota: 500, storage_quota: 5, admin_quota: 1, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email, cost_per_month: 49, addition_admin_cost: 15, currency_symbol: "$", currency_description: "USD"})
+  SystemPlan.create!({subscription_plan: 'Small Business', assets_quota: 2000, storage_quota: 20, admin_quota: 2, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email, cost_per_month: 99, addition_admin_cost: 15, currency_symbol: "$", currency_description: "USD"})
+  SystemPlan.create!({subscription_plan: 'Midsize Business', assets_quota: 5000, storage_quota: 50, admin_quota: 3, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email, cost_per_month: 199, addition_admin_cost: 15, currency_symbol: "$", currency_description: "USD"})
+  SystemPlan.create!({subscription_plan: 'Enterprise', assets_quota: 10000, storage_quota: 100, admin_quota: 5, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email, cost_per_month: 299, addition_admin_cost: 15, currency_symbol: "$", currency_description: "USD"})
+  SystemPlan.create!({subscription_plan: 'Jumbo 1', assets_quota: 15000, storage_quota: 125, admin_quota: 6, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email, cost_per_month: 399, addition_admin_cost: 15, currency_symbol: "$", currency_description: "USD"})
+  SystemPlan.create!({subscription_plan: 'Jumbo 2', assets_quota: 20000, storage_quota: 150, admin_quota: 7, user_quota: 100, active: 0, company_id: company_id, company_name: company_name, billing_email: billing_email, cost_per_month: 499, addition_admin_cost: 15, currency_symbol: "$", currency_description: "USD"})
 end
 
 def load_service_types

@@ -24,7 +24,7 @@
     <div class="card-body">
       <form action="#">
         <div class="input-group mb-3">
-          <p>This Trial ended on [DATE].</p>
+          <p>This Trial ended on <span class="text-danger"><%= @trial_end_date.strftime("%d.%b.%Y") %></span>.</p>
           To continue where you left off:
           <a href="/pricing" class="btn btn-primary btn-block">
             <i class="fa fa-plus-circle"></i> Begin Paid Plan

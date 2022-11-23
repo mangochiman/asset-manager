@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authorize, :except => [:login, :check_if_email_exists, :reset_password]
+  before_action :authorize, :except => [:login, :logout, :check_if_email_exists, :reset_password]
 
   def login
     if request.post?

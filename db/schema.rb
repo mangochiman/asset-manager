@@ -209,6 +209,10 @@ ActiveRecord::Schema.define(version: 2022_11_18_115215) do
     t.string "company_name"
     t.string "billing_email"
     t.integer "active"
+    t.decimal "cost_per_month", precision: 10
+    t.decimal "addition_admin_cost", precision: 10
+    t.string "currency_symbol"
+    t.string "currency_description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

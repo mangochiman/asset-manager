@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   skip_before_action :verify_authenticity_token
-  helper_method :current_user, :user_is_admin?
+  helper_method :current_user, :user_is_admin?, :system_is_trial?, :trial_days_remaining
 
 
   def current_user
@@ -11,7 +11,8 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize
-    redirect_to ("/login") unless current_user
+    redirect_to ("/login")  unless current_user
+    redirect_to ("/package_expired") and return if SystemPlan.trial_ended?
   end
 
   def user_is_admin?
@@ -23,6 +24,14 @@ class ApplicationController < ActionController::Base
 
   def check_admin_privileges
     redirect_to "/", flash: {error: "You dont have enough permissions to perform that action"} if !user_is_admin?
+  end
+
+  def system_is_trial?
+    SystemPlan.is_trial?
+  end
+
+  def trial_days_remaining
+    SystemPlan.trial_days_remaining
   end
 
 end

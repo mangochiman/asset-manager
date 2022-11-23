@@ -153,9 +153,6 @@ class User < ActiveRecord::Base
     max_Size
   end
 
-  def self.trial_version_days
-    30
-  end
 
   def admin_quota_validation
     active_system_plan = SystemPlan.where('active =?', 1).last

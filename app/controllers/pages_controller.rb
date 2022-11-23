@@ -1,7 +1,7 @@
 require 'csv'
 
 class PagesController < ApplicationController
-  before_action :authorize
+  before_action :authorize, :except => [:package_expired, :pricing]
   before_action :check_admin_privileges, only: [:new_asset_menu, :new_vendor, :new_person, :delete_selection_field,
                                                 :delete_service_item, :delete_vendor, :delete_vendor_attachment,
                                                 :delete_group, :delete_location, :delete_person, :delete_person_attachment,
@@ -421,7 +421,9 @@ class PagesController < ApplicationController
 
   def system_overview
     @page_header = "System Overview"
-    @active_system_plan = SystemPlan.where('active =?', 1).last
+    @active_system_plan = SystemPlan.active_plan
+    @is_trial = SystemPlan.is_trial?
+    @trial_end_date = SystemPlan.trial_end_date
     if request.post?
       @active_system_plan.billing_email = params[:email]
       if @active_system_plan.save
@@ -1071,6 +1073,14 @@ class PagesController < ApplicationController
   def delete_person
     person = Person.find(params[:id])
     person_attachments = person.person_attachments
+    unless person.user.blank?
+      role = person.role
+      if role == "System Administrator" || (@current_user.person_id == person.person_id)
+        flash[:error] = "That action is not allowed on the selected record"
+        redirect_to("/list_people") and return
+      end
+    end
+
     ActiveRecord::Base.transaction do
       person_attachments.each do |person_attachment|
         file_path = Rails.root.to_s + '/public' + person_attachment.url.to_s
@@ -1655,11 +1665,16 @@ class PagesController < ApplicationController
   end
 
   def package_expired
-    render layout: false
+    if SystemPlan.trial_ended?
+      @trial_end_date = SystemPlan.trial_end_date
+      render layout: false
+    else
+      redirect_to("/")
+    end
   end
 
   def pricing
-    @system_plans = SystemPlan.all
+    @system_plans = SystemPlan.where(["subscription_plan != ?", "Trial"])
     render layout: false
   end
 end

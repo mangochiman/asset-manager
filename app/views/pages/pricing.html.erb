@@ -26,22 +26,22 @@
           <!-- /.card-header -->
           <div class="card-body">
             please contact us at: <a href="#">mangochiman@gmail.com</a>
-            <% @system_plans.in_groups_of(3).each do |groups| %>
+            <% @system_plans.in_groups_of(3, false).each do |groups| %>
               <div class="row mt-4">
-                <% groups.each do |system_pan| %>
+                <% groups.each do |system_plan| %>
                   <div class="col-sm-4">
                     <div class="position-relative p-3 bg-gray" style="height: 180px">
                       <div class="ribbon-wrapper ribbon-xl">
                         <div class="ribbon bg-warning text-lg">
-                          <%= system_pan.subscription_plan %>
+                          <%= system_plan.subscription_plan %>
                         </div>
                       </div>
-                      COST: <b>$49/month (USD)</b><br />
-                      ASSETS: <b><%= system_pan.assets_quota %></b><br />
-                      ADMINISTRATOR ACCOUNT: <b><%= system_pan.admin_quota %></b><br />
+                      COST: <b><%= system_plan.currency_symbol %><%= system_plan.cost_per_month %>/month (<%= system_plan.currency_description%>)</b><br />
+                      ASSETS: <b><%= system_plan.assets_quota %></b><br />
+                      ADMINISTRATOR ACCOUNT: <b><%= system_plan.admin_quota %></b><br />
                       STANDARD USER ACCOUNTS: <b>UNLIMITED</b><br />
-                      FILE STORAGE: <b><%= system_pan.storage_quota %>GB</b><br />
-                      ADDITION ADMIN ACCOUNT: <b>$15/month/each</b><br />
+                      FILE STORAGE: <b><%= system_plan.storage_quota %>GB</b><br />
+                      ADDITION ADMIN ACCOUNT: <b><%= system_plan.currency_symbol %><%= system_plan.addition_admin_cost %>/month/each</b><br />
                     </div>
                   </div>
                 <% end %>
