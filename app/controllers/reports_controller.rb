@@ -63,7 +63,7 @@ class ReportsController < ApplicationController
     file_name = "asset-list.pdf"
     source = "http://#{request.env["HTTP_HOST"]}/asset_list_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
-    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
     Thread.new{
       Kernel.system wkhtmltopdf
     }.join
@@ -88,7 +88,7 @@ class ReportsController < ApplicationController
     file_name = "asset-details.pdf"
     source = "http://#{request.env["HTTP_HOST"]}/asset_details_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
-    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
     Thread.new{
       Kernel.system wkhtmltopdf
     }.join
@@ -161,7 +161,7 @@ class ReportsController < ApplicationController
     file_name = "assets-checked-out.pdf"
     source = "http://#{request.env["HTTP_HOST"]}/assets_checked_out_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
-    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
     Thread.new{
       Kernel.system wkhtmltopdf
     }.join
@@ -228,7 +228,7 @@ class ReportsController < ApplicationController
     file_name = "personnel-list.pdf"
     source = "http://#{request.env["HTTP_HOST"]}/personnel_list_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
-    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
     Thread.new{
       Kernel.system wkhtmltopdf
     }.join
@@ -295,7 +295,7 @@ class ReportsController < ApplicationController
     file_name = "vendor-list.pdf"
     source = "http://#{request.env["HTTP_HOST"]}/vendor_list_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
-    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
     Thread.new{
       Kernel.system wkhtmltopdf
     }.join
@@ -372,7 +372,7 @@ class ReportsController < ApplicationController
     file_name = "completed-services.pdf"
     source = "http://#{request.env["HTTP_HOST"]}/completed_services_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
-    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
     Thread.new{
       Kernel.system wkhtmltopdf
     }.join
@@ -449,7 +449,7 @@ class ReportsController < ApplicationController
     file_name = "overdue-services.pdf"
     source = "http://#{request.env["HTTP_HOST"]}/overdue_services_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
-    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
     Thread.new{
       Kernel.system wkhtmltopdf
     }.join
@@ -526,7 +526,7 @@ class ReportsController < ApplicationController
     file_name = "scheduled-services.pdf"
     source = "http://#{request.env["HTTP_HOST"]}/service_schedule_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
-    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
     Thread.new{
       Kernel.system wkhtmltopdf
     }.join
