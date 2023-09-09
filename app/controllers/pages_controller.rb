@@ -61,6 +61,7 @@ class PagesController < ApplicationController
       count = 0
       CSV.foreach(data, headers: true) do |row|
         asset_name = row['Asset Name'].to_s
+        project_name = row['Project'].to_s
         asset_code = row['Asset Code'].to_s
         asset_type = row['Asset Type'].to_s
         asset_location = row['Asset Location'].to_s
@@ -77,13 +78,15 @@ class PagesController < ApplicationController
         account_code = row['Account Code'].to_s
         warranty_end = row['Warranty End(YYYY/MM/DD)'].to_s
 
-        location = Location.find_or_create_by(name: asset_location)
-        vendor = Vendor.find_or_create_by(name: vendor_name)
+        location = Location.find_or_create_by(name: asset_location) unless asset_location.blank?
+        vendor = Vendor.find_or_create_by(name: vendor_name) unless vendor_name.blank?
         asset_type = AssetType.find_or_create_by(name: asset_type)
+        project = Project.find_or_create_by(name: project_name)
         selection_field = SelectionField.find_or_create_by({field_type: 'condition',
                                                             field_name: condition})
         asset = Asset.new
         asset.name = asset_name
+        asset.project_id = project.project_id
         asset.barcode = asset_code
         asset.asset_type_id = asset_type.asset_type_id rescue ""
         asset.location_id = location.location_id rescue ""
@@ -132,6 +135,7 @@ class PagesController < ApplicationController
       asset.name = params[:name]
       asset.barcode = params[:barcode]
       asset.asset_type_id = params[:asset_type_id]
+      asset.project_id = params[:project_id]
       asset.status_id = params[:status_selection_field_id]
       asset.location_id = params[:location_id]
       asset.condition_id = params[:condition_selection_field_id]
@@ -235,6 +239,7 @@ class PagesController < ApplicationController
     @people = Person.all
     @vendors = Vendor.all
     @locations = Location.all
+    @projects = Project.all
   end
 
   def list_assets
@@ -257,6 +262,7 @@ class PagesController < ApplicationController
       asset.name = params[:name]
       asset.barcode = params[:barcode]
       asset.asset_type_id = params[:asset_type_id]
+      asset.project_id = params[:project_id]
       #asset.status_id = params[:status_selection_field_id]
       asset.location_id = params[:location_id]
       asset.condition_id = params[:condition_selection_field_id]
@@ -347,6 +353,7 @@ class PagesController < ApplicationController
     @people = Person.all
     @vendors = Vendor.all
     @locations = Location.all
+    @projects = Project.all
     @retire_reasons = Asset.retire_reasons
     @service_types = SelectionField.where(['field_type =?', 'service_type'])
     @vendors = Vendor.all

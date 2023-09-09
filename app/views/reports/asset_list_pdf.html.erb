@@ -30,6 +30,7 @@
             <tr>
               <th>Asset Name</th>
               <th>Asset Number</th>
+              <th>Project</th>
               <th>Location</th>
               <th>Status</th>
               <th>Brand</th>
@@ -42,6 +43,7 @@
               <tr>
                 <td><%= asset.name %></td>
                 <td><%= asset.barcode %></td>
+                <td><%= asset.project_details %></td>
                 <td><%= asset.location_details %></td>
                 <td><%= asset.state %></td>
                 <td><%= asset.brand %></td>
@@ -58,7 +60,7 @@
     </div>
     <!-- /.col -->
   </div>
-  <%= @footer %> | Generated on <%= Time.now %>
+ Generated on <%= Time.now %>
   <!-- /.row -->
 </div>
 <!-- /.container-fluid -->

@@ -138,6 +138,7 @@
         <div class="tab-pane fade" id="custom-content-above-profile" role="tabpanel" aria-labelledby="custom-content-above-profile-tab">
           <div class="card">
             <div class="card-body">
+
               <div class="row">
                 <div class="col-sm-4">
                   <div class="form-group">
@@ -163,6 +164,20 @@
                       <option value="" selected disabled>Select one</option>
                       <% @condition_selection_fields.each do |selection_field| %>
                         <option id="selection_field_id_<%= selection_field.selection_field_id %>" value="<%= selection_field.selection_field_id %>"><%= selection_field.field_name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Project</label>
+                    <select name="project_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @projects.each do |project| %>
+                        <option id="project_id_<%= project.project_id %>" value="<%= project.project_id %>"><%= project.name %></option>
                       <% end %>
                     </select>
                   </div>
@@ -303,6 +318,7 @@
     var condition_selection_field_id = '<%= @asset.condition_id %>';
     var vendor_id = '<%= @asset.vendor_id %>';
     var asset_id = '<%= @asset.asset_id %>';
+    var project_id = '<%= @asset.project_id %>';
 
     $(document).ready(function () {
         // Summernote
@@ -353,6 +369,11 @@
         var vendor_id_option = document.getElementById('vendor_id_' + vendor_id)
         if (vendor_id_option) {
             vendor_id_option.selected = true;
+        }
+
+        var project_id_option = document.getElementById('project_id_' + project_id)
+        if (project_id_option) {
+            project_id_option.selected = true;
         }
     }
 

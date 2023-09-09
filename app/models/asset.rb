@@ -14,6 +14,7 @@ class Asset < ApplicationRecord
   belongs_to :selection_field, :foreign_key => :condition_id, optional: true
   belongs_to :vendor, :foreign_key => :vendor_id, optional: true
   belongs_to :asset_type, :foreign_key => :asset_type_id, optional: true
+  belongs_to :project, :foreign_key => :project_id, optional: true
   validates_presence_of :name
 
   validate :asset_quota_validation, :picture_size_validation
@@ -153,6 +154,11 @@ class Asset < ApplicationRecord
     condition_name
   end
 
+  def project_details
+    project_name = self.project.name rescue ""
+    project_name
+  end
+
   def self.search(key, value)
     assets = []
     key = key.to_s.downcase
@@ -191,6 +197,7 @@ class Asset < ApplicationRecord
     worksheet.write(row_pos, 19, "retired_by")
     worksheet.write(row_pos, 20, "retire_comments")
     worksheet.write(row_pos, 21, "created_at")
+    worksheet.write(row_pos, 22, "project")
 
     assets.each do |asset|
       row_pos = row_pos + 1
@@ -217,6 +224,7 @@ class Asset < ApplicationRecord
       worksheet.write(row_pos, 19, asset.retired_by)
       worksheet.write(row_pos, 20, asset.retire_comments)
       worksheet.write(row_pos, 21, created_at)
+      worksheet.write(row_pos, 22, asset.project_details)
     end
     # write to file
     workbook.close
