@@ -48,8 +48,8 @@
                   <td><%= asset.state %></td>
                   <td><%= asset.brand %></td>
                   <td><%= asset.model %></td>
-                  <td><%= asset.checked_out_date.strftime("%d.%m.%Y") %></td>
-                  <td><%= asset.return_on_date.strftime("%d.%m.%Y") %></td>
+                  <td><%= asset.checked_out_date.strftime("%d.%m.%Y") rescue asset.checked_out_date %></td>
+                  <td><%= asset.return_on_date.strftime("%d.%m.%Y") rescue asset.return_on_date %></td>
                 </tr>
               <% end %>
               </tbody>

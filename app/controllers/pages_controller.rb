@@ -869,6 +869,60 @@ class PagesController < ApplicationController
     @locations = Location.order("location_id DESC")
   end
 
+  def projects
+    @page_header = "Projects"
+    if request.post?
+      project = Project.new
+      project.name = params[:name]
+      if project.save
+        person_id_param = @current_user.person.person_id
+        action_params = "Add"
+        description_param = "Created new project: #{project.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
+        flash[:notice] = 'Record creation was successful'
+        redirect_to("/projects") and return
+      else
+        flash[:error] = project.errors.full_messages.join('<br />')
+        redirect_to("/projects") and return
+      end
+    end
+    @projects = Project.order("project_id DESC")
+  end
+
+  def update_project
+    project = Project.find(params[:project_id])
+    project.name = params[:name]
+    if project.save
+      person_id_param = @current_user.person.person_id
+      action_params = "Update"
+      description_param = "Updated project record: #{project.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
+      flash[:notice] = 'Record update was successful'
+      redirect_to("/projects") and return
+    else
+      flash[:error] = project.errors.full_messages.join('<br />')
+      redirect_to("/projects") and return
+    end
+  end
+
+  def delete_project
+    project = Project.find(params[:id])
+    if project.delete
+      person_id_param = @current_user.person.person_id
+      action_params = "Delete"
+      description_param = "Deleted project record: #{project.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/projects") and return
+    else
+      flash[:error] = project.errors.full_messages.join('<br />')
+      redirect_to("/projects") and return
+    end
+  end
+
   def delete_location
     location = Location.find(params[:id])
     if location.delete

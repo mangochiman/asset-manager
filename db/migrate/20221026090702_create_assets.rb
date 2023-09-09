@@ -4,6 +4,7 @@ class CreateAssets < ActiveRecord::Migration[6.0]
       t.string :name
       t.string :barcode
       t.integer :asset_type_id
+      t.integer :project_id
       t.integer :status_id
       t.integer :location_id
       t.integer :condition_id

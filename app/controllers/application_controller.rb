@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize
-    redirect_to ("/login")  unless current_user
+    redirect_to ("/login") and return  unless current_user
     redirect_to ("/package_expired") and return if SystemPlan.trial_ended?
   end
 

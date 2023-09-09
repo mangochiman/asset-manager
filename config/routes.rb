@@ -117,6 +117,12 @@ Rails.application.routes.draw do
   post '/subscription_plan_summary' => 'pages#subscription_plan_summary'
   get '/package_expired' => 'pages#package_expired'
   get '/pricing' => 'pages#pricing'
+  #projects
+  get '/projects' => 'pages#projects'
+  post '/projects' => 'pages#projects'
+  post '/update_project' => 'pages#update_project'
+  post '/delete_project' => 'pages#delete_project'
+
   #reports
   get '/asset_list' => 'reports#asset_list'
   get '/asset_list_csv' => 'reports#asset_list_csv'
@@ -165,10 +171,10 @@ Rails.application.routes.draw do
   get '/service_schedule_pdf' => 'reports#service_schedule_pdf'
   get '/download_service_schedule_pdf' => 'reports#download_service_schedule_pdf'
 
-  get "/404", to: "errors#not_found", :via => :all
-  post "/404", to: "errors#not_found", :via => :all
-  get "/422", to: "errors#unacceptable", :via => :all
-  post "/422", to: "errors#unacceptable", :via => :all
-  get "/500", to: "errors#internal_error", :via => :all
-  post "/500", to: "errors#internal_error", :via => :all
+  #get "/404", to: "errors#not_found", :via => :all
+  #post "/404", to: "errors#not_found", :via => :all
+  #get "/422", to: "errors#unacceptable", :via => :all
+  #post "/422", to: "errors#unacceptable", :via => :all
+  #get "/500", to: "errors#internal_error", :via => :all
+  #post "/500", to: "errors#internal_error", :via => :all
 end
