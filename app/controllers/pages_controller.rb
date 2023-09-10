@@ -1555,7 +1555,8 @@ class PagesController < ApplicationController
         "people_count": Person.all.count,
         "groups_count": Group.all.count,
         "locations_count": Location.all.count,
-        "vendors_count": Vendor.all.count
+        "vendors_count": Vendor.all.count,
+        "projects_count": Project.all.count
     }
     respond_to do |format|
       format.json { render json: summary }

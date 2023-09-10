@@ -6,7 +6,7 @@ class SystemPlan < ApplicationRecord
   validates_uniqueness_of :subscription_plan
 
   def self.trial_version_days
-    31
+    90
   end
 
   def self.active_plan

@@ -68,6 +68,7 @@
             Assets
             <span class="float-right text-muted text-sm"><span id="assetsCount">&nbsp;</span></span>
           </a>
+          <div class="dropdown-divider"></div>
           <a href="/asset_types" class="dropdown-item">
             Asset Types
             <span class="float-right text-muted text-sm"><span id="assetTypesCount">&nbsp;</span></span>
@@ -77,10 +78,12 @@
             people
             <span class="float-right text-muted text-sm"><span id="peopleCount">&nbsp;</span></span>
           </a>
+          <div class="dropdown-divider"></div>
           <a href="/groups" class="dropdown-item">
             Groups
             <span class="float-right text-muted text-sm"><span id="groupsCount">&nbsp;</span></span>
           </a>
+          <div class="dropdown-divider"></div>
           <a href="/locations" class="dropdown-item">
             Locations
             <span class="float-right text-muted text-sm"><span id="locationsCount">&nbsp;</span></span>
@@ -91,6 +94,10 @@
             <span class="float-right text-muted text-sm"><span id="vendorsCount">&nbsp;</span></span>
           </a>
           <div class="dropdown-divider"></div>
+          <a href="/projects" class="dropdown-item">
+            Projects
+            <span class="float-right text-muted text-sm"><span id="projectsCount">&nbsp;</span></span>
+          </a>
         </div>
       </li>
     </ul>
@@ -479,6 +486,7 @@
                 jQuery('#groupsCount').html("Loading...")
                 jQuery('#locationsCount').html("Loading...")
                 jQuery('#vendorsCount').html("Loading...")
+                jQuery('#projectsCount').html("Loading...")
             },
             error: function (xhr, ajaxOptions, thrownError) {
 
@@ -490,6 +498,7 @@
                 var groups_count = result["groups_count"]
                 var locations_count = result["locations_count"]
                 var vendors_count = result["vendors_count"]
+                var projects_count = result["projects_count"]
 
                 jQuery('#assetsCount').html(assets_count)
                 jQuery('#assetTypesCount').html(asset_types_count)
@@ -497,6 +506,7 @@
                 jQuery('#groupsCount').html(groups_count)
                 jQuery('#locationsCount').html(locations_count)
                 jQuery('#vendorsCount').html(vendors_count)
+                jQuery('#projectsCount').html(projects_count)
             }
         })
 

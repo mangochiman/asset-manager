@@ -55,9 +55,15 @@
           <td>
             <a class="btn btn-primary btn-block" href="/edit_person?person_id=<%= person.person_id %>"><i class="fas fa-user-edit"></i>Edit</a>
           </td>
-          <td class="project-actions text-right" onclick="voidPersonConfirm('<%= person.person_id %>')">
-            <a class="btn btn-danger btn-block" href="#"><i class="fas fa-trash"></i>Delete</a>
-          </td>
+          <% if current_user.person_id == person.person_id %>
+            <td class="project-actions text-right" >
+              <a class="btn btn-default btn-block disabled" href="#"><i class="fas fa-trash"></i>Delete</a>
+            </td>
+          <% else %>
+            <td class="project-actions text-right" onclick="voidPersonConfirm('<%= person.person_id %>')">
+              <a class="btn btn-danger btn-block" href="#"><i class="fas fa-trash"></i>Delete</a>
+            </td>
+          <% end %>
         </tr>
       <% end %>
       </tbody>
