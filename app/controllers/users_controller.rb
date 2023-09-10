@@ -13,6 +13,8 @@ class UsersController < ApplicationController
         redirect_to('/login') and return
       end
     end
+    active_system_plan = SystemPlan.active_plan
+    @company_name = active_system_plan.company_name rescue ""
     render layout: false
   end
 

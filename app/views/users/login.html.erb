@@ -20,6 +20,9 @@
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
       <a href="#" class="h4"><b>Asset Management System</b></a>
+      <% unless @company_name.blank? %>
+        <p><%= @company_name %></p>
+      <% end %>
     </div>
     <div class="card-body">
       <% if flash[:error] %>
