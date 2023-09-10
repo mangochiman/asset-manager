@@ -1231,27 +1231,29 @@
       <div class="modal-body" style="overflow: auto; max-height: calc(80vh - 90px);">
         <div class="row">
           <div class="col-md-6 offset-md-3">
-            <h4>HISTORY</h4>
             <ul class="timeline">
+              <% if @asset_check_in_out_activities.blank? %>
+                <p>Nothing to show</p>
+                <% end %>
               <% @asset_check_in_out_activities.each do |activity| %>
                 <% if activity.name.to_s.match(/in/i) %>
                   <li>
-                    <a href="#"><%= activity.name %></a> on
+                    <a href="#"><%= activity.name %>: </a>
                     <%
                       checkin_date = activity.checkin_date.to_date.strftime("%d.%b.%Y") rescue activity.checkin_date
                     %>
                     <a href="#" class="float-right"><%= checkin_date %></a>
-                    <p>Checked in from: <%= activity.person_id %></p>
+                    <p>Checked in from: <%= activity.person_details %></p>
                   </li>
                 <% else %>
                   <li>
-                    <a href="#"><%= activity.name %></a> on
+                    <a href="#"><%= activity.name %>: </a>
                     <%
                       checkout_date = activity.checkout_date.to_date.strftime("%d.%b.%Y") rescue activity.checkout_date
                     %>
                     <a href="#" class="float-right"><%= checkout_date %></a>
-                    <p>Checked out to: <%= activity.person_id %></p>
-                    <p>Location: <%= activity.location_id %></p>
+                    <p>Checked out to: <%= activity.person_details %></p>
+                    <p>Location: <%= activity.location_details %></p>
                   </li>
                 <% end %>
 

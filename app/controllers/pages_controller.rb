@@ -1,7 +1,7 @@
 require 'csv'
 
 class PagesController < ApplicationController
-  before_action :authorize, :except => [:package_expired, :pricing]
+  before_action :authorize, :except => [:package_expired, :pricing, :asset_label]
   before_action :check_admin_privileges, only: [:new_asset_menu, :new_vendor, :new_person, :delete_selection_field,
                                                 :delete_service_item, :delete_vendor, :delete_vendor_attachment,
                                                 :delete_group, :delete_location, :delete_person, :delete_person_attachment,
