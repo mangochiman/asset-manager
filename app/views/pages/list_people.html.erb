@@ -31,7 +31,7 @@
 
 <div class="card">
   <div class="card-body ">
-    <table class="table-striped table-condensed" style="width: 100%;">
+    <table id="example1" class="table-striped table-condensed" style="width: 100%;">
       <thead>
       <tr>
         <th>First Name</th>
@@ -40,7 +40,8 @@
         <th>Email</th>
         <th>Phone #</th>
         <th>Last Update</th>
-        <th colspan="2"></th>
+        <th></th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -104,6 +105,14 @@
         jQuery('.list_person_menu').addClass('active');
         jQuery('.people-menu').addClass('menu-open');
         loadDefaults();
+
+        $("#example1").DataTable({
+            "aaSorting": [],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "bFilter": false
+        })
     })
 
     var selectedPersonID;
