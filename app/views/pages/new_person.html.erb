@@ -12,6 +12,9 @@
                 <button onclick="validateForm()" type="button" class="btn btn-primary">
                   <i class="fa fa-save"></i> Save
                 </button>
+                <button onclick="uploadPeopleFromCSV()" type="button" class="btn btn-success">
+                  <i class="fa fa-upload"></i> Upload People From CSV
+                </button>
                 <button onclick="goBack()" type="button" class="btn btn-default">
                   <i class="fa fa-arrow-circle-left"></i> Cancel
                 </button>
@@ -265,5 +268,9 @@
 
     function validateForm() {
         $("#person").submit();
+    }
+
+    function uploadPeopleFromCSV(){
+        window.location = "/upload_people_from_file"
     }
 </script>

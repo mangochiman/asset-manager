@@ -171,6 +171,10 @@ Rails.application.routes.draw do
   get '/service_schedule_pdf' => 'reports#service_schedule_pdf'
   get '/download_service_schedule_pdf' => 'reports#download_service_schedule_pdf'
 
+  get '/upload_people_from_file' => 'pages#upload_people_from_file'
+  post '/upload_people_from_file' => 'pages#upload_people_from_file'
+  get '/download_people_template' => 'pages#download_people_template'
+
   get "/404", to: "errors#not_found", :via => :all
   post "/404", to: "errors#not_found", :via => :all
   get "/422", to: "errors#unacceptable", :via => :all
