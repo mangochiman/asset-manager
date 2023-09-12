@@ -109,6 +109,16 @@ class Asset < ApplicationRecord
     asset_state
   end
 
+  def custodian
+    person_details = ""
+    if self.checked_out?
+      checkout_activity = AssetActivity.last_activity(asset_id)
+      person = checkout_activity.person
+      person_details = person.first_name.to_s + " " + person.last_name.to_s
+    end
+    person_details
+  end
+
   def complete_all_started_services_except(asset_service_log_id)
     started_services = self.asset_service_logs.where(['asset_service_log_id != ? AND state =?',
                                                       asset_service_log_id, 'Started'])

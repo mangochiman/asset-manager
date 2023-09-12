@@ -10,10 +10,10 @@ class ReportsController < ApplicationController
   def asset_list_csv
     assets = Asset.all
     file = "#{Rails.root}/tmp/asset_list.csv"
-    headers = ["Asset Name", "Asset Number", "Project", "Location", "Status", "Brand", "Model", "Last Update"]
+    headers = ["Asset Name", "Asset Number", "Project", "Location", "Status", "Custodian", "Brand", "Model", "Last Update"]
     CSV.open(file, 'w', write_headers: true, headers: headers) do |csv|
       assets.each do |asset|
-        csv << [asset.name, asset.barcode, asset.project_details, asset.location_details, asset.state, asset.brand, asset.model, asset.updated_at.strftime("%d.%m.%Y")]
+        csv << [asset.name, asset.barcode, asset.project_details, asset.location_details, asset.state, asset.custodian, asset.brand, asset.model, asset.updated_at.strftime("%d.%m.%Y")]
       end
     end
     send_file(file)
@@ -34,6 +34,7 @@ class ReportsController < ApplicationController
     worksheet.write(row_pos, 5, "Brand")
     worksheet.write(row_pos, 6, "Model")
     worksheet.write(row_pos, 7, "Last Update")
+    worksheet.write(row_pos, 8, "Custodian")
 
     assets.each do |asset|
       row_pos = row_pos + 1
@@ -46,6 +47,7 @@ class ReportsController < ApplicationController
       worksheet.write(row_pos, 5, asset.brand)
       worksheet.write(row_pos, 6, asset.model)
       worksheet.write(row_pos, 7, updated_at)
+      worksheet.write(row_pos, 8, asset.custodian)
     end
     # write to file
     workbook.close
@@ -105,12 +107,13 @@ class ReportsController < ApplicationController
   def assets_checked_out_csv
     assets = Asset.checked_out
     file = "#{Rails.root}/tmp/assets_checked_out.csv"
-    headers = ["Asset Name", "Asset Number", "Project", "Location", "Status", "Brand", "Model",
+    headers = ["Asset Name", "Asset Number", "Project", "Location", "Status", "Custodian", "Brand", "Model",
                "Checked Out Date", "Return On"]
     CSV.open(file, 'w', write_headers: true, headers: headers) do |csv|
       assets.each do |asset|
-        csv << [asset.name, asset.barcode, asset.project_details, asset.location_details, asset.state, asset.brand, asset.model,
-                asset.checked_out_date.strftime("%d.%m.%Y"), asset.return_on_date.strftime("%d.%m.%Y")  ]
+        csv << [asset.name, asset.barcode, asset.project_details, asset.location_details, asset.state, asset.custodian, asset.brand, asset.model,
+                (asset.checked_out_date.strftime("%d.%m.%Y") rescue asset.checked_out_date),
+                (asset.return_on_date.strftime("%d.%m.%Y") rescue asset.return_on_date)  ]
       end
     end
     send_file(file)
@@ -132,11 +135,12 @@ class ReportsController < ApplicationController
     worksheet.write(row_pos, 6, "Model")
     worksheet.write(row_pos, 7, "Checked Out Date")
     worksheet.write(row_pos, 8, "Return On")
+    worksheet.write(row_pos, 9, "Custodian")
 
     assets.each do |asset|
       row_pos = row_pos + 1
-      checked_out_date = asset.checked_out_date.strftime("%d.%m.%Y")
-      return_on = asset.return_on_date.strftime("%d.%m.%Y")
+      checked_out_date = asset.checked_out_date.strftime("%d.%m.%Y") rescue asset.checked_out_date
+      return_on = asset.return_on_date.strftime("%d.%m.%Y") rescue asset.return_on_date
       worksheet.write(row_pos, 0, asset.name)
       worksheet.write(row_pos, 1, asset.barcode)
       worksheet.write(row_pos, 2, asset.project_details)
@@ -146,6 +150,7 @@ class ReportsController < ApplicationController
       worksheet.write(row_pos, 6, asset.model)
       worksheet.write(row_pos, 7, checked_out_date)
       worksheet.write(row_pos, 8, return_on)
+      worksheet.write(row_pos, 9, asset.custodian)
     end
     # write to file
     workbook.close

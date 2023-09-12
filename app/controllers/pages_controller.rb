@@ -1466,7 +1466,7 @@ class PagesController < ApplicationController
     if asset_activity.save
       person_id_param = @current_user.person.person_id
       action_params = "Checkin"
-      description_param = "Checked asset: #{asset_activity.asset_id}"
+      description_param = "Checked in asset: #{asset_activity.asset_details}"
       SystemActivity.log(person_id_param, action_params, description_param)
 
       flash[:notice] = 'Checkin was successful'

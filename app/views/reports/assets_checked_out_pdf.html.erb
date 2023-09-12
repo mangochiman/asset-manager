@@ -33,6 +33,7 @@
               <th>Project</th>
               <th>Location</th>
               <th>Status</th>
+              <th>Custodian</th>
               <th>Brand</th>
               <th>Model</th>
               <th>Checked out Date</th>
@@ -47,10 +48,11 @@
                 <td><%= asset.project_details %></td>
                 <td><%= asset.location_details %></td>
                 <td><%= asset.state %></td>
+                <td><%= asset.custodian %></td>
                 <td><%= asset.brand %></td>
                 <td><%= asset.model %></td>
-                <td><%= asset.checked_out_date.strftime("%d.%m.%Y") %></td>
-                <td><%= asset.return_on_date.strftime("%d.%m.%Y") %></td>
+                <td><%= asset.checked_out_date.strftime("%d.%m.%Y") rescue asset.checked_out_date %></td>
+                <td><%= asset.return_on_date.strftime("%d.%m.%Y") rescue asset.return_on_date %></td>
               </tr>
             <% end %>
             </tbody>
@@ -62,7 +64,7 @@
     </div>
     <!-- /.col -->
   </div>
-  <%= @footer %> | Generated on <%= Time.now %>
+  Generated on <%= Time.now %>
   <!-- /.row -->
 </div>
 <!-- /.container-fluid -->
