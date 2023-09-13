@@ -68,12 +68,32 @@ class ReportsController < ApplicationController
     source = "http://#{request.env["HTTP_HOST"]}/asset_list_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
     wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
-    Thread.new{
+    Thread.new {
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
   end
 
+  def person_audit_trail_csv
+    person = Person.find(params[:person_id])
+    check_in_out_activities = person.checkin_out_history
+    file = "#{Rails.root}/tmp/person_audit_trail_#{person.person_id}.csv"
+    headers = ["Activity Name", "Asset Details", "Checkout Date", "Checkin Date", "Location", "Notes"]
+    CSV.open(file, 'w', write_headers: true, headers: headers) do |csv|
+      check_in_out_activities.each do |asset_activity|
+        csv << [
+            asset_activity.name,
+            asset_activity.asset_details,
+            (asset_activity.checkout_date.strftime("%d.%m.%Y") rescue asset_activity.checkout_date),
+            (asset_activity.checkin_date.strftime("%d.%m.%Y") rescue asset_activity.checkin_date),
+            asset_activity.location_details,
+            asset_activity.notes
+        ]
+      end
+    end
+    send_file(file)
+  end
+  
   def asset_details
     @page_header = "Asset Details"
     @assets = Asset.all
@@ -93,7 +113,7 @@ class ReportsController < ApplicationController
     source = "http://#{request.env["HTTP_HOST"]}/asset_details_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
     wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
-    Thread.new{
+    Thread.new {
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
@@ -113,7 +133,7 @@ class ReportsController < ApplicationController
       assets.each do |asset|
         csv << [asset.name, asset.barcode, asset.project_details, asset.location_details, asset.state, asset.custodian, asset.brand, asset.model,
                 (asset.checked_out_date.strftime("%d.%m.%Y") rescue asset.checked_out_date),
-                (asset.return_on_date.strftime("%d.%m.%Y") rescue asset.return_on_date)  ]
+                (asset.return_on_date.strftime("%d.%m.%Y") rescue asset.return_on_date)]
       end
     end
     send_file(file)
@@ -171,7 +191,7 @@ class ReportsController < ApplicationController
     source = "http://#{request.env["HTTP_HOST"]}/assets_checked_out_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
     wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
-    Thread.new{
+    Thread.new {
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
@@ -238,7 +258,7 @@ class ReportsController < ApplicationController
     source = "http://#{request.env["HTTP_HOST"]}/personnel_list_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
     wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
-    Thread.new{
+    Thread.new {
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
@@ -305,7 +325,7 @@ class ReportsController < ApplicationController
     source = "http://#{request.env["HTTP_HOST"]}/vendor_list_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
     wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
-    Thread.new{
+    Thread.new {
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
@@ -382,7 +402,7 @@ class ReportsController < ApplicationController
     source = "http://#{request.env["HTTP_HOST"]}/completed_services_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
     wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
-    Thread.new{
+    Thread.new {
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
@@ -459,7 +479,7 @@ class ReportsController < ApplicationController
     source = "http://#{request.env["HTTP_HOST"]}/overdue_services_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
     wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
-    Thread.new{
+    Thread.new {
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)
@@ -536,7 +556,7 @@ class ReportsController < ApplicationController
     source = "http://#{request.env["HTTP_HOST"]}/service_schedule_pdf"
     destination = Rails.root.to_s + "/tmp/#{file_name}"
     wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
-    Thread.new{
+    Thread.new {
       Kernel.system wkhtmltopdf
     }.join
     send_file(destination)

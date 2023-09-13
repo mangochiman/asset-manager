@@ -99,6 +99,7 @@
 
     var value = '<%= params[:q] %>'
     var search_caption = '<%= params[:search_caption] %>'
+    var person_id = '<%= params[:person_id] %>'
     function loadDefaults(){
         if (value){
             jQuery("#adv-search-btn").html(search_caption);
@@ -108,14 +109,14 @@
     }
 
     function downloadPersonAuditTrailCSV(){
-
+        window.location = "/person_audit_trail_csv?person_id=" + person_id;
     }
 
     function downloadPersonAuditTrailWorkBook(){
-
+        window.location = "/person_audit_trail_work_book?person_id=" + person_id;
     }
 
     function downloadPersonAuditTrailPDF(){
-        
+        window.location = "/download_person_audit_trail_pdf?person_id="  + person_id;
     }
 </script>
