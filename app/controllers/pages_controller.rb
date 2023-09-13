@@ -1477,6 +1477,12 @@ class PagesController < ApplicationController
     end
   end
 
+  def person_checkin_out_history
+    person = Person.find(params[:person_id])
+    @page_header = "#{person.first_name}'s audit trail"
+    @check_in_out_activities = person.checkin_out_history
+  end
+
   def reserve_asset
     asset_reservation = AssetReservation.new
     asset_reservation.asset_id = params[:asset_id]

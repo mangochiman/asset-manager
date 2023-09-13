@@ -74,4 +74,9 @@ class Person < ApplicationRecord
     Person.joins([:user]).where(["role =?", "System Administrator"])
   end
 
+  def checkin_out_history
+    checkin_out_activities = AssetActivity.where(['name IN (?) AND person_id =?',
+                                                  %w[check-out check-in], person_id])
+    checkin_out_activities
+  end
 end

@@ -42,6 +42,7 @@
         <th>Last Update</th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -54,7 +55,10 @@
           <td><%= person.phone %></td>
           <td><%= person.updated_at.strftime("%d.%m.%Y") %></td>
           <td>
-            <a class="btn btn-primary btn-block" href="/edit_person?person_id=<%= person.person_id %>"><i class="fas fa-user-edit"></i>Edit</a>
+            <a class="btn btn-primary btn-block" href="/person_checkin_out_history?person_id=<%= person.person_id %>"><i class="fas fa-info"></i> Audit Trail</a>
+          </td>
+          <td>
+            <a class="btn btn-primary btn-block" href="/edit_person?person_id=<%= person.person_id %>"><i class="fas fa-user-edit"></i> Edit</a>
           </td>
           <% if current_user.person_id == person.person_id %>
             <td class="project-actions text-right" >

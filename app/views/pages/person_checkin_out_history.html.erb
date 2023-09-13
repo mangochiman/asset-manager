@@ -1,0 +1,121 @@
+<div class="row">
+  <div class="col-md-12">
+    <!-- Buttons with Icons -->
+    <div class="card">
+      <div class="card-body row">
+        <div>
+          <button onclick="downloadPersonAuditTrailCSV()" type="button" class="btn btn-primary">
+            <i class="fa fa-file-csv"></i> Download CSV
+          </button>
+          <button onclick="downloadPersonAuditTrailWorkBook()" type="button" class="btn btn-primary">
+            <i class="fa fa-file-excel"></i> Download Excel
+          </button>
+          <button ONCLICK="downloadPersonAuditTrailPDF()" type="button" class="btn btn-primary">
+            <i class="fa fa-file-pdf"></i> Download PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body ">
+    <table id="example1" class="table-striped table-condensed" style="width: 100%;">
+      <thead>
+      <tr>
+        <th>Activity Name</th>
+        <th>Asset Details</th>
+        <th>Checkout Date</th>
+        <th>Checkin Date</th>
+        <th>Location</th>
+        <th>Notes</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @check_in_out_activities.each do |asset_activity| %>
+        <tr>
+          <td><%= asset_activity.name %></td>
+          <td><a href="/edit_asset?asset_id=<%= asset_activity.asset_id%>"><%= asset_activity.asset_details %></a></td>
+          <td><%= asset_activity.checkout_date.strftime("%d.%m.%Y") rescue asset_activity.checkout_date %></td>
+          <td><%= asset_activity.checkin_date.strftime("%d.%m.%Y") rescue asset_activity.checkin_date %></td>
+          <td><%= asset_activity.location_details %></td>
+          <td><%= asset_activity.notes %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->
+<!-- /.modal -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.people').addClass('active');
+        jQuery('.list_person_menu').addClass('active');
+        jQuery('.people-menu').addClass('menu-open');
+        loadDefaults();
+
+        $("#example1").DataTable({
+            "aaSorting": [],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "bFilter": false
+        })
+    })
+
+    var selectedPersonID;
+
+    function voidPersonConfirm(id) {
+        selectedPersonID = id;
+        jQuery('#voidPersonModal').modal('show');
+    }
+
+    function voidPerson() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_person";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedPersonID;
+        input.name = "id";
+        form.appendChild(input);
+
+        form.submit();
+    }
+
+    function updateSearchParam(key, value){
+        jQuery("#adv-search-btn").html(key);
+        jQuery("#searchField").val(value);
+        jQuery("#searchCaption").val(key);
+    }
+
+    var value = '<%= params[:q] %>'
+    var search_caption = '<%= params[:search_caption] %>'
+    function loadDefaults(){
+        if (value){
+            jQuery("#adv-search-btn").html(search_caption);
+            jQuery("#search").val(value);
+            jQuery("#searchCaption").val(search_caption);
+        }
+    }
+
+    function downloadPersonAuditTrailCSV(){
+
+    }
+
+    function downloadPersonAuditTrailWorkBook(){
+
+    }
+
+    function downloadPersonAuditTrailPDF(){
+        
+    }
+</script>

@@ -175,6 +175,8 @@ Rails.application.routes.draw do
   post '/upload_people_from_file' => 'pages#upload_people_from_file'
   get '/download_people_template' => 'pages#download_people_template'
 
+  get '/person_checkin_out_history' => 'pages#person_checkin_out_history'
+
   get "/404", to: "errors#not_found", :via => :all
   post "/404", to: "errors#not_found", :via => :all
   get "/422", to: "errors#unacceptable", :via => :all
