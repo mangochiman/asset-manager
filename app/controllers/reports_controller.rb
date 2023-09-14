@@ -93,7 +93,57 @@ class ReportsController < ApplicationController
     end
     send_file(file)
   end
-  
+
+  def person_audit_trail_work_book
+    person = Person.find(params[:person_id])
+    check_in_out_activities = person.checkin_out_history
+    file = "#{Rails.root}/tmp/person_audit_trail_#{person.person_id}.xlsx"
+    workbook = WriteXLSX.new(file)
+    worksheet = workbook.add_worksheet
+    # Add and define a format
+    row_pos = 0
+    worksheet.write(row_pos, 0, "Activity Name")
+    worksheet.write(row_pos, 1, "Asset Details")
+    worksheet.write(row_pos, 2, "Checkout Date")
+    worksheet.write(row_pos, 3, "Checkin Date")
+    worksheet.write(row_pos, 4, "Location")
+    worksheet.write(row_pos, 5, "Notes")
+
+    check_in_out_activities.each do |asset_activity|
+      row_pos = row_pos + 1
+      worksheet.write(row_pos, 0, asset_activity.name)
+      worksheet.write(row_pos, 1, asset_activity.asset_details)
+      worksheet.write(row_pos, 2, (asset_activity.checkout_date.strftime("%d.%m.%Y") rescue asset_activity.checkout_date))
+      worksheet.write(row_pos, 3, (asset_activity.checkin_date.strftime("%d.%m.%Y") rescue asset_activity.checkin_date))
+      worksheet.write(row_pos, 4, asset_activity.location_details)
+      worksheet.write(row_pos, 5, asset_activity.notes)
+    end
+    # write to file
+    workbook.close
+    send_file(file)
+  end
+
+  def person_audit_trail_pdf
+    person = Person.find(params[:person_id])
+    @page_header = "#{person.first_name}'s audit trail"
+    report_option = ReportOption.last
+    @header = report_option.header rescue nil
+    @footer = report_option.footer rescue nil
+    @logo_url = report_option.logo_url rescue nil
+    @check_in_out_activities = person.checkin_out_history
+  end
+
+  def download_person_audit_trail_pdf
+    file_name = "person_audit_trail_#{params[:person_id]}.pdf"
+    source = "http://#{request.env["HTTP_HOST"]}/person_audit_trail_pdf?person_id=#{params[:person_id]}"
+    destination = Rails.root.to_s + "/tmp/#{file_name}"
+    wkhtmltopdf = "xvfb-run wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    Thread.new {
+      Kernel.system wkhtmltopdf
+    }.join
+    send_file(destination)
+  end
+
   def asset_details
     @page_header = "Asset Details"
     @assets = Asset.all
