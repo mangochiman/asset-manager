@@ -41,7 +41,7 @@
       <p class="login-box-msg">Sign in to start your session</p>
       <form action="/login" method="post">
         <div class="input-group mb-3">
-          <input type="username" name="username" required class="form-control" placeholder="Username">
+          <input type="username" name="username" id="username" required class="form-control" placeholder="Username">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user-ninja"></span>
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" name="password" required class="form-control" placeholder="Password">
+          <input type="password" name="password" id="pass" required class="form-control" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -84,6 +84,77 @@
 </div>
 <!-- /.login-box -->
 
+<!-- Modal -->
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Password reminder</h4>
+      </div>
+      <div class="modal-body">
+        <form action="#" role="form" class="form-horizontal">
+          <div id="emailError" class="alert-error text-center" style="color: red; font-weight: bold;"></div>
+          <div class="form-group">
+            <label class="control-label col-lg-5" for="email"><strong>Email address</strong></label>
+            <div class="col-lg-7">
+              <input type="text" name="email" class="form-control" placeholder="Email" id="email" autocomplete="off"/>
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button id="sendEmailButton" onclick="showEmailAddressPopup();" type="button" class="btn btn-primary">Reset
+          my password
+        </button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="userNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Record not found</h4>
+      </div>
+      <div class="modal-body">
+        <p>The email address provided does not belong to any user. Please try again for you to reset your password</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">E-mail sent</h4>
+      </div>
+      <div class="modal-body">
+        <p>Please check your email for the new password</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 <!-- jQuery -->
 <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -92,3 +163,95 @@
 <script src="/AdminLTE/dist/js/adminlte.min.js"></script>
 </body>
 </html>
+
+<script type="text/javascript">
+    function sendEmailToUser() {
+        var emailAddress = jQuery('#email').val();
+        if (validateEmail(emailAddress)) {
+            jQuery.ajax({
+                type: "GET",
+                url: "/check_if_email_exists",
+                data: "email=" + emailAddress,
+                beforeSend: function () {
+                    jQuery("#sendEmailButton").attr("disabled", true);
+                },
+                success: function (user) {
+                    if (user){
+                        jQuery.ajax({
+                            type: "GET",
+                            url: "/reset_password",
+                            data: "email=" + emailAddress,
+                            beforeSend: function () {
+                                jQuery('#emailModal').modal('hide');
+                                jQuery('#notificationModal').modal({backdrop: 'static', keyboard: false});
+                            },
+                            success: function (result) {
+                                jQuery("#tr_" + selectedDebtorID).remove();
+                                jQuery('#voidDebtorModal').modal('hide');
+                            }
+
+                        });
+
+                    } else{
+                        jQuery('#emailModal').modal('hide');
+                        jQuery('#userNotFoundModal').modal({backdrop: 'static', keyboard: false});
+                    }
+                }
+
+            });
+
+        } else {
+            jQuery("#emailError").html("Please input a valid email address");
+        }
+    }
+
+    function showEmailAddressPopup() {
+        jQuery("#sendEmailButton").removeAttr("disabled");
+        jQuery('#email').val('');
+        jQuery('#emailModal').modal({backdrop: 'static', keyboard: false});
+        jQuery('#emailModal').on('shown.bs.modal', function () {
+            jQuery('#email').focus();
+        });
+    }
+
+    function validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    window.onload = function () {
+        jQuery('#email').keypress(function (e) {
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                jQuery('#sendEmailButton').click();
+                return false;
+            }
+        });
+
+        if (localStorage.chkbx && localStorage.chkbx != '') {
+            $('#remember').attr('checked', 'checked');
+            $('#username').val(localStorage.usrname);
+            $('#pass').val(localStorage.pass);
+        } else {
+            $('#remember').removeAttr('checked');
+            $('#username').val('');
+            $('#pass').val('');
+        }
+
+        $('#remember').click(function() {
+            if ($('#remember').is(':checked')) {
+                // save username and password
+                localStorage.usrname = $('#username').val();
+                localStorage.pass = $('#pass').val();
+                localStorage.chkbx = $('#remember').val();
+            } else {
+                localStorage.usrname = '';
+                localStorage.pass = '';
+                localStorage.chkbx = '';
+            }
+        });
+
+
+    };
+</script>
