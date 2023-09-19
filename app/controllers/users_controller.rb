@@ -123,14 +123,14 @@ class UsersController < ApplicationController
   end
 
   def check_if_email_exists
-    user = User.find_by_email(params[:email])
+    user = User.joins(:person).where(["email =?", params[:email]]).last
     render json: user.to_json
   end
 
   def reset_password
-    user = User.find_by_email(params[:email])
+    user = User.joins(:person).where(["email =?", params[:email]]).last
     new_password = user.reset_password
-    NotificationMailer.reset_password(user, new_password).deliver_later
+    NotificationMailer.reset_password(user.person, new_password).deliver_later
     render json: {success: true}.to_json
   end
 
