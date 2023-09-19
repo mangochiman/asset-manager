@@ -29,3 +29,4 @@
 /config/master.key
 config/settings.yml
 db/schema.rb
+Gemfile.lock
