@@ -75,7 +75,7 @@
       <!-- /.social-auth-links -->
 
       <p class="mb-1">
-        <a href="#">I forgot my password</a>
+        <a href="#" onclick="showEmailAddressPopup();">I forgot my password</a>
       </p>
     </div>
     <!-- /.card-body -->
@@ -90,23 +90,26 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Password reminder</h4>
+        <h7 class="modal-title" id="myModalLabel">Password Reminder</h7>
       </div>
       <div class="modal-body">
         <form action="#" role="form" class="form-horizontal">
-          <div id="emailError" class="alert-error text-center" style="color: red; font-weight: bold;"></div>
-          <div class="form-group">
-            <label class="control-label col-lg-5" for="email"><strong>Email address</strong></label>
-            <div class="col-lg-7">
-              <input type="text" name="email" class="form-control" placeholder="Email" id="email" autocomplete="off"/>
+          <div class="input-group mb-3">
+            <input type="text" name="email" class="form-control" placeholder="Email Address" id="email" autocomplete="off">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
             </div>
           </div>
+          <div id="emailError" class="alert-error text-center" style="color: red; font-weight: bold;"></div>
+
         </form>
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button id="sendEmailButton" onclick="showEmailAddressPopup();" type="button" class="btn btn-primary">Reset
+        <button id="sendEmailButton" onclick="sendEmailToUser();" type="button" class="btn btn-primary">Reset
           my password
         </button>
       </div>
