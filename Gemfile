@@ -26,6 +26,7 @@ gem 'writeexcel'
 gem 'simple_xlsx_reader'
 gem 'will_paginate', '~> 3.1.0'
 gem 'fastercsv', '~> 1.5', '>= 1.5.5'
+gem 'delayed_job_active_record'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
