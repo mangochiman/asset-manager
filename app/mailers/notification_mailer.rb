@@ -7,7 +7,7 @@ class NotificationMailer < ApplicationMailer
     @name = person.first_name
     @new_password = new_password
     mail(
-        to: user.email,
+        to: person.email,
         subject: 'PASSWORD RESET'
     )
   end
