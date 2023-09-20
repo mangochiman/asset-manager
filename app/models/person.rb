@@ -79,4 +79,20 @@ class Person < ApplicationRecord
                                                   %w[check-out check-in], person_id])
     checkin_out_activities
   end
+
+  def assets_with_me
+    checkout_activities = AssetActivity.where(['name =? AND person_id =?',
+                                               "check-out", person_id])
+    my_assets = []
+    checkout_activities.each do |asset_activity|
+      asset = asset_activity.asset
+      if asset.checked_out?
+        checked_out_activity = asset.asset_activities.last
+        my_assets << asset if checked_out_activity.person_id.to_i == person_id.to_i
+      end
+    end
+
+    my_assets
+  end
+
 end

@@ -1419,7 +1419,7 @@ class PagesController < ApplicationController
       action_params = "Checked out"
       description_param = "Checked out asset: #{asset_activity.asset_details}"
       SystemActivity.log(person_id_param, action_params, description_param)
-
+      NotificationMailer.checkout_asset(asset_activity).deliver_later
       flash[:notice] = 'Checkout was successful'
       redirect_to("/edit_asset?asset_id=#{params[:asset_id]}") and return
     else
