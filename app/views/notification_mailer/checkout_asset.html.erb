@@ -44,13 +44,13 @@
               <td style="padding:10px;font-size:14px; width:100%;">
                 <p>Hi <b><%= @person.first_name %></b>,</p>
                 <p>
-                  <br/> We would like to let you know that you are now the custodian of: <br/>
+                  <br/> We would like to let you know that you are now the custodian of the following item: <br/>
                   Asset Name: <b><%= @asset.name %></b> <br/>
                   Serial #: <b><%= @asset.serial_number %></b> <br/>
                   Barcode : <b><%= @asset.barcode %></b> <br/>
                   Date Assigned : <b><%= @asset.checked_out_date.to_date.strftime("%d.%m.%Y") %></b>
                   <br/>
-                <h4>All assets assigned to me</h4>
+                <h4>All assets assigned to me (<%= @assets.count %>)</h4>
                 <% count = 1 %>
                 <% @assets.each do |asset| %>
                   <%= "#{count}. " + asset.name.to_s %><br/>
