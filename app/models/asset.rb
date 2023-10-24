@@ -17,6 +17,7 @@ class Asset < ApplicationRecord
   belongs_to :project, :foreign_key => :project_id, optional: true
   validates_presence_of :name
 
+  validates_uniqueness_of :barcode, allow_blank: true
   validate :asset_quota_validation, :picture_size_validation
 
   def self.retire_reasons
