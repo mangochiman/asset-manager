@@ -164,4 +164,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.search(key, value)
+    people = []
+    key = key.to_s.downcase
+    people = Person.joins([:user]).where(["first_name LIKE ?", '%' + value + '%']) if key == "first_name"
+    people = Person.joins([:user]).where(["last_name LIKE ?", '%' + value + '%']) if key == "last_name"
+    people = Person.joins([:user]).where(["email LIKE ?", '%' + value + '%']) if key == "email"
+    people = Person.joins([:user]).where(["barcode LIKE ?", '%' + value + '%']) if key == "personnel_number"
+    people = Person.joins([:user]).where(["phone LIKE ?", '%' + value + '%']) if key == "phone_number"
+    people
+  end
 end

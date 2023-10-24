@@ -1805,4 +1805,24 @@ class PagesController < ApplicationController
     @system_plans = SystemPlan.where(["subscription_plan != ?", "Trial"])
     render layout: false
   end
+
+  def list_users
+    @page_header = "List users"
+    @people = Person.joins([:user])
+
+    @page_header = "List users"
+    if params[:q]
+      search_value = params[:q]
+      search_field = params[:search_field]
+      @people = User.search(search_field, search_value)
+      @page_header = "Search people: #{@people.length} result(s)"
+    else
+      @people = Person.joins([:user])
+    end
+  end
+
+  def suspend_user
+
+  end
+
 end

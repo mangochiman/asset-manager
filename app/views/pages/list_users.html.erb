@@ -1,0 +1,156 @@
+<form action="/list_users" method="get">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="input-group" id="adv-search">
+        <button type="button" id="adv-search-btn" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          First Name
+        </button>
+        <ul class="dropdown-menu">
+          <li class="dropdown-item" onclick="updateSearchParam('First Name', 'first_name')"><a href="#">First Name</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Last Name', 'last_name')"><a href="#">Last Name</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Email', 'email')"><a href="#">Email</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Personnel Number', 'personnel_number')"><a href="#">Personnel Number</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Phone Number', 'phone_number')"><a href="#">Phone Number</a></li>
+        </ul>
+        <input type="text" name="q" id="search" required class="form-control" placeholder="Search"/>
+        <input type="hidden" name="search_field" id="searchField" class="form-control" value="first_name"/>
+        <input type="hidden" name="search_caption" id="searchCaption" class="form-control" value="First Name"/>
+        <div class="input-group-btn">
+
+          <div class="btn-group" role="group">
+            <button type="submit" class="btn btn-success">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<br/>
+
+<div class="card">
+  <div class="card-body ">
+    <table id="example1" class="table-striped table-condensed" style="width: 100%;">
+      <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Personnel Number</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Phone #</th>
+        <th>Last Update</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @people.each do |person| %>
+        <tr>
+          <td><%= person.first_name %></td>
+          <td><%= person.last_name %></td>
+          <td><%= person.barcode %></td>
+          <td><%= person.user.username %></td>
+          <td><%= person.email %></td>
+          <td><%= person.phone %></td>
+          <td><%= person.updated_at.strftime("%d.%m.%Y") %></td>
+
+          <% if current_user.person_id == person.person_id %>
+            <td class="project-actions text-right" >
+              <a class="btn btn-default btn-block disabled" href="#"><i class="fas fa-trash"></i>Suspend</a>
+            </td>
+          <% else %>
+            <td class="project-actions text-right" onclick="suspendUserConfirm('<%= person.person_id %>')">
+              <a class="btn btn-danger btn-block" href="#"><i class="fas fa-trash"></i>Suspend</a>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="suspendUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will suspend the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="suspendUser();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.people').addClass('active');
+        jQuery('.list_user_menu').addClass('active');
+        jQuery('.people-menu').addClass('menu-open');
+        loadDefaults();
+
+        $("#example1").DataTable({
+            "aaSorting": [],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "bFilter": false
+        })
+    })
+
+    var selectedPersonID;
+
+    function suspendUserConfirm(id) {
+        selectedPersonID = id;
+        jQuery('#suspendUserModal').modal('show');
+    }
+
+    function suspendUser() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/suspend_user";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedPersonID;
+        input.name = "id";
+        form.appendChild(input);
+
+        form.submit();
+    }
+
+    function updateSearchParam(key, value){
+        jQuery("#adv-search-btn").html(key);
+        jQuery("#searchField").val(value);
+        jQuery("#searchCaption").val(key);
+    }
+
+    var value = '<%= params[:q] %>'
+    var search_caption = '<%= params[:search_caption] %>'
+    function loadDefaults(){
+        if (value){
+            jQuery("#adv-search-btn").html(search_caption);
+            jQuery("#search").val(value);
+            jQuery("#searchCaption").val(search_caption);
+        }
+    }
+</script>
