@@ -1807,7 +1807,6 @@ class PagesController < ApplicationController
   end
 
   def list_users
-
     @page_header = "List users"
     if params[:q]
       search_value = params[:q]
@@ -1855,6 +1854,12 @@ class PagesController < ApplicationController
       flash[:error] = user.errors.full_messages.join('<br />')
       redirect_to("/list_users") and return
     end
+  end
+
+  def checkin_out_history
+    @asset = Asset.find(params[:asset_id])
+    @page_header = "Checkin/Out History - #{@asset.name}"
+    @asset_activities = @asset.asset_activities.order("created_at ASC")
   end
 
 end

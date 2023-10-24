@@ -52,6 +52,8 @@ Rails.application.routes.draw do
   post '/suspend_user' => 'pages#suspend_user'
   #activate_user
   post '/activate_user' => 'pages#activate_user'
+  #checkin_out_history
+  get '/checkin_out_history' => 'pages#checkin_out_history'
 
   get '/export_all' => 'pages#export_all'
   post '/export_all' => 'pages#export_all'

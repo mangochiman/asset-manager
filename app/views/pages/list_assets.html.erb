@@ -66,6 +66,7 @@
               <div class="dropdown-menu" role="menu">
                 <a class="dropdown-item" href="/edit_asset?asset_id=<%= asset.asset_id %>">Update</a>
                 <a class="dropdown-item" href="/new_asset_menu?ref_id=<%= asset.asset_id %>">Clone</a>
+                <a class="dropdown-item" href="/checkin_out_history?asset_id=<%= asset.asset_id %>">Checkin/out History</a>
                 <a class="dropdown-item" href="#" onclick="voidAssetConfirm('<%= asset.asset_id %>')">Delete</a>
               </div>
             </div>
