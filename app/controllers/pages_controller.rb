@@ -1807,8 +1807,6 @@ class PagesController < ApplicationController
   end
 
   def list_users
-    @page_header = "List users"
-    @people = Person.joins([:user])
 
     @page_header = "List users"
     if params[:q]
@@ -1822,7 +1820,41 @@ class PagesController < ApplicationController
   end
 
   def suspend_user
+    person = Person.find(params[:id])
+    unless person.user.blank?
+      role = person.role
+      if role == "System Administrator" || (@current_user.person_id == person.person_id)
+        flash[:error] = "That action is not allowed on the selected record"
+        redirect_to("/list_users") and return
+      end
+    end
 
+    user = person.user
+    user.voided = 1
+    user.voided_by = @current_user.person_id
+    user.date_voided = Date.today
+    if user.save
+      flash[:notice] = "Username #{user.username} has been successfully suspended from accessing the system"
+      redirect_to("/list_users") and return
+    else
+      flash[:error] = user.errors.full_messages.join('<br />')
+      redirect_to("/list_users") and return
+    end
+  end
+
+  def activate_user
+    person = Person.find(params[:id])
+    user = person.user
+    user.voided = 0
+    user.voided_by = nil
+    user.date_voided = nil
+    if user.save
+      flash[:notice] = "Username #{user.username} has been successfully activated"
+      redirect_to("/list_users") and return
+    else
+      flash[:error] = user.errors.full_messages.join('<br />')
+      redirect_to("/list_users") and return
+    end
   end
 
 end

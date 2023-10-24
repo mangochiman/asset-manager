@@ -47,9 +47,11 @@ Rails.application.routes.draw do
   #list_users
   get '/list_users' => 'pages#list_users'
   post '/list_users' => 'pages#list_users'
-  
+
   #suspend_user
   post '/suspend_user' => 'pages#suspend_user'
+  #activate_user
+  post '/activate_user' => 'pages#activate_user'
 
   get '/export_all' => 'pages#export_all'
   post '/export_all' => 'pages#export_all'

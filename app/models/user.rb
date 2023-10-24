@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 
   validate :admin_quota_validation
 
-  default_scope {where('voided = 0')}
+  #default_scope {where('voided = 0')}
 
   def try_to_login
     User.authenticate(self.username, self.password)
@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
 
   def self.authenticate(login, password)
     password = password.to_s.squish
-    u = where(['username =?', login]).first
+    u = where(['username =? AND voided = 0', login]).first
     if u
       password_reminder = u.password_reminders.last
       unless password_reminder.blank?
