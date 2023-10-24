@@ -63,7 +63,7 @@
 
           <% if current_user.person_id == person.person_id %>
             <td class="project-actions text-right" >
-              <a class="btn btn-default btn-block disabled" href="#"><i class="fas fa-trash"></i>Suspend</a>
+              <a class="btn btn-default btn-block disabled" href="#"><i class="fas fa-lock"></i> Suspend</a>
             </td>
           <% else %>
             <% if person.user.voided == 0 %>
