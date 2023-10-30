@@ -44,6 +44,12 @@ Rails.application.routes.draw do
   get '/report_options' => 'pages#report_options'
   post '/report_options' => 'pages#report_options' #export_all
 
+  get '/new_asset_stock_menu' => 'pages#new_asset_stock_menu'
+  post '/new_asset_stock_menu' => 'pages#new_asset_stock_menu'
+
+  get '/list_asset_stock' => 'pages#list_asset_stock'
+  post '/list_asset_stock' => 'pages#list_asset_stock'
+
   #list_users
   get '/list_users' => 'pages#list_users'
   post '/list_users' => 'pages#list_users'

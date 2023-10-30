@@ -1862,4 +1862,24 @@ class PagesController < ApplicationController
     @asset_activities = @asset.asset_activities.order("created_at ASC")
   end
 
+  def new_asset_stock_menu
+    @page_header = "New Asset Stock"
+    @asset = Asset.new
+    if params[:ref_id]
+      @page_header = "Clone Asset Stock"
+      @asset = Asset.find(params[:ref_id]) rescue Asset.new
+    end
+    @asset_types = AssetType.all
+    @status_selection_fields = SelectionField.where(['field_type =?', 'status'])
+    @condition_selection_fields = SelectionField.where(['field_type =?', 'condition'])
+    @people = Person.all
+    @vendors = Vendor.all
+    @locations = Location.all
+    @projects = Project.all
+  end
+
+  def list_asset_stock
+
+  end
+
 end

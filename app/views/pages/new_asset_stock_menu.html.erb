@@ -1,0 +1,324 @@
+<form id="assetForm" action="/new_asset_stock_menu" method="post" enctype="multipart/form-data">
+  <div class="card card-primary card-outline">
+
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Buttons with Icons -->
+          <div class="card">
+            <div class="card-body row">
+              <div>
+                <button onclick="validateForm()" type="button" class="btn btn-primary">
+                  <i class="fa fa-save"></i> Save
+                </button>
+                <button onclick="uploadAssetStockFromCSV()" type="button" class="btn btn-success">
+                  <i class="fa fa-upload"></i> Upload Asset Stock From CSV
+                </button>
+                <button onclick="goBack()" type="button" class="btn btn-default">
+                  <i class="fa fa-arrow-circle-left"></i> Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs" id="custom-content-above-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="custom-content-above-home-tab" data-toggle="pill" href="#custom-content-above-home" role="tab" aria-controls="custom-content-above-home" aria-selected="true">General</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-profile-tab" data-toggle="pill" href="#custom-content-above-profile" role="tab" aria-controls="custom-content-above-profile" aria-selected="false">Details</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-settings-tab" data-toggle="pill" href="#custom-content-above-notes" role="tab" aria-controls="custom-content-above-notes" aria-selected="false">Notes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-content-above-settings-tab" data-toggle="pill" href="#custom-content-above-files" role="tab" aria-controls="custom-content-above-notes" aria-selected="false">Files</a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="custom-content-above-tabContent">
+        <div class="tab-pane fade show active" id="custom-content-above-home" role="tabpanel" aria-labelledby="custom-content-above-home-tab">
+
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Name<span class="text-red"> *</span></label>
+                    <input type="text" id="assetName" value="<%= @asset.name %>" name="name" required class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Product Model Number</label>
+                    <input type="text" name="model" class="form-control" placeholder="Automatic">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Group</label>
+                    <select name="asset_type_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @asset_types.each do |asset_type| %>
+                        <option id="asset_type_id_<%= asset_type.asset_type_id %>" value="<%= asset_type.asset_type_id %>"><%= asset_type.name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Manufacturer</label>
+                    <input type="text" value="<%= @asset.manufacturer %>" name="manufacturer" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Brand</label>
+                    <input type="text" name="brand" value="<%= @asset.brand %>" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Model</label>
+                    <input type="text" name="model" value="<%= @asset.model %>" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Picture</label>
+                    <div class="form-group">
+                      <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <div class="fileupload-new thumbnail" style=" height: 150px;">
+                          <% if @asset.photo_url.blank? %>
+                            <img src="/assets/demoUpload.jpg" alt=""/>
+                          <% else %>
+                            <img src="<%= @asset.photo_url %>" alt=""/>
+                          <% end %>
+                        </div>
+                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                        <div class="upload-buttons">
+                          <span class="btn btn-file btn-info">
+                            <span class="fileupload-new">Select image</span>
+                            <span class="fileupload-exists">Change</span>
+                            <input type="file" name="picture"/>
+                          </span>
+                          <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remove</a>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <% if !@asset.asset_id.blank? %>
+                <div class="row">
+                  <div class="form-check">
+                    <input type="checkbox" name="display_image" checked class="form-check-input" id="display_image">
+                    <label class="form-check-label" for="display_image">Copy display image</label>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="custom-content-above-profile" role="tabpanel" aria-labelledby="custom-content-above-profile-tab">
+          <div class="card">
+            <div class="card-body">
+
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <select name="location_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @locations.each do |location| %>
+                        <option id="location_id_<%= location.location_id %>" value="<%= location.location_id %>"><%= location.name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Serial Number</label>
+                    <input type="text" value="<%= @asset.serial_number %>" name="serial_number" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Condition</label>
+                    <select name="condition_selection_field_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @condition_selection_fields.each do |selection_field| %>
+                        <option id="selection_field_id_<%= selection_field.selection_field_id %>" value="<%= selection_field.selection_field_id %>"><%= selection_field.field_name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Project</label>
+                    <select name="project_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @projects.each do |project| %>
+                        <option id="project_id_<%= project.project_id %>" value="<%= project.project_id %>"><%= project.name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="custom-content-above-notes" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-outline card-info">
+                <!-- /.card-header -->
+                <div class="card-body">
+                <textarea id="summernote" name="notes" rows="40">
+                    <%= @asset.notes %>
+                </textarea>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+          </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="custom-content-above-files" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
+          <br/>
+          <% if @asset.asset_id.blank? %>
+            <p><i>To upload multiple files, press <strong>ctrl</strong> on your keyboard + click the file</i></p>
+            <div class="col-md-12">
+              <div class="form-group" id="fileInput">
+                <label for="exampleInputFile">Upload Files</label>
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" name="file[]" class="custom-file-input" multiple>
+                    <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <% @asset.asset_attachments.each do |asset_attachment| %>
+              <div class="form-check">
+                <input type="checkbox" value="<%= asset_attachment.asset_attachment_id %>" name="asset_attachment_ids[]" checked class="form-check-input" id="asset_attachment<%= asset_attachment.asset_attachment_id %>">
+                <label class="form-check-label" for="asset_attachment<%= asset_attachment.asset_attachment_id %>"><%= asset_attachment.url %></label>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <input type="hidden" value="<%= params[:ref_id] %>" name="ref_id">
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="requiredModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The asset name is required
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script>
+    var asset_type_id = '<%= @asset.asset_type_id %>';
+    var location_id = '<%= @asset.location_id %>';
+    var condition_selection_field_id = '<%= @asset.condition_id %>';
+    var vendor_id = '<%= @asset.vendor_id %>';
+    var asset_id = '<%= @asset.asset_id %>';
+    var project_id = '<%= @asset.project_id %>';
+
+    $(document).ready(function () {
+        // Summernote
+        jQuery('#summernote').summernote()
+
+        jQuery('.assets').addClass('active');
+        jQuery('.new_asset_menu').addClass('active');
+        jQuery('.assets-menu').addClass('menu-open');
+
+        jQuery("#assetForm").submit(function (event) {
+            var assetName = jQuery("#assetName").val().trim()
+            if (assetName == "") {
+                jQuery('#requiredModal').modal('show');
+                event.preventDefault();
+            }
+        });
+
+        bsCustomFileInput.init();
+        <% unless @asset.asset_id.blank?%>
+        jQuery(".upload-buttons").hide();
+        <% end %>
+    })
+
+    function validateForm() {
+        $("#assetForm").submit();
+    }
+
+    function uploadAssetsFromCSV(){
+        window.location = "/upload_assets_from_file"
+    }
+
+    function loadDefaultValues() {
+        var location_id_option = document.getElementById('location_id_' + location_id)
+        if (location_id_option) {
+            location_id_option.selected = true;
+        }
+
+        var asset_type_id_option = document.getElementById('asset_type_id_' + asset_type_id)
+        if (asset_type_id_option) {
+            asset_type_id_option.selected = true;
+        }
+
+        var condition_selection_field_id_option = document.getElementById('selection_field_id_' + condition_selection_field_id)
+        if (condition_selection_field_id_option) {
+            condition_selection_field_id_option.selected = true;
+        }
+
+        var vendor_id_option = document.getElementById('vendor_id_' + vendor_id)
+        if (vendor_id_option) {
+            vendor_id_option.selected = true;
+        }
+
+        var project_id_option = document.getElementById('project_id_' + project_id)
+        if (project_id_option) {
+            project_id_option.selected = true;
+        }
+    }
+
+    loadDefaultValues()
+</script>
