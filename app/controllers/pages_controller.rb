@@ -1864,10 +1864,10 @@ class PagesController < ApplicationController
 
   def new_asset_stock_menu
     @page_header = "New Asset Stock"
-    @asset = Asset.new
+    @asset_stock = AssetStock.new
     if params[:ref_id]
       @page_header = "Clone Asset Stock"
-      @asset = Asset.find(params[:ref_id]) rescue Asset.new
+      @asset_stock = AssetStock.find(params[:ref_id]) rescue Asset.new
     end
     @asset_types = AssetType.all
     @status_selection_fields = SelectionField.where(['field_type =?', 'status'])
@@ -1880,6 +1880,10 @@ class PagesController < ApplicationController
 
   def list_asset_stock
 
+  end
+
+  def upload_asset_stock_from_file
+    @page_header = "Upload Asset Stock From File"
   end
 
 end

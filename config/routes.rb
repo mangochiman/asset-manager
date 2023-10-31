@@ -50,6 +50,8 @@ Rails.application.routes.draw do
   get '/list_asset_stock' => 'pages#list_asset_stock'
   post '/list_asset_stock' => 'pages#list_asset_stock'
 
+  get '/upload_asset_stock_from_file' => 'pages#upload_asset_stock_from_file'
+  post '/upload_asset_stock_from_file' => 'pages#upload_asset_stock_from_file'
   #list_users
   get '/list_users' => 'pages#list_users'
   post '/list_users' => 'pages#list_users'

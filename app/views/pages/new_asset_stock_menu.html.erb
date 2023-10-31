@@ -48,13 +48,13 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Name<span class="text-red"> *</span></label>
-                    <input type="text" id="assetName" value="<%= @asset.name %>" name="name" required class="form-control">
+                    <input type="text" id="assetName" value="<%= @asset_stock.name %>" name="name" required class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <label>Product Model Number</label>
-                    <input type="text" name="model" class="form-control" placeholder="Automatic">
+                    <label>Barcode</label>
+                    <input type="text" name="model" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -74,19 +74,19 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Manufacturer</label>
-                    <input type="text" value="<%= @asset.manufacturer %>" name="manufacturer" class="form-control">
+                    <input type="text" value="<%= @asset_stock.manufacturer %>" name="manufacturer" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Brand</label>
-                    <input type="text" name="brand" value="<%= @asset.brand %>" class="form-control">
+                    <input type="text" name="brand" value="<%= @asset_stock.brand %>" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Model</label>
-                    <input type="text" name="model" value="<%= @asset.model %>" class="form-control">
+                    <input type="text" name="model" value="<%= @asset_stock.model %>" class="form-control">
                   </div>
                 </div>
               </div>
@@ -97,10 +97,10 @@
                     <div class="form-group">
                       <div class="fileupload fileupload-new" data-provides="fileupload">
                         <div class="fileupload-new thumbnail" style=" height: 150px;">
-                          <% if @asset.photo_url.blank? %>
+                          <% if @asset_stock.photo_url.blank? %>
                             <img src="/assets/demoUpload.jpg" alt=""/>
                           <% else %>
-                            <img src="<%= @asset.photo_url %>" alt=""/>
+                            <img src="<%= @asset_stock.photo_url %>" alt=""/>
                           <% end %>
                         </div>
                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
@@ -119,7 +119,7 @@
                 </div>
               </div>
 
-              <% if !@asset.asset_id.blank? %>
+              <% if !@asset_stock.asset_stock_id.blank? %>
                 <div class="row">
                   <div class="form-check">
                     <input type="checkbox" name="display_image" checked class="form-check-input" id="display_image">
@@ -135,6 +135,26 @@
         <div class="tab-pane fade" id="custom-content-above-profile" role="tabpanel" aria-labelledby="custom-content-above-profile-tab">
           <div class="card">
             <div class="card-body">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Price For Add Stock</label>
+                    <input type="number" value="<%= @asset_stock.reorder_quantity %>" name="reorder_quantity" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Initial Stock Quantity</label>
+                    <input type="number" value="<%= @asset_stock.initial_quantity %>" name="initial_quantity" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Reorder Quantity</label>
+                    <input type="number" value="<%= @asset_stock.reorder_quantity %>" name="reorder_quantity" class="form-control">
+                  </div>
+                </div>
+              </div>
 
               <div class="row">
                 <div class="col-sm-4">
@@ -151,7 +171,7 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label>Serial Number</label>
-                    <input type="text" value="<%= @asset.serial_number %>" name="serial_number" class="form-control">
+                    <input type="text" value="<%= @asset_stock.serial_number %>" name="serial_number" class="form-control">
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -170,6 +190,46 @@
               <div class="row">
                 <div class="col-sm-4">
                   <div class="form-group">
+                    <label>Vendor</label>
+                    <select name="vendor_id" class="form-control custom-select">
+                      <option value="" selected disabled>Select one</option>
+                      <% @vendors.each do |vendor| %>
+                        <option id="vendor_id_<%= vendor.vendor_id %>" value="<%= vendor.vendor_id %>"><%= vendor.name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Date Purchased</label>
+                    <input type="date" value="<%= @asset_stock.date_purchased %>" name="date_purchased" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Purchase Order Number</label>
+                    <input type="text" value="<%= @asset_stock.order_number %>" name="order_number" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Account Code</label>
+                    <input type="text" value="<%= @asset_stock.account_code %>" name="account_code" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Warranty End</label>
+                    <input type="date" value="<%= @asset_stock.warranty_end %>" name="warranty_end" class="form-control">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
                     <label>Project</label>
                     <select name="project_id" class="form-control custom-select">
                       <option value="" selected disabled>Select one</option>
@@ -179,6 +239,7 @@
                     </select>
                   </div>
                 </div>
+
               </div>
             </div>
             <!-- /.card-body -->
@@ -192,7 +253,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                 <textarea id="summernote" name="notes" rows="40">
-                    <%= @asset.notes %>
+                    <%= @asset_stock.notes %>
                 </textarea>
                 </div>
               </div>
@@ -204,7 +265,7 @@
 
         <div class="tab-pane fade" id="custom-content-above-files" role="tabpanel" aria-labelledby="custom-content-above-settings-tab">
           <br/>
-          <% if @asset.asset_id.blank? %>
+          <% if @asset_stock.asset_stock_id.blank? %>
             <p><i>To upload multiple files, press <strong>ctrl</strong> on your keyboard + click the file</i></p>
             <div class="col-md-12">
               <div class="form-group" id="fileInput">
@@ -218,10 +279,10 @@
               </div>
             </div>
           <% else %>
-            <% @asset.asset_attachments.each do |asset_attachment| %>
+            <% @asset_stock.asset_stock_attachments.each do |asset_stock_attachment| %>
               <div class="form-check">
-                <input type="checkbox" value="<%= asset_attachment.asset_attachment_id %>" name="asset_attachment_ids[]" checked class="form-check-input" id="asset_attachment<%= asset_attachment.asset_attachment_id %>">
-                <label class="form-check-label" for="asset_attachment<%= asset_attachment.asset_attachment_id %>"><%= asset_attachment.url %></label>
+                <input type="checkbox" value="<%= asset_stock_attachment.asset_stock_attachment_id %>" name="asset_stock_attachment_ids[]" checked class="form-check-input" id="asset_stock_attachment<%= asset_stock_attachment.asset_stock_attachment_id %>">
+                <label class="form-check-label" for="asset_attachment<%= asset_stock_attachment.asset_stock_attachment_id %>"><%= asset_stock_attachment.url %></label>
               </div>
             <% end %>
           <% end %>
@@ -244,7 +305,7 @@
         </button>
       </div>
       <div class="modal-body">
-        The asset name is required
+        The asset stock name is required
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
@@ -256,20 +317,20 @@
 </div>
 <!-- /.modal -->
 <script>
-    var asset_type_id = '<%= @asset.asset_type_id %>';
-    var location_id = '<%= @asset.location_id %>';
-    var condition_selection_field_id = '<%= @asset.condition_id %>';
-    var vendor_id = '<%= @asset.vendor_id %>';
-    var asset_id = '<%= @asset.asset_id %>';
-    var project_id = '<%= @asset.project_id %>';
+    var asset_type_id = '<%= @asset_stock.asset_type_id %>';
+    var location_id = '<%= @asset_stock.location_id %>';
+    var condition_selection_field_id = '<%= @asset_stock.condition_id %>';
+    var vendor_id = '<%= @asset_stock.vendor_id %>';
+    var asset_stock_id = '<%= @asset_stock.asset_stock_id %>';
+    var project_id = '<%= @asset_stock.project_id %>';
 
     $(document).ready(function () {
         // Summernote
         jQuery('#summernote').summernote()
 
-        jQuery('.assets').addClass('active');
-        jQuery('.new_asset_menu').addClass('active');
-        jQuery('.assets-menu').addClass('menu-open');
+        jQuery('.asset_stock').addClass('active');
+        jQuery('.new_asset_stock_menu').addClass('active');
+        jQuery('.assets-stock-menu').addClass('menu-open');
 
         jQuery("#assetForm").submit(function (event) {
             var assetName = jQuery("#assetName").val().trim()
@@ -280,7 +341,7 @@
         });
 
         bsCustomFileInput.init();
-        <% unless @asset.asset_id.blank?%>
+        <% unless @asset_stock.asset_stock_id.blank?%>
         jQuery(".upload-buttons").hide();
         <% end %>
     })
@@ -289,8 +350,8 @@
         $("#assetForm").submit();
     }
 
-    function uploadAssetsFromCSV(){
-        window.location = "/upload_assets_from_file"
+    function uploadAssetStockFromCSV(){
+        window.location = "/upload_asset_stock_from_file"
     }
 
     function loadDefaultValues() {
