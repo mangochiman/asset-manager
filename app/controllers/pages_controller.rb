@@ -1867,8 +1867,114 @@ class PagesController < ApplicationController
     @asset_stock = AssetStock.new
     if params[:ref_id]
       @page_header = "Clone Asset Stock"
-      @asset_stock = AssetStock.find(params[:ref_id]) rescue Asset.new
+      @asset_stock = AssetStock.find(params[:ref_id]) rescue AssetStock.new
     end
+
+    if request.post?
+      asset_stock = AssetStock.new
+      asset_stock.name = params[:name]
+      asset_stock.initial_quantity = params[:initial_quantity]
+      asset_stock.reorder_quantity = params[:reorder_quantity]
+      asset_stock.barcode = params[:barcode]
+      asset_stock.asset_type_id = params[:asset_type_id]
+      asset_stock.project_id = params[:project_id]
+      asset_stock.status_id = params[:status_selection_field_id]
+      asset_stock.location_id = params[:location_id]
+      asset_stock.condition_id = params[:condition_selection_field_id]
+      asset_stock.vendor_id = params[:vendor_id]
+      asset_stock.serial_number = params[:serial_number]
+      asset_stock.manufacturer = params[:manufacturer]
+      asset_stock.brand = params[:brand]
+      asset_stock.model = params[:model]
+      asset_stock.unit_price = params[:price]
+      asset_stock.date_purchased = params[:date_purchased]
+      asset_stock.order_number = params[:order_number]
+      asset_stock.account_code = params[:account_code]
+      asset_stock.warranty_end = params[:warranty_end]
+      asset_stock.notes = params[:notes]
+
+      if asset_stock.save
+        person_id_param = @current_user.person.person_id
+        action_params = "Add"
+        description_param = "Created new asset stock record: #{asset_stock.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+        errors = []
+        unless params[:file].blank?
+          params[:file].each do |file_upload|
+            extension = File.extname(file_upload).downcase
+            original_filename = file_upload.original_filename.split(".")[0].parameterize
+            file_name = "#{original_filename}#{extension}"
+            file_size_readable = ActionController::Base.helpers.number_to_human_size(file_upload.size)
+            file_size_bytes = file_upload.size
+
+            asset_stock_attachment = AssetStockAttachment.new
+            asset_stock_attachment.asset_stock_id = asset_stock.asset_stock_id
+            asset_stock_attachment.name = original_filename
+            asset_stock_attachment.size = file_size_readable
+            asset_stock_attachment.bytes = file_size_bytes
+            asset_stock_attachment.url = '/uploads/' + file_name
+            if asset_stock_attachment.save
+              File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+                file.write(file_upload.read)
+              end
+            else
+              errors << asset_stock_attachment.errors.full_messages.join('<br />')
+            end
+          end
+        end
+
+        unless params[:picture].blank?
+          file_upload = params[:picture]
+          extension = File.extname(file_upload).downcase
+          original_filename = file_upload.original_filename.split(".")[0].parameterize
+          file_name = "#{original_filename}#{extension}"
+
+          file_extensions = %w[.png .jpeg .jpg]
+          if !file_extensions.include?(extension)
+            errors << "Unsupported file for asset stock picture. You can only upload .png, .jpeg, .jpg file extensions"
+          else
+            File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+              file.write(params[:picture].read)
+            end
+            asset_stock.photo_url = '/uploads/' + file_name
+            asset_stock.save!
+          end
+        end
+
+        if params[:display_image].to_s == "on"
+          asset_stock.photo_url = @asset_stock.photo_url
+          asset_stock.save!
+        end
+
+        unless params[:asset_stock_attachment_ids].blank?
+          params[:asset_stock_attachment_ids].each do |asset_stock_attachment_id|
+            asset_stock_attachment_new = AssetStockAttachment.new
+            asset_stock_attachment_old = AssetStockAttachment.find(asset_stock_attachment_id)
+            asset_stock_attachment_new.asset_stock_id = asset_stock.asset_stock_id
+            asset_stock_attachment_new.name = asset_stock_attachment_old.name
+            asset_stock_attachment_new.url = asset_stock_attachment_old.url
+            asset_stock_attachment_new.size = asset_stock_attachment_old.size
+            asset_stock_attachment_new.bytes = asset_stock_attachment_old.bytes
+            if asset_stock_attachment_new.save
+            else
+              errors << "Unable to copy image #{asset_stock_attachment_old.url}"
+            end
+          end
+        end
+
+        unless errors.blank?
+          flash[:error] = errors.join('<br />')
+          redirect_to("/new_asset_stock_menu") and return
+        end
+
+        flash[:notice] = 'Record creation was successful'
+        redirect_to("/new_asset_stock_menu") and return
+      else
+        flash[:error] = asset_stock.errors.full_messages.join('<br />')
+        redirect_to("/new_asset_stock_menu") and return
+      end
+    end
+
     @asset_types = AssetType.all
     @status_selection_fields = SelectionField.where(['field_type =?', 'status'])
     @condition_selection_fields = SelectionField.where(['field_type =?', 'condition'])
