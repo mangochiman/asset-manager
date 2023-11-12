@@ -1985,7 +1985,168 @@ class PagesController < ApplicationController
   end
 
   def list_asset_stock
+    @page_header = "List asset stock"
+    if params[:q]
+      search_value = params[:q]
+      search_field = params[:search_field]
+      @asset_stock = AssetStock.search(search_field, search_value)
+      @page_header = "Search assets: #{@asset_stock.length} result(s)"
+    else
+      @asset_stock = AssetStock.order('asset_stock_id DESC')
+    end
+  end
 
+  def edit_asset_stock
+    @asset_stock = AssetStock.find(params[:asset_stock_id])
+    if request.post?
+      asset = @asset_stock
+      asset.name = params[:name]
+      asset.barcode = params[:barcode]
+      asset.initial_quantity = params[:initial_quantity]
+      asset.reorder_quantity = params[:reorder_quantity]
+      asset.asset_type_id = params[:asset_type_id]
+      asset.project_id = params[:project_id]
+      #asset.status_id = params[:status_selection_field_id]
+      asset.location_id = params[:location_id]
+      asset.condition_id = params[:condition_selection_field_id]
+      asset.vendor_id = params[:vendor_id]
+      asset.serial_number = params[:serial_number]
+      asset.manufacturer = params[:manufacturer]
+      asset.brand = params[:brand]
+      asset.model = params[:model]
+      asset.unit_price = params[:price]
+      asset.date_purchased = params[:date_purchased]
+      asset.order_number = params[:order_number]
+      asset.account_code = params[:account_code]
+      asset.warranty_end = params[:warranty_end]
+      asset.notes = params[:notes]
+
+      if asset.save
+        person_id_param = @current_user.person.person_id
+        action_params = "Update"
+        description_param = "Updated asset stock record: #{asset.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+        errors = []
+        unless params[:file].blank?
+          params[:file].each do |file_upload|
+            extension = File.extname(file_upload).downcase
+            original_filename = file_upload.original_filename.split(".")[0].parameterize
+            file_name = "#{original_filename}#{extension}"
+            file_size_readable = ActionController::Base.helpers.number_to_human_size(file_upload.size)
+            file_size_bytes = file_upload.size
+
+            asset_attachment = AssetStockAttachment.new
+            asset_attachment.asset_stock_id = asset.asset_stock_id
+            asset_attachment.name = original_filename
+            asset_attachment.size = file_size_readable
+            asset_attachment.bytes = file_size_bytes
+            asset_attachment.url = '/uploads/' + file_name
+            if asset_attachment.save
+              File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+                file.write(file_upload.read)
+              end
+            else
+              errors << asset_attachment.errors.full_messages.join('<br />')
+            end
+          end
+        end
+
+        unless params[:picture].blank?
+          file_upload = params[:picture]
+          extension = File.extname(file_upload).downcase
+          original_filename = file_upload.original_filename.split(".")[0].parameterize
+          file_name = "#{original_filename}#{extension}"
+
+          file_extensions = %w[.png .jpeg .jpg]
+          if !file_extensions.include?(extension)
+            errors << "Unsupported file for asset picture. You can only upload .png, .jpeg, .jpg file extensions"
+          else
+            file_path = Rails.root.to_s + '/public' + asset.photo_url.to_s
+            File.delete(file_path) if File.exist?(file_path) && !asset.photo_url.to_s.blank?
+            File.open(Rails.root.join('public', 'uploads', file_name), 'wb') do |file|
+              file.write(params[:picture].read)
+            end
+            asset.photo_url = '/uploads/' + file_name
+            asset.save!
+          end
+        end
+
+        unless errors.blank?
+          flash[:error] = errors.join('<br />')
+          redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+        end
+
+        flash[:notice] = 'Record update was successful'
+        redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+      else
+        flash[:error] = asset.errors.full_messages.join('<br />')
+        redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+      end
+    end
+
+    @page_header = @asset_stock.name
+    @retired = @asset_stock.retired?
+    @asset_types = AssetType.all
+    @status_selection_fields = SelectionField.where(['field_type =?', 'status'])
+    @condition_selection_fields = SelectionField.where(['field_type =?', 'condition'])
+    @people = Person.all
+    @vendors = Vendor.all
+    @locations = Location.all
+    @projects = Project.all
+    @retire_reasons = Asset.retire_reasons
+    @service_types = SelectionField.where(['field_type =?', 'service_type'])
+    @vendors = Vendor.all
+    @people = Person.all
+  end
+
+  def retire_asset_stock
+
+  end
+
+  def checkout_asset_stock
+
+  end
+
+  def delete_asset_stock_attachment
+
+  end
+
+  def activate_asset_stock
+
+  end
+
+  def download_asset_stock_label
+
+  end
+
+  def delete_asset_stock
+    asset_stock = AssetStock.find(params[:id])
+    asset_attachments = asset_stock.asset_attachments
+    errors = []
+    ActiveRecord::Base.transaction do
+      if asset.delete
+        person_id_param = @current_user.person.person_id
+        action_params = "Delete"
+        description_param = "Deleted asset stock record: #{asset_stock.name}"
+        SystemActivity.log(person_id_param, action_params, description_param)
+
+        asset_attachments.each do |asset_attachment|
+          file_path = Rails.root.to_s + '/public' + asset_attachment.url.to_s
+          if asset_attachment.delete
+            File.delete(file_path) if File.exist?(file_path) && !asset_attachment.url.to_s.blank?
+          end
+        end
+      else
+        errors << asset.errors.full_messages.join('<br />')
+      end
+    end
+    if errors.blank?
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/list_asset_stock") and return
+    else
+      flash[:error] = errors
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:id]}") and return
+    end
   end
 
   def upload_asset_stock_from_file

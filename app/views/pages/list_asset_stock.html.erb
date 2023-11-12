@@ -1,0 +1,162 @@
+<form action="/list_asset_stock" method="get">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="input-group" id="adv-search">
+        <button type="button" id="adv-search-btn" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          Asset Name
+        </button>
+        <ul class="dropdown-menu">
+          <li class="dropdown-item" onclick="updateSearchParam('Asset Name', 'name')"><a href="#">Asset Name</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Asset Location', 'location')"><a href="#">Asset Location</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Asset Model', 'model')"><a href="#">Asset Model</a></li>
+          <li class="dropdown-item" onclick="updateSearchParam('Asset Barcode', 'barcode')"><a href="#">Asset Barcode</a></li>
+        </ul>
+        <input type="text" name="q" id="search" required class="form-control" placeholder="Search"/>
+        <input type="hidden" name="search_field" id="searchField" class="form-control" value="name"/>
+        <input type="hidden" name="search_caption" id="searchCaption" class="form-control" value="Asset Name"/>
+        <div class="input-group-btn">
+
+          <div class="btn-group" role="group">
+            <button type="submit" class="btn btn-success">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<br/>
+
+<div class="card">
+  <div class="card-body ">
+    <table id="example1" class="table-striped table-condensed" style="width: 100%;">
+      <thead>
+      <tr>
+        <th>Asset Name</th>
+        <th>Asset Number</th>
+        <th>Project</th>
+        <th>Location</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Last Update</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @asset_stock.each do |asset_stock| %>
+        <tr>
+          <td><%= asset_stock.name %></td>
+          <td><%= asset_stock.barcode %></td>
+          <td><%= asset_stock.project_details %></td>
+          <td><%= asset_stock.location_details %></td>
+          <td><%= asset_stock.brand %></td>
+          <td><%= asset_stock.model %></td>
+          <td><%= asset_stock.updated_at.strftime("%d.%m.%Y") %></td>
+          <td>
+            <div class="btn-group btn-block">
+              <button type="button" class="btn btn-success">Action</button>
+              <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu" role="menu">
+                <a class="dropdown-item" href="/edit_asset_stock?asset_stock_id=<%= asset_stock.asset_stock_id %>">Update</a>
+                <a class="dropdown-item" href="/new_asset_menu?ref_id=<%= asset_stock.asset_stock_id %>">Clone</a>
+                <a class="dropdown-item" href="/asset_stock_movement?asset_stock_id=<%= asset_stock.asset_stock_id %>">Stock Movement</a>
+                <a class="dropdown-item" href="#" onclick="voidAssetConfirm('<%= asset_stock.asset_stock_id %>')">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="voidAssetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Alert</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This will permanently delete the selected record. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidAsset();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        jQuery('.asset_stock').addClass('active');
+        jQuery('.list_asset_stock_menu').addClass('active');
+        jQuery('.assets-stock-menu').addClass('menu-open');
+
+        loadDefaults();
+
+        $("#example1").DataTable({
+            "aaSorting": [],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "bFilter": false,
+            "pageLength": 100
+        })
+        console.log("dd")
+    })
+
+    var selectedAssetID;
+
+    function voidAssetConfirm(id) {
+        selectedAssetID = id;
+        jQuery('#voidAssetModal').modal('show');
+    }
+
+    function voidAsset() {
+        var body = document.getElementsByTagName("body")[0];
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/delete_asset_stock";
+        body.appendChild(form);
+
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.value = selectedAssetID;
+        input.name = "id";
+        form.appendChild(input);
+
+        form.submit();
+    }
+
+    function updateSearchParam(key, value){
+        jQuery("#adv-search-btn").html(key);
+        jQuery("#searchField").val(value);
+        jQuery("#searchCaption").val(key);
+    }
+    var value = '<%= params[:q] %>'
+    var search_caption = '<%= params[:search_caption] %>'
+    function loadDefaults(){
+        if (value){
+            jQuery("#adv-search-btn").html(search_caption);
+            jQuery("#search").val(value);
+            jQuery("#searchCaption").val(search_caption);
+        }
+    }
+</script>

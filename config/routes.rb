@@ -47,8 +47,15 @@ Rails.application.routes.draw do
   get '/new_asset_stock_menu' => 'pages#new_asset_stock_menu'
   post '/new_asset_stock_menu' => 'pages#new_asset_stock_menu'
 
+  get '/edit_asset_stock' => 'pages#edit_asset_stock'
+  post '/edit_asset_stock' => 'pages#edit_asset_stock'
+
+  post '/delete_asset_stock' => 'pages#delete_asset_stock'
+
   get '/list_asset_stock' => 'pages#list_asset_stock'
   post '/list_asset_stock' => 'pages#list_asset_stock'
+
+  get '/download_asset_stock_label' => 'pages#download_asset_stock_label'
 
   get '/upload_asset_stock_from_file' => 'pages#upload_asset_stock_from_file'
   post '/upload_asset_stock_from_file' => 'pages#upload_asset_stock_from_file'
