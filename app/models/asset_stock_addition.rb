@@ -1,0 +1,2 @@
+class AssetStockAddition < ApplicationRecord
+end

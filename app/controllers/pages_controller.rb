@@ -458,7 +458,7 @@ class PagesController < ApplicationController
     asset.retired = 1
     asset.retire_reason = params[:retire_reason]
     asset.date_retired = params[:retire_date]
-    asset.retired_by = '#'
+    asset.retired_by = @current_user.person.person_id
     asset.retire_comments = params[:comments]
     if asset.save
       person_id_param = @current_user.person.person_id
@@ -2100,7 +2100,23 @@ class PagesController < ApplicationController
   end
 
   def retire_asset_stock
-
+    asset_stock = AssetStock.find(params[:asset_stock_id])
+    asset_stock.retired = 1
+    asset_stock.retire_reason = params[:retire_reason]
+    asset_stock.date_retired = params[:retire_date]
+    asset_stock.retired_by = @current_user.person.person_id
+    asset_stock.retire_comments = params[:comments]
+    if asset_stock.save
+      person_id_param = @current_user.person.person_id
+      action_params = "Retired"
+      description_param = "Retired asset stock record: #{asset_stock.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+      flash[:notice] = 'Asset retirement was successful'
+      redirect_to("/list_asset_stock") and return
+    else
+      flash[:error] = asset_stock.errors.full_messages.join('<br />')
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+    end
   end
 
   def checkout_asset_stock
@@ -2121,7 +2137,24 @@ class PagesController < ApplicationController
   end
 
   def activate_asset_stock
+    asset_stock = AssetStock.find(params[:asset_stock_id])
+    asset_stock.retired = 0
+    asset_stock.retire_reason = ""
+    asset_stock.date_retired = ""
+    asset_stock.retired_by = ""
+    asset_stock.retire_comments = ""
+    if asset_stock.save
+      person_id_param = @current_user.person.person_id
+      action_params = "Activate"
+      description_param = "Activate asset stock: #{asset_stock.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
 
+      flash[:notice] = 'Asset stock activation was successful'
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+    else
+      flash[:error] = asset.errors.full_messages.join('<br />')
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+    end
   end
 
   def download_asset_stock_label

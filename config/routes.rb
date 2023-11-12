@@ -51,6 +51,8 @@ Rails.application.routes.draw do
   post '/edit_asset_stock' => 'pages#edit_asset_stock'
 
   post '/delete_asset_stock' => 'pages#delete_asset_stock'
+  post '/retire_asset_stock' => 'pages#retire_asset_stock'
+  post '/activate_asset_stock' => 'pages#activate_asset_stock'
 
   get '/list_asset_stock' => 'pages#list_asset_stock'
   post '/list_asset_stock' => 'pages#list_asset_stock'
