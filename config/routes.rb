@@ -54,7 +54,7 @@ Rails.application.routes.draw do
 
   get '/list_asset_stock' => 'pages#list_asset_stock'
   post '/list_asset_stock' => 'pages#list_asset_stock'
-
+  post '/delete_asset_stock_attachment' => 'pages#delete_asset_stock_attachment'
   get '/download_asset_stock_label' => 'pages#download_asset_stock_label'
 
   get '/upload_asset_stock_from_file' => 'pages#upload_asset_stock_from_file'

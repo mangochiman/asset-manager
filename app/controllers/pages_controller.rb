@@ -2108,7 +2108,16 @@ class PagesController < ApplicationController
   end
 
   def delete_asset_stock_attachment
-
+    asset_attachment = AssetStockAttachment.find(params[:id])
+    file_path = Rails.root.to_s + '/public' + asset_attachment.url.to_s
+    if asset_attachment.delete
+      File.delete(file_path) if File.exist?(file_path) && !asset_attachment.url.to_s.blank?
+      flash[:notice] = 'Record deletion was successful'
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+    else
+      flash[:error] = asset_attachment.errors.full_messages.join('<br />')
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+    end
   end
 
   def activate_asset_stock
@@ -2121,10 +2130,10 @@ class PagesController < ApplicationController
 
   def delete_asset_stock
     asset_stock = AssetStock.find(params[:id])
-    asset_attachments = asset_stock.asset_attachments
+    asset_attachments = asset_stock.asset_stock_attachments
     errors = []
     ActiveRecord::Base.transaction do
-      if asset.delete
+      if asset_stock.delete
         person_id_param = @current_user.person.person_id
         action_params = "Delete"
         description_param = "Deleted asset stock record: #{asset_stock.name}"
@@ -2137,7 +2146,7 @@ class PagesController < ApplicationController
           end
         end
       else
-        errors << asset.errors.full_messages.join('<br />')
+        errors << asset_stock.errors.full_messages.join('<br />')
       end
     end
     if errors.blank?
