@@ -2157,6 +2157,30 @@ class PagesController < ApplicationController
     end
   end
 
+  def add_stock
+    asset_stock_addition = AssetStockAddition.new
+    asset_stock_addition.asset_stock_id = params[:asset_stock_id]
+    asset_stock_addition.quantity = params[:quantity]
+    asset_stock_addition.unit_price = params[:unit_price]
+    asset_stock_addition.total_price = params[:total_price]
+    asset_stock_addition.location_id = params[:location_id]
+    asset_stock_addition.vendor_id = params[:vendor_id]
+    asset_stock_addition.notes = params[:comments]
+    asset_stock = AssetStock.find(params[:asset_stock_id])
+    if asset_stock_addition.save
+      person_id_param = @current_user.person.person_id
+      action_params = "Add stock"
+      description_param = "Added stock quantity: #{params[:quantity]} #{asset_stock.name}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+
+      flash[:notice] = 'Asset stock addition was successful'
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+    else
+      flash[:error] = asset_stock_addition.errors.full_messages.join('<br />')
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+    end
+  end
+
   def download_asset_stock_label
 
   end
