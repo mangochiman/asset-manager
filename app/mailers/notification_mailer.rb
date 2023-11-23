@@ -22,4 +22,14 @@ class NotificationMailer < ApplicationMailer
     )
   end
 
+  def checkout_asset_stock(asset_activity)
+    @asset_stock = asset_activity.asset_stock
+    @person = asset_activity.person
+    @assets = @person.assets_with_me
+    mail(
+        to: @person.email,
+        subject: 'CHECKOUT NOTIFICATION'
+    )
+  end
+
 end

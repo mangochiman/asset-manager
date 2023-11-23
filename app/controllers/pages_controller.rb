@@ -2120,7 +2120,31 @@ class PagesController < ApplicationController
   end
 
   def checkout_asset_stock
-
+    asset_activity = AssetStockActivity.new
+    asset_activity.asset_stock_id = params[:asset_stock_id]
+    asset_activity.quantity = params[:quantity]
+    asset_activity.name = 'Check-out'
+    asset_activity.checkout_date = Time.now
+    asset_activity.return_on = params[:return_date]
+    if params["checkout-indefinite"].to_s == "on"
+      asset_activity.checkout_indefinite = 1
+      asset_activity.return_on = ""
+    end
+    asset_activity.person_id = params[:person_id]
+    asset_activity.location_id = params[:location_id]
+    asset_activity.notes = params[:comments]
+    if asset_activity.save
+      person_id_param = @current_user.person.person_id
+      action_params = "Checked out"
+      description_param = "Checked out asset: #{asset_activity.asset_details}"
+      SystemActivity.log(person_id_param, action_params, description_param)
+      NotificationMailer.checkout_asset(asset_activity).deliver_later
+      flash[:notice] = 'Checkout was successful'
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+    else
+      flash[:error] = asset_activity.errors.full_messages.join('<br />')
+      redirect_to("/edit_asset_stock?asset_stock_id=#{params[:asset_stock_id]}") and return
+    end
   end
 
   def delete_asset_stock_attachment
