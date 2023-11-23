@@ -6,6 +6,7 @@ class AssetStock < ApplicationRecord
 
   has_many :asset_stock_activities, :foreign_key => :asset_stock_id
   has_many :asset_stock_attachments, :foreign_key => :asset_stock_id
+  has_many :asset_stock_additions, :foreign_key => :asset_stock_id
 
   belongs_to :location, :foreign_key => :location_id, optional: true
   belongs_to :selection_field, :foreign_key => :condition_id, optional: true
@@ -84,6 +85,40 @@ class AssetStock < ApplicationRecord
   def active_checkout_activities
     activities = asset_stock_activities.where(['name IN (?)', %w[check-out]]) #TODO
     activities
+  end
+
+  def stock_movement
+    data = ActiveSupport::HashWithIndifferentAccess.new
+    count = 1
+    data[count] = {
+        activity: "Initial Stock",
+        quantity: initial_quantity,
+        unit_price: unit_price,
+        custody: '',
+        created_at: created_at
+    }
+    asset_stock_additions.each do |asset_stock_addition|
+      count += 1
+      data[count] = {
+          activity: "Add Stock",
+          quantity: asset_stock_addition.quantity,
+          unit_price: asset_stock_addition.unit_price,
+          custody: '',
+          created_at: asset_stock_addition.created_at
+      }
+    end
+
+    asset_stock_activities.each do |asset_stock_activity|
+      count += 1
+      data[count] = {
+          activity: asset_stock_activity.name,
+          quantity: asset_stock_activity.quantity,
+          unit_price: '',
+          custody: asset_stock_activity.person_details,
+          created_at: asset_stock_activity.created_at
+      }
+    end
+    data.sort_by{|k,v|v['created_at']}.reverse!
   end
 
   def generate_qr

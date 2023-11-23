@@ -2098,6 +2098,7 @@ class PagesController < ApplicationController
     @vendors = Vendor.all
     @people = Person.all
     @active_checkout_activities = @asset_stock.active_checkout_activities
+    @stock_movement = @asset_stock.stock_movement
   end
 
   def checkin_asset_stock
