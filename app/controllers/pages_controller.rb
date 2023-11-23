@@ -1,7 +1,7 @@
 require 'csv'
 
 class PagesController < ApplicationController
-  before_action :authorize, :except => [:package_expired, :pricing, :asset_label]
+  before_action :authorize, :except => [:package_expired, :pricing, :asset_label, :asset_stock_label]
   before_action :check_admin_privileges, only: [:new_asset_menu, :new_vendor, :new_person, :delete_selection_field,
                                                 :delete_service_item, :delete_vendor, :delete_vendor_attachment,
                                                 :delete_group, :delete_location, :delete_person, :delete_person_attachment,
@@ -2230,8 +2230,22 @@ class PagesController < ApplicationController
     end
   end
 
-  def download_asset_stock_label
+  def asset_stock_label
+    @asset_stock = AssetStock.find(params[:asset_stock_id])
+    @barcode_base64 = @asset_stock.generate_qr
+    render layout: false
+  end
 
+  def download_asset_stock_label
+    asset_id = params[:asset_stock_id]
+    file_name = "asset-stock-label-#{asset_id}.pdf"
+    source = "http://#{request.env["HTTP_HOST"]}/asset_stock_label?asset_stock_id=#{asset_id}"
+    destination = Rails.root.to_s + "/tmp/#{file_name}"
+    wkhtmltopdf = "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 #{source} #{destination}"
+    Thread.new {
+      Kernel.system wkhtmltopdf
+    }.join
+    send_file(destination)
   end
 
   def delete_asset_stock

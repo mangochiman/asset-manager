@@ -86,4 +86,13 @@ class AssetStock < ApplicationRecord
     activities
   end
 
+  def generate_qr
+    require 'barby'
+    require 'barby/barcode'
+    require 'barby/barcode/qr_code'
+    require 'barby/outputter/png_outputter'
+    text = self.name
+    base64_output = Barby::QrCode.new(text, level: :q, size: 15).to_image.to_data_url
+    base64_output
+  end
 end
