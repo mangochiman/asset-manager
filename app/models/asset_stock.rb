@@ -80,4 +80,10 @@ class AssetStock < ApplicationRecord
       end
     end
   end
+
+  def active_checkout_activities
+    activities = asset_stock_activities.where(['name IN (?)', %w[check-out]]) #TODO
+    activities
+  end
+
 end

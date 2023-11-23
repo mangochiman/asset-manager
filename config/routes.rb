@@ -56,6 +56,7 @@ Rails.application.routes.draw do
 
   post '/add_stock' => 'pages#add_stock'
   post '/checkout_asset_stock' => 'pages#checkout_asset_stock'
+  post '/checkin_asset_stock' => 'pages#checkin_asset_stock'
 
   get '/list_asset_stock' => 'pages#list_asset_stock'
   post '/list_asset_stock' => 'pages#list_asset_stock'

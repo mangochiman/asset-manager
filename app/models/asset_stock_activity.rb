@@ -12,4 +12,12 @@ class AssetStockActivity < ApplicationRecord
     asset_info = "#{asset_stock.name}" if !asset_stock.blank?
     asset_info
   end
+
+  def person_details
+    (person.first_name.to_s + " " + person.last_name.to_s) rescue ""
+  end
+
+  def location_details
+    location.name rescue ""
+  end
 end
