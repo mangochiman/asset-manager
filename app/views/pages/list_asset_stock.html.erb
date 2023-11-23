@@ -37,9 +37,8 @@
         <th>Asset Number</th>
         <th>Project</th>
         <th>Location</th>
-        <th>Brand</th>
-        <th>Model</th>
-        <th>Last Update</th>
+        <th>Available Quantity</th>
+        <th>Checked out Quantity</th>
         <th></th>
       </tr>
       </thead>
@@ -50,9 +49,8 @@
           <td><%= asset_stock.barcode %></td>
           <td><%= asset_stock.project_details %></td>
           <td><%= asset_stock.location_details %></td>
-          <td><%= asset_stock.brand %></td>
-          <td><%= asset_stock.model %></td>
-          <td><%= asset_stock.updated_at.strftime("%d.%m.%Y") %></td>
+          <td style="text-align: center"><span><%= asset_stock.total_quantity %></span></td>
+          <td><%= asset_stock.checked_out_quantity %></td>
           <td>
             <div class="btn-group btn-block">
               <button type="button" class="btn btn-success">Action</button>
@@ -62,8 +60,7 @@
               <div class="dropdown-menu" role="menu">
                 <a class="dropdown-item" href="/edit_asset_stock?asset_stock_id=<%= asset_stock.asset_stock_id %>">Update</a>
                 <a class="dropdown-item" href="/new_asset_menu?ref_id=<%= asset_stock.asset_stock_id %>">Clone</a>
-                <a class="dropdown-item" href="/asset_stock_movement?asset_stock_id=<%= asset_stock.asset_stock_id %>">Stock Movement</a>
-                <a class="dropdown-item" href="#" onclick="voidAssetConfirm('<%= asset_stock.asset_stock_id %>')">Delete</a>
+                <!--<a class="dropdown-item" href="#" onclick="voidAssetConfirm('<%= asset_stock.asset_stock_id %>')">Delete</a>-->
               </div>
             </div>
           </td>

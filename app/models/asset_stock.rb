@@ -121,6 +121,45 @@ class AssetStock < ApplicationRecord
     data.sort_by{|k,v|v['created_at']}.reverse!
   end
 
+  def total_quantity
+    initial_total = initial_quantity.to_i
+    checkout_activities = asset_stock_activities.where(['name IN (?)', %w[check-out]])
+    checkout_total = 0
+    checkout_activities.each do |checkout_activity|
+      checkout_total += checkout_activity.quantity.to_i
+    end
+
+    checkin_activities = asset_stock_activities.where(['name IN (?)', %w[check-in]])
+    checkin_total = 0
+    checkin_activities.each do |checkin_activity|
+      checkin_total += checkin_activity.quantity.to_i
+    end
+
+    additions_total = 0
+    asset_stock_additions.each do |asset_stock_addition|
+      additions_total += asset_stock_addition.quantity.to_i
+    end
+
+    (initial_total + additions_total + checkin_total) - checkout_total
+  end
+
+  def checked_out_quantity
+    checkout_activities = asset_stock_activities.where(['name IN (?)', %w[check-out]])
+    checked_out_total = 0
+    checkout_activities.each do |checkout_activity|
+      checkout_quantity = checkout_activity.quantity.to_i
+      check_in_activities = AssetStockActivity.where(['name IN (?) AND ref_id = ?', %w[check-in],
+                                                     checkout_activity.asset_stock_activity_id])
+      checkin_total = 0
+      check_in_activities.each do |check_in_activity|
+        checkin_quantity = check_in_activity.quantity.to_i
+        checkin_total += checkin_quantity
+      end
+      checked_out_total += (checkout_quantity - checkin_total)
+    end
+    checked_out_total
+  end
+
   def generate_qr
     require 'barby'
     require 'barby/barcode'
