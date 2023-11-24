@@ -69,7 +69,11 @@
                   </button>
                   <div class="dropdown-menu" role="menu">
                     <a class="dropdown-item" href="#" onclick="showAddStockModal()">Add Stock</a>
-                    <a class="dropdown-item" href="#" onclick="showCheckinMenuModal()">Checkin</a>
+                    <% if @asset_stock.checked_out_quantity > 0 %>
+                      <a class="dropdown-item" disabled href="#" onclick="showCheckinMenuModal()">Checkin</a>
+                    <% else %>
+                      <a class="dropdown-item" disabled href="#" style="color: gray">Checkin</a>
+                    <% end %>
                     <a class="dropdown-item" href="#" onclick="showStockMovementModal()">Stock History</a>
                     <a class="dropdown-item" href="#" onclick="printLabel()">Print Labels</a>
                   </div>
@@ -77,21 +81,31 @@
 
 
                 <% if !@retired %>
+                  <% if @checked_out && !@retired %>
+                    <button type="button" onclick="showCheckinAssetModal()" class="btn btn-primary">
+                      <i class="fa fa-arrow-circle-right"></i> Checkin
+                    </button>
+                  <% end %>
+
+                  <% if @asset_stock.checked_out_quantity > 0 %>
+                    <button type="button" onclick="showCheckinMenuModal()" class="btn btn-primary">
+                      <i class="fa fa-arrow-circle-right"></i> Checkin
+                    </button>
+                  <% else %>
+                    <button type="button" disabled class="btn btn-default">
+                      <i class="fa fa-arrow-circle-right"></i> Checkin
+                    </button>
+                  <% end %>
+
+                  <% if @asset_stock.total_quantity > 0 %>
                   <button type="button" onclick="showCheckoutAssetModal()" class="btn btn-primary">
                     <i class="fa fa-arrow-circle-right"></i> Checkout
                   </button>
-                <% end %>
-
-                <% if @checked_out %>
-                  <button type="button" onclick="showExtendCheckoutModal()" class="btn btn-primary">
-                    <i class="fa fa-arrow-circle-right"></i> Extend Checkout
-                  </button>
-                <% end %>
-
-                <% if @checked_out && !@retired %>
-                  <button type="button" onclick="showCheckinAssetModal()" class="btn btn-primary">
-                    <i class="fa fa-arrow-circle-right"></i> Checkin
-                  </button>
+                  <% else %>
+                    <button type="button" disabled class="btn btn-default">
+                      <i class="fa fa-arrow-circle-right"></i> Checkout
+                    </button>
+                  <% end %>
                 <% end %>
 
                 <% if @retired %>
@@ -689,7 +703,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" style="overflow: auto;">
+        <div class="modal-body" style="overflow: auto; width: 100%;">
           <table class="table-bordered">
             <thead>
             <tr>
