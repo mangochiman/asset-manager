@@ -83,7 +83,19 @@ class AssetStock < ApplicationRecord
   end
 
   def active_checkout_activities
-    activities = asset_stock_activities.where(['name IN (?)', %w[check-out]]) #TODO
+    activities = []
+    checkout_activities = asset_stock_activities.where(['name IN (?)', %w[check-out]])
+    checkout_activities.each do |checkout_activity|
+      checkout_quantity = checkout_activity.quantity.to_i
+      check_in_activities = AssetStockActivity.where(['name IN (?) AND ref_id = ?', %w[check-in],
+                                                      checkout_activity.asset_stock_activity_id])
+      checkin_total = 0
+      check_in_activities.each do |check_in_activity|
+        checkin_quantity = check_in_activity.quantity.to_i
+        checkin_total += checkin_quantity
+      end
+      activities << checkout_activity if checkin_total < checkout_quantity
+    end
     activities
   end
 
