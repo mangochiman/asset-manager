@@ -178,6 +178,11 @@ class PagesController < ApplicationController
     send_file(file)
   end
 
+  def download_asset_stock_template
+    file = Rails.root.to_s + "/config/asset_stock_template.csv"
+    send_file(file)
+  end
+
   def download_people_template
     file = Rails.root.to_s + "/config/people_template.csv"
     send_file(file)
@@ -2281,6 +2286,81 @@ class PagesController < ApplicationController
 
   def upload_asset_stock_from_file
     @page_header = "Upload Asset Stock From File"
-  end
+    if request.post?
+      unless params[:file].blank?
+        file_extension = File.extname(params[:file]).downcase
+        if file_extension != ".csv"
+          flash[:error] = "Unsupported file. Please upload a CSV file"
+          redirect_to("/upload_asset_stock_from_file") and return
+        end
+      end
 
+      file = params[:file].path
+      data = File.open(file)
+      errors = []
+      count = 0
+      CSV.foreach(data, headers: true) do |row|
+        asset_name = row['Asset Name'].to_s
+        project_name = row['Project'].to_s
+        asset_code = row['Asset Code'].to_s
+        asset_type = row['Asset Type'].to_s
+        asset_location = row['Asset Location'].to_s
+
+        initial_quantity = row['Initial Quantity'].to_s
+        reorder_quantity = row['Reorder Quantity'].to_s
+
+        manufacturer = row['Manufacturer'].to_s
+        brand = row['Brand'].to_s
+        serial_no = row['Serial No'].to_s
+        description = row['Description'].to_s
+        model = row['Model'].to_s
+        condition = row['Condition'].to_s
+        vendor_name = row['Vendor Name'].to_s
+        po_number = row['PO Number'].to_s
+        unit_price = row['Unit Price'].to_s
+        date_purchased = row['Date Purchased(YYYY/MM/DD)'].to_s
+        account_code = row['Account Code'].to_s
+        warranty_end = row['Warranty End(YYYY/MM/DD)'].to_s
+
+        location = Location.find_or_create_by(name: asset_location) unless asset_location.blank?
+        vendor = Vendor.find_or_create_by(name: vendor_name) unless vendor_name.blank?
+        asset_type = AssetType.find_or_create_by(name: asset_type)
+        project = Project.find_or_create_by(name: project_name)
+        selection_field = SelectionField.find_or_create_by({field_type: 'condition',
+                                                            field_name: condition})
+        asset = AssetStock.new
+        asset.name = asset_name
+        asset.project_id = project.project_id
+        asset.barcode = asset_code
+        asset.asset_type_id = asset_type.asset_type_id rescue ""
+        asset.location_id = location.location_id rescue ""
+        asset.initial_quantity = initial_quantity rescue ""
+        asset.reorder_quantity = reorder_quantity rescue ""
+        asset.condition_id = selection_field.selection_field_id rescue ""
+        asset.vendor_id = vendor.vendor_id rescue ""
+        asset.serial_number = serial_no
+        asset.manufacturer = manufacturer
+        asset.brand = brand
+        asset.model = model
+        asset.unit_price = unit_price
+        asset.date_purchased = date_purchased
+        asset.order_number = po_number
+        asset.account_code = account_code
+        asset.warranty_end = warranty_end
+        asset.notes = description
+        if asset.save
+          count = count + 1
+        else
+          errors << asset.errors.full_messages.join('<br />')
+        end
+      end
+
+      unless errors.blank?
+        flash[:error] = errors.join('<br />')
+        redirect_to("/upload_asset_stock_from_file") and return
+      end
+      flash[:notice] = "You have successfully imported #{count} assets"
+      redirect_to("/list_asset_stock")
+    end
+  end
 end
