@@ -2000,6 +2000,7 @@ class PagesController < ApplicationController
     else
       @asset_stock = AssetStock.order('asset_stock_id DESC')
     end
+    @projects = Project.all
   end
 
   def edit_asset_stock
@@ -2368,10 +2369,14 @@ class PagesController < ApplicationController
   def view_assets_by
     @assets = []
     @page_header = ""
+    project = Project.find(params[:project_id])
     if params[:type] == "asset"
-      project = Project.find(params[:project_id])
       @page_header = project.name.to_s + ": #{project.assets.count} Assets"
       @assets = project.assets
+    end
+    if params[:type] == "asset_stock"
+      @page_header = project.name.to_s + ": #{project.assets.count} Assets"
+      @assets = project.asset_stocks
     end
   end
 end

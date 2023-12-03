@@ -1,3 +1,9 @@
+<style>
+    .item{color:#48453d; margin-top:30px; overflow:hidden;}
+    .block-title{color: #48453d; margin-bottom:0px; font-size:18px; margin-top: 0px; font-weight:700; text-transform:uppercase;}
+    .item-content-block{padding:20px; border-top:2px solid #f6f6f2; background-color:#FFF; display:block;}
+</style>
+
 <form action="/list_asset_stock" method="get">
   <div class="row">
     <div class="col-md-12">
@@ -27,6 +33,17 @@
   </div>
 </form>
 <br/>
+
+<% if @projects.length > 0 %>
+  <div class="item">
+    <div class="item-content-block tags">
+      <% @projects.each do |project| %>
+        <a href="/view_assets_by?project_id=<%= project.project_id %>&type=asset_stock" class="btn btn-primary"><%= project.name %> (<%= project.asset_stocks.count %>)</a>
+      <% end %>
+    </div>
+  </div>
+  <br />
+<% end %>
 
 <div class="card">
   <div class="card-body ">
