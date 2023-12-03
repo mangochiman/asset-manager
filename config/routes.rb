@@ -215,6 +215,7 @@ Rails.application.routes.draw do
   get '/person_audit_trail_work_book' => 'reports#person_audit_trail_work_book'
   get '/person_audit_trail_pdf' => 'reports#person_audit_trail_pdf'
   get '/download_person_audit_trail_pdf' => 'reports#download_person_audit_trail_pdf'
+  get '/view_assets_by' => 'pages#view_assets_by'
 
   get "/404", to: "errors#not_found", :via => :all
   post "/404", to: "errors#not_found", :via => :all

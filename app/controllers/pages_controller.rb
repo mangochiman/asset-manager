@@ -317,6 +317,7 @@ class PagesController < ApplicationController
     else
       @assets = Asset.order('asset_id DESC')
     end
+    @projects = Project.all
   end
 
   def edit_asset
@@ -2361,6 +2362,16 @@ class PagesController < ApplicationController
       end
       flash[:notice] = "You have successfully imported #{count} assets"
       redirect_to("/list_asset_stock")
+    end
+  end
+
+  def view_assets_by
+    @assets = []
+    @page_header = ""
+    if params[:type] == "asset"
+      project = Project.find(params[:project_id])
+      @page_header = project.name.to_s + ": #{project.assets.count} Assets"
+      @assets = project.assets
     end
   end
 end

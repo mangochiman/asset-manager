@@ -1,0 +1,57 @@
+
+
+<div class="card">
+  <div class="card-body ">
+    <table id="example1" class="table-striped table-condensed" style="width: 100%;">
+      <thead>
+      <tr>
+        <th>Asset Name</th>
+        <th>Asset Number</th>
+        <th>Project</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th>Custodian</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Last Update</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @assets.each do |asset| %>
+        <tr>
+          <td><%= asset.name %></td>
+          <td><%= asset.barcode %></td>
+          <td><%= asset.project_details %></td>
+          <td><%= asset.location_details %></td>
+          <td><%= asset.state %></td>
+          <td><%= asset.custodian %></td>
+          <td><%= asset.brand %></td>
+          <td><%= asset.model %></td>
+          <td><%= asset.updated_at.strftime("%d.%m.%Y") %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery('.assets').addClass('active');
+        jQuery('.list_assets_menu').addClass('active');
+        jQuery('.assets-menu').addClass('menu-open');
+        loadDefaults();
+
+        $("#example1").DataTable({
+            "aaSorting": [],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "bFilter": false,
+            "pageLength": 100
+        })
+        console.log("dd")
+    })
+
+</script>
